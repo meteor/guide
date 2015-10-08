@@ -22,7 +22,7 @@ Tinytest is specifically designed for *unit testing*. From [wikipedia](https://e
 
 > ... Ideally, each test case is independent from the others. Substitutes such as method stubs, mock objects, fakes, and test harnesses can be used to assist testing a module in isolation.
 
-The object of a unit test is to prove functionality you have written. It is not to prove third-party or other package or library code which may form a part of your codebase. This may require that you head up your tests with *stubs, mocks* or *fakes* which satisfy the demands of your code, but are non-functional (or have limited functionality). Alternatively, instead of placing the stubs in your test file, you could put them into a separate `stubs.js` file, which you `api.addFiles`, or even create and add a stubs package which you then `api.use`.
+The object of a unit test is to prove functionality you have written. It is not to prove third-party or other package or library code which may form a part of your codebase. This may require that you head up your tests with *stubs, mocks/spies* or *fakes* which satisfy the demands of your code, but are non-functional (or have limited functionality). Alternatively, instead of placing the stubs in your test file, you could put them into a separate `stubs.js` file, which you `api.addFiles`, or even create and add a stubs package which you then `api.use`.
 
 From [martinfowler.com](http://www.martinfowler.com/articles/mocksArentStubs.html):
 
@@ -30,7 +30,9 @@ From [martinfowler.com](http://www.martinfowler.com/articles/mocksArentStubs.htm
 
 > Stubs provide canned answers to calls made during the test, usually not responding at all to anything outside what's programmed in for the test. Stubs may also record information about calls, such as an email gateway stub that remembers the messages it 'sent', or maybe only how many messages it 'sent'.
 
-> Mocks [...]: objects pre-programmed with expectations which form a specification of the calls they are expected to receive.
+> Mocks [are] objects pre-programmed with expectations which form a specification of the calls they are expected to receive.
+
+For a comprehensive way of including spies, stubs, timeouts and other fun stuff, check out [practicalmeteor:munit](https://atmospherejs.com/practicalmeteor/munit) which wraps a host of useful functionality around Tinytest.
 
 ## Adding Tinytest to Your Package
 
@@ -109,7 +111,7 @@ Tinytest.addAsync(name, function(test, onComplete) {
     // test body
     onComplete(); // invoke when async function completes.
   }
-})
+});
 ```
 
 ES6/2015 (recommended):
@@ -377,26 +379,26 @@ Don't use:
 let list = MyCollection.find().fetch();
 let total = 0;
 _.each(list, (element) => {
-  total += list[element].age;
+  total += element.age;
 });
 ```
 
 Use:
 
 ```javascript
-let list = [
+const list = [
   {_id: 'abcd', name: 'Bob', age: 30},
   {_id: 'bcde', name: 'Carol', age: 31}
 ];
 let total = 0;
-_.each(list, () => {
-  total += list[element].age;
+_.each(list, (element) => {
+  total += element.age;
 });
 ```
 
 This ensures predictable data for testing, which means if appropriate, it's easy to supply in-range, out-of-range and edge-case data.
 
-### How do I (do what I shouldn't and) test call/method end-to-end
+### How do I (do what I shouldn't and) test call/method end-to-end?
 
 The normal use case for `Meteor.call` and `Meteor.methods` is that a client `call`s a server `method`. However, `call`s and `methods` may exist on client and/or server. This means there are four basic use cases. In addition, a server may `call` a `method` on another server. In this use case, the `call`ing server is treated as a client (but this is definitely outside the scope of a package test).
 
