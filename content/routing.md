@@ -32,7 +32,7 @@ meteor add kadira:flow-router
 
 *Snippet: Adding the Flow Router package*
 
-At the time of writing this guide, Flow Router is at version 2.x.
+At the time of writing this guide, [Flow Router](https://github.com/kadirahq/flow-router) is at version 2.x.
 
 *Community packages: Flow Router is one of several popular routing packages for Meteor. Another is iron:router. You can search for router on Atmosphere to find more. Hopefully, the concepts in this routing guide will be relevant no matter which router you use, as long as it provides basic functions for URL management.*
 
@@ -74,6 +74,8 @@ The above code snippet will match certain URLs. You may notice that one of the s
 *Table: Example URLs and the resulting parameters*
 
 Note that all of the values in `pathParams` and `queryParams` are always strings since URLs don't have any way of encoding data types. You might need to use `parseInt(value, 10)` to convert strings into numbers.
+
+> FlowRouter and IronRouter internally uses a path matching library called [path-to-regexp](https://github.com/pillarjs/path-to-regexp). Check that project for advance URL pattern matching.
 
 ## Displaying different views based on the URL and defining layouts
 
@@ -290,6 +292,8 @@ You can also redirect to a different route from a route trigger. We'll discuss t
 
 Sometimes, you want to have a route that always redirects somewhere else. Maybe this is so that the user can type less, or bookmark a certain URL, or similar. For example, you may want a URL that always redirects to the most recent blog post published. In Flow Router, you do this using a trigger, which will be covered in more detail later in the guide:
 
+// XXX: In FlowRouter, it's a good idea to use triggers to redirect only if those are static. I mean, there should not be any data related stuff. If there are data related stuff, redirect in the UI level.
+
 ```js
 // XXX how do you do this?
 ```
@@ -314,6 +318,9 @@ You will also want to show some kind of status while the method is working so th
 
 If some data in your app has been moved, you probably want to redirect people to the new object. For example, if we renamed a document and the name was part of the URL, we would want the user to end up at the new URL so that usage of the old one decreases gradually. Eventually, once our _analytics_ indicate that nobody is visiting the old URL anymore, we can remove the backwards compatibility code.
 
+// XXX: For this case, I hope server side redirect is a way to go. That's good for SEO as well?
+// If we are doing it in the client side(something other than page redirect), we may need to use a Tracker and watch document(s) and change the route. But I still suggest not to do it automatically. Just tell user that, something has changed. Then assign some action with that. May be a redirect or something else.
+
 ```js
 // XXX how do you do this?
 ```
@@ -322,13 +329,15 @@ If some data in your app has been moved, you probably want to redirect people to
 
 As you maintain and develop new features for your app, you might discover that you need to change your URL structure. If there are already lots of links and bookmarks to your app floating around in the wild, it might be a good idea to redirect the old URLs for backwards compatibility.
 
+// XXX: This can be both done in the server side and client. In FR 3.0, we'll make this isomorphic.
+
 ```js
 // XXX write this
 ```
 
 ## User permissions and URLs
 
-In a traditional server-side rendered app, it's common to restrict which URLs users are allowed to visit based on their ownership of certain data, or the role they have in the system (admin, moderator, etc). In Meteor, the router is not the correct place to manage permissions. Permissions about which users can read and write data belong in Meteor publications and methods, which deal with actually reading and writing data from the server. However, it's still useful to show people nice messages reminding them to log in to see certain content or reminding them that they don't have the right permissions.
+In a traditional server-side rendered app, it's common to restrict which URLs users are allowed to visit based on their ownership of certain data, or the role they have in the system (admin, moderator, etc). In Meteor, the router is **not the** correct place to manage permissions. Permissions about which users can read and write data belong in Meteor publications and methods, which deal with actually reading and writing data from the server. However, it's still useful to show people nice messages reminding them to log in to see certain content or reminding them that they don't have the right permissions.
 
 ### Displaying a reminder to log in to see a certain page
 
@@ -428,6 +437,7 @@ Below here not done!
 - Root route
 - When to use query parameters
 - Displaying not found/404 page
+- Metadata and SEO stuff
 
 Notes/ideas from sashko
 
