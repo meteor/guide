@@ -156,7 +156,7 @@ An optional `message` may be added to the assertions which will change a failure
 
 #### equal
 
-test.equal(actual, expected[, message[, not]]);
+`test.equal(actual, expected[, message[, not]]);`
 
 `not` is a boolean (`true`/`false`) parameter which may be used to switch the sense (`equal` becomes `notEqual`). Used internally by `notEqual`. **Don't use it in your tests - it just makes your code harder to grok.**
 
@@ -164,91 +164,91 @@ Compares by type and value, so 2 is not equal to "2", for example. Is a better c
 
 #### notEqual
 
-test.notEqual(actual, expected[, message]);
+`test.notEqual(actual, expected[, message]);`
 
 Internally, calls `equal` with the `not` flag set to `true`.
 
 #### matches
 
-test.matches(actual, regexp[, message]);
+`test.matches(actual, regexp[, message]);`
 
 Checks `regexp.test(actual)`
 
 #### notMatches
 
-test.notMatches(actual, regexp[, message]);
+`test.notMatches(actual, regexp[, message]);`
 
 Checks `!regexp.test(actual)`
 
 #### isTrue
 
-test.isTrue(actual[, message]);
+`test.isTrue(actual[, message]);`
 
 Checks that `actual` is truthy (does not check type is `Boolean`).
 
 #### isFalse
 
-test.isFalse(actual[, message]);
+`test.isFalse(actual[, message]);`
 
 Checks that `actual` is falsey (does not check type is `Boolean`).
 
 #### isNull
 
-test.isNull(actual[, message]);
+`test.isNull(actual[, message]);`
 
 Checks `actual === null`
 
 #### isNotNull
 
-test.isNotNull(actual[, message]);
+`test.isNotNull(actual[, message]);`
 
 Checks `!(actual === null)`
 
 #### isUndefined
 
-test.isUndefined(actual[, message]);
+`test.isUndefined(actual[, message]);`
 
 Checks `actual === undefined`
 
 #### isNotUndefined
 
-test.isNotUndefined(actual[, message]);
+`test.isNotUndefined(actual[, message]);`
 
 Checks `!(actual === undefined)`
 
 #### isNaN
 
-test.isNaN(actual[, message]);
+`test.isNaN(actual[, message]);`
 
 Checks `isNaN(actual)`
 
 #### isNotNaN
 
-test.isNotNaN(actual[, message]);
+`test.isNotNaN(actual[, message]);`
 
 Checks `!(isNaN(actual))`
 
 #### length
 
-test.length(obj, expected_length[, message]);
+`test.length(obj, expected_length[, message]);`
 
 Checks `obj.length === expected_length`
 
 #### instanceOf
 
-test.instanceOf(obj, klass[, message]);
+`test.instanceOf(obj, klass[, message]);`
 
 Checks `obj instanceof klass`
 
 #### notInstanceOf
 
-test.notInstanceOf(obj, klass[, message]);
+`test.notInstanceOf(obj, klass[, message]);`
 
 Checks `!(obj instanceof klass)`
 
 #### include
 
-test.include(haystack, needle[, message[, not]]);
+`test.include(haystack, needle[, message[, not]]);`
 
 `haystack` may be an `array`, `object` or `string`. Correspondingly, `needle` may be an `element` (simple elements only), `key` (method or property name) or `substring`.
 
@@ -256,19 +256,19 @@ test.include(haystack, needle[, message[, not]]);
 
 #### notInclude
 
-test.notInclude(haystack, needle[,message]);
+`test.notInclude(haystack, needle[,message]);`
 
 Internally, calls `include` with the `not` flag set to `true`.
 
 #### _stringEqual
 
-test._stringEqual: function (actual, expected[, message]);
+`test._stringEqual: function (actual, expected[, message]);`
 
 EXPERIMENTAL way to compare two strings that results in a nicer display in the test runner, e.g. for multiline strings.
 
 ### Assertions without optional fail messages
 
-test.throws(func, expected);
+`test.throws(func, expected);`
 
 `expected` can be:
 
@@ -285,13 +285,13 @@ The upshot is, if you want to test whether an error is of a particular class, us
 
 #### runId
 
-test.runId();
+`test.runId();`
 
 Returns a unique string id for this test (for example 'ZmXxMPyoWGFy5wEiB').
 
 #### exception
 
-test.exception(exception);
+`test.exception(exception);`
 
 **Should only be used with asynchronous tests**
 
@@ -302,7 +302,7 @@ Call this to fail the test with an exception that occurs inside asynchronous cal
 
 #### expect_fail
 
-test.expect_fail();
+`test.expect_fail();`
 
 May be used to change a fail to a qualified pass. The test is counted as a pass, but clicking on it reveals that the underlying test failed:
 
@@ -369,7 +369,7 @@ Tinytest.add('mypackage - test someFunction', (test) => {
 
 ### How do I test my method?
 
-Follow the same principle as with testing `call`. Ensure that the `method`'s functionality is encapsulated in testable components. It's likely you will be getting data from "elsewhere" in a method (for example, a `collection` or a REST endpoint). For these use cases you should *fake* the expected result(s). Remember, unless you are testing the `mongo` package, you are not testing that a `Mongo.Collection` actually is connected to a physical MongoDB collection!
+Follow the same principle as with testing `call`. Ensure that the `method`'s functionality is encapsulated in testable components. It's likely you will be getting data from "elsewhere" in a method (for example, a `collection` or a REST endpoint). For these use cases you should *fake* the expected result(s). Remember, unless you are testing the `mongo` package, you are not ensuring that a `Mongo.Collection` actually is connected to a physical MongoDB collection!
 
 Don't use:
 
