@@ -152,10 +152,7 @@ Tests may include multiple assertions. The total number of successes and failure
 
 ### Assertions with optional fail messages
 
-An optional `message` may be added to the assertions which will change a failure report from:
-
-`fail - <failure-test>` to
-`fail - <failure-test> - message <optional message>`
+An optional `message` may be added to the assertions which will change a failure report from `fail - <failure-test>` to `fail - <failure-test> - message <optional message>`
 
 #### equal
 
@@ -187,13 +184,13 @@ Checks `!regexp.test(actual)`
 
 test.isTrue(actual[, message]);
 
-Checks that `actual` is truthy (does not check type is `boolean`).
+Checks that `actual` is truthy (does not check type is `Boolean`).
 
 #### isFalse
 
 test.isFalse(actual[, message]);
 
-Checks that `actual` is falsey (does not check type is `boolean`).
+Checks that `actual` is falsey (does not check type is `Boolean`).
 
 #### isNull
 
@@ -315,7 +312,7 @@ May be used to change a fail to a qualified pass. The test is counted as a pass,
 
 Remember, you are testing a package, so unless your `call`s and `method`s are both in this package, you shouldn't be doing this. Similarly, you are writing *unit tests*, so there should be no need to test that `call`/`method` operates correctly between client and server. You should be testing that your call is functionally correct and that your method is functionally correct.
 
-### How to I test my call?
+### How do I test my call?
 
 It is often unnecessary to test a simple call. Consider:
 
@@ -350,7 +347,7 @@ MyPackageNamespace.someFunction = function(result) {
 Meteor.call('mymethod', value, (error, result) => {
   let answer;
   if (error) {
-    // "value" must have been illegal
+    // something nasty happened
   } else {
     answer = MyPackageNamespace.someFunction(result);
   }
@@ -372,7 +369,7 @@ Tinytest.add('mypackage - test someFunction', (test) => {
 
 ### How do I test my method?
 
-Follw the same principle as with testing `call`. Ensure that the `method`'s functionality is encapsulated in testable components. It's likely you will be getting data from "elsewhere" in a method (for example, a `collection` or a REST endpoint). For these use cases you should *fake* the expected result(s). Remember, unless you are testing the `mongo` package, you are not testing that a `Mongo.Collection` actually is connected to a physical MongoDB collection!
+Follow the same principle as with testing `call`. Ensure that the `method`'s functionality is encapsulated in testable components. It's likely you will be getting data from "elsewhere" in a method (for example, a `collection` or a REST endpoint). For these use cases you should *fake* the expected result(s). Remember, unless you are testing the `mongo` package, you are not testing that a `Mongo.Collection` actually is connected to a physical MongoDB collection!
 
 Don't use:
 
