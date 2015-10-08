@@ -41,7 +41,7 @@ Tinytest is included through configuration in the `package.js` file using `Packa
 Package.onTest(function(api)
   // We will need the following packages to run our tests.
   // Note that we also need to include the package to be tested (myname:mypackage).
-  api.use(['tinytest', 'underscore', 'ecmascript', 'myname:mypackage']
+  api.use(['tinytest', 'underscore', 'ecmascript', 'myname:mypackage']);
   // In v1.2 test-packages no longer include any packages globally.
   // You may need to make some exports global for your tests to run, for example:
   api.imply('underscore');
