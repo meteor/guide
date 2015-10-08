@@ -40,7 +40,7 @@ Tinytest is included through configuration in the `package.js` file using `Packa
 
 ```javascript
 // Define test section
-Package.onTest(function(api)
+Package.onTest(function(api) {
   // We will need the following packages to run our tests.
   // Note that we also need to include the package to be tested (myname:mypackage).
   api.use(['tinytest', 'underscore', 'ecmascript', 'myname:mypackage']);
