@@ -40,7 +40,7 @@ Meteor lets you write your UI as if the database is present on the client while 
     3. Webhooks
 7. How to publish and use relational data
 8. How to do pagination or infinite scroll so that you can load data incrementally as the user needs it
-9. How to prepare Meteor app to work in offline mode and synchronize with database after reconnecting
+9. How to work with data in offline mode and synchronize back with database after reconnecting
 
 ### Meteor guide: UI/UX
 
