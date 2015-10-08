@@ -44,11 +44,11 @@ Package.onTest(function(api)
   api.use(['tinytest', 'underscore', 'ecmascript', 'myname:mypackage']
   // In v1.2 test-packages no longer include any packages globally.
   // You may need to make some exports global for your tests to run, for example:
-  api.imply('underscore'
+  api.imply('underscore');
   // This file contains the tests we want to run (these will run on the client and the server)
-  api.addFiles('tests.js'
+  api.addFiles('tests.js');
   // You can add as many test files as you want and choose where they are to run:
-  api.addFiles('server-tests.js', 'server'
+  api.addFiles('server-tests.js', 'server');
   // and these only run on the client:
   api.addFiles('client-tests.js', 'client');
 });
