@@ -58,7 +58,9 @@ Package.onTest(function(api) {
 
 ## Structuring the Test File
 
-The test file is normally Javascript/ES2015 (but may be anything if the appropriate transpiler is included with `api.use('some-transpiler');` within `Package.onTest`). Examples in this guide assume ES2015, for which you will have to include an `api.use('ecmascript');` line in your `Package.onTest`.
+The test file is normally written in Javascript/ES5 (but may be anything if the appropriate transpiler is included with `api.use('some-transpiler');` within `Package.onTest`). Examples in this guide assume ES2015, for which you will have to include an `api.use('ecmascript');` line in your `Package.onTest`.
+
+> Note that currently the `package.js` file itself is processed as Javascript/ES5. This cannot be changed.
 
 A "test" contains the code you want to test, plus zero or more *assertions* wrapped within a `Tinytest.add` or `Tinytest.addAsync` callback. The `name` of the test is specified in the `add` or `addAsync` call. An assertion is a call to a method used to verify an actual result (or some property of a result) vs a expected result. For example, "is the result === 1?", or "is the result a JavaScript `Number`?".
 
