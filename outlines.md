@@ -104,6 +104,15 @@ What do URLs mean in a mobile and client-rendering world, and how does one use t
 5. How to handle URLs in your app that should only be accessible to certain users
 6. How and why to use a UI framework native router, like Angular router or React Router
 
+### Meteor guide: Essential packages
+
+What are some of the essential packages that most Meteor projects will need?
+
+1. Iron router - Handle routing in your Meteor application
+2. Moment - Moment.js integration for your Meteor application
+3. NPM - A package to use NPM in your Meteor project
+4. Accounts-Ui - A turn-key user interface for Meteor Accounts
+
 [See the document.](content/routing.md)
 
 Status: Initial draft 80% done.
