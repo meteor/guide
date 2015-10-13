@@ -108,7 +108,7 @@ myMethod.getValidationErrorsForField("name", "Hello");
 {
   name: {
     value: "Hello",
-    type: "Must be a String", // How do we avoid hardcoding messages?
+    type: true, // Let's not hardcode error messages...
   }
 }
 
@@ -127,3 +127,9 @@ myMethod.call({
 3. Saving intermediate inputs... you could have a per-user collection and have each form have a unique ID; then you have a `submit` button that actually runs the method validation?
 4. Does this help for uploading files at all?
 5. What if you want to do different validation on the client and server? I guess the validation data is only stuff that is shared between client and server...
+
+The ideal solution for forms would probably have a couple components:
+
+1. A form generator
+2. A form reader - parse the form and get an object that can be validated, reactively when user input happens; so that we can display realtime errors or save the user's progress
+3. The validating method infrastructure above
