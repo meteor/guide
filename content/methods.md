@@ -120,6 +120,12 @@ myMethod.call({
   // there is a client side error it is never called on the server
   // Validation error has the data structure above attached
 });
+
+// Available on the server only
+myMethod.callWithUserId(userId, {
+  name: "Hello",
+  content: "Stuff"
+}, callback);
 ```
 
 1. Definitely solves client-side realtime validation via `getValidationErrors` - and you can do it per-field if you need to
