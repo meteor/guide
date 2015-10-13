@@ -134,6 +134,10 @@ myMethod.callWithUserId(userId, {
 4. Does this help for uploading files at all?
 5. What if you want to do different validation on the client and server? I guess the validation data is only stuff that is shared between client and server...
 
+Questions
+
+1. Should this return a promise?? We've been waiting for a chance to integrate async/await - this could be that opportunity!
+
 The ideal solution for forms would probably have a couple components:
 
 1. A form generator
