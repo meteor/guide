@@ -30,11 +30,14 @@ To add routing to your app, install the `kadira:flow-router` package:
 meteor add kadira:flow-router
 ```
 
-*Snippet: Adding the Flow Router package*
+Flow Router is a community routing package for Meteor. At the time of writing this guide, it is at version 2.x.
 
-At the time of writing this guide, Flow Router is at version 2.x.
+- [Flow Router on GitHub](https://github.com/kadirahq/flow-router)
+- [Kadira Meteor routing guide](https://kadira.io/academy/meteor-routing-guide)
 
-*Community packages: Flow Router is one of several popular routing packages for Meteor. Another is iron:router. You can search for router on Atmosphere to find more. Hopefully, the concepts in this routing guide will be relevant no matter which router you use, as long as it provides basic functions for URL management.*
+### Other options for routing
+
+Flow Router is one of several popular routing packages for Meteor. Another is iron:router. You can search for router on Atmosphere to find more. Hopefully, the concepts in this routing guide will be relevant no matter which router you use, as long as it provides basic functions for URL management.
 
 ## Defining a simple route
 
@@ -54,15 +57,19 @@ FlowRouter.route('/blog/:postId', {
 
 This route handler will run in two situations: if the page loads initially at a URL that matches the URL pattern, and if the URL changes to one that matches the pattern while the page is open. Note that, unlike in a server-side-rendered app, the URL can change without any additional requests to the server.
 
-When the route is matched, the `action` method executes, and you can perform any actions you need to.
-
-The `name` property of the route is optional, but will let us refer to this route more conveniently later on.
+When the route is matched, the `action` method executes, and you can perform any actions you need to. The `name` property of the route is optional, but will let us refer to this route more conveniently later on.
 
 ### URL pattern matching
 
-The above code snippet will match certain URLs. You may notice that one of the segments is prefixed by `:` - this means that it is a *url parameter*, and will match any string that is present in that segment of the path. Here are some example URLs and the resulting `pathParams` and `queryParams`:
+Consider the following URL pattern, used in the code snippet above:
 
-| URL           | action() called?	        | pathParams	         | queryParams
+```js
+'/blog/:postId'
+```
+
+The above pattern will match certain URLs. You may notice that one of the segments is prefixed by `:` - this means that it is a *url parameter*, and will match any string that is present in that segment of the path. Here are some example URLs and the resulting `pathParams` and `queryParams`:
+
+| URL           | matches pattern? | pathParams	         | queryParams
 | ---- | ---- | ---- | ---- |
 | /	            | no		
 | /about	      | no		
@@ -87,7 +94,7 @@ When using Flow Router, the simplest way to display different views on the page 
 meteor add kadira:blaze-layout
 ```
 
-*Snippet: Add the Blaze Layout package*
+- [Blaze Layout on GitHub](https://github.com/kadirahq/blaze-layout)
 
 To use this package, we need to define a layout template in our HTML:
 
@@ -264,6 +271,8 @@ One more place you might want to access the data from the URL is in your navigat
 meteor add zimme:active-route
 ```
 
+- [zimme/meteor-active-route on GitHub](https://github.com/zimme/meteor-active-route)
+
 Now, let's create a navbar template that highlights the appropriate item based on the active route:
 
 ```html
@@ -354,7 +363,6 @@ There are several options for what the UI should do if a user is logged in but d
 
 In the below code snippet, we use a helper `userCanEditPost` to check if the user is the owner of the blog post and display a helpful message. This can be a good option if the user's permissions are likely to change - for example, you could arrive at this page, note that you don't have permissions, ask the author to give you the permissions, and then the page will update to show the editor once the permissions are added. This workflow wouldn't be possible if you had instead redirected the user to a different URL entirely.
 
-
 ```html
 <template name="page-blog-post-edit">
   <h3>Edit post {{blogPost.title}}</h3>
@@ -384,6 +392,8 @@ Once you have some routes defined in your app, you will probably want to add som
 meteor add arillo:flow-router-helpers
 ```
 
+- [arillo/meteor-flow-router-helpers on GitHub](https://github.com/arillo/meteor-flow-router-helpers/)
+
 Now that you have this package, you can use helpers in your templates to display a link to a certain route. For example, to link to a blog post:
 
 ```html
@@ -404,6 +414,8 @@ It's common to want to know which pages of your app are most commonly visited, a
 meteor add okgrow:analytics
 ```
 
+- [okgrow/analytics on GitHub](https://github.com/okgrow/analytics)
+
 Now, we need to configure the package with our Google Analytics key (the package also supports a large variety of other providers, check out the documentation [on Atmosphere](https://atmospherejs.com/okgrow/analytics)). Pass it in as part of _Meteor settings_:
 
 ```js
@@ -417,19 +429,23 @@ Now, we need to configure the package with our Google Analytics key (the package
 }
 ```
 
-We're done! The analytics package hooks into Flow Router and records all of the page events for you.
+That's it! The analytics package hooks into Flow Router and records all of the page events for you.
 
-----------
+## Not done
 
-Below here not done!
-
-- Advanced features of Flow Router
-- Nested routes
 - Root route
-- When to use query parameters
+- When to use query parameters; don't encode temporary data in the URL, like `/stuff?alert="thanks for logging in"` because you can just use a variable in JS. If you want something to persist across tabs and actual page reloads, it should be in Mongo or localstorage.
 - Displaying not found/404 page
 
-Notes/ideas from sashko
+## Further reading
 
-1. Don't use redirects to display a login page; just display the login page instead of the content, and keep the URL the same. In server-side rendered apps the only way to show a login page is to redirect but that restriction doesn't exist on the client. XXX we need to figure out how this interacts with password managers!
-2. Similarly, don't encode temporary data in the URL, like `/stuff?alert="thanks for logging in"` because you can just use a variable in JS. If you want something to persist across tabs and actual page reloads, it should be in Mongo or localstorage.
+Learn about advanced features of Flow Router:
+
+- [Simple Template-Based Authorization Example](https://github.com/alanning/meteor-roles/tree/master/examples/flow-router)
+- [Advanced Authorization with Auth Controllers Example](https://github.com/alanning/meteor-roles/tree/master/examples/flow-router-advanced)
+- Nested routes
+- XXX
+
+HTTP routing/API
+
+- Link to other guide articles here

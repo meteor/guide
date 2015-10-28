@@ -13,6 +13,10 @@ Since everything is JavaScript and code can be shared between all parts of your 
 5. How to split your app into smaller apps that each have a smaller surface area while sharing code and data
 6. The Meteor style guide
 
+[See the document.](content/structure.md)
+
+Status: Initial draft 50% done.
+
 ### Meteor guide: Collections and models
 
 We'll explain how to deal with collections across client and server. Then we'll reduce code repetition by extending database documents with model classes.
@@ -60,6 +64,7 @@ Meteor's login system works pretty well out of the box, but there are a few tips
 1. Picking an accounts UI package
 2. Setting up password reset, email verification, and enrollment emails
 3. Setting up OAuth login services
+4. Building your own login service
 4. Adding custom fields to the users collection and using them
 
 ### Meteor guide: Security
@@ -99,6 +104,10 @@ What do URLs mean in a mobile and client-rendering world, and how does one use t
 4. How to construct links to routes and go to routes programmatically
 5. How to handle URLs in your app that should only be accessible to certain users
 6. How and why to use a UI framework native router, like Angular router or React Router
+
+[See the document.](content/routing.md)
+
+Status: Initial draft 80% done.
 
 ### Meteor guide: Testing
 
