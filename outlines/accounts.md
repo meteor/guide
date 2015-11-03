@@ -24,15 +24,17 @@
     6. Meetup
     7. Meteor Developer Accounts
     8. Building your own OAuth login handler
-5. The useraccounts package for a production-grade login UI
-    1. Pick the right package based on your CSS framework
-    2. Get help from splendido to flesh out this section - just the basics, then link to the docs
-    3. Figure out what to do about useraccounts and adding fields to profile
-6. Adding custom data about users
+5. Adding custom data about users
     1. Adding new top-level fields onto the users collection
     2. How and why to disable profile
     3. Why top-level fields are better than nested objects in DDP (link to collections/schema article)
     4. Security concerns - don't accidentally publish secret data to the client
+6. The useraccounts package for a production-grade login UI
+    1. Rationale (logic & routing vs. styling)
+    2. Pick the right package based on your CSS framework
+    3. Quick routes set up
+    4. Basic Customization (with link to documentation for deeper understanding)
+    5. Additional fields for password registration (linking back to section 5)
 7. Allowing the same user to log in through different methods - “account merging”
     1. Update the existing account using requestCredential
     2. accounts-meld in case you want to do more complicated things, but make sure you understand the risk!
