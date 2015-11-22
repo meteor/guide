@@ -1,5 +1,5 @@
 ---
-title: "Adding structure to CSS"
+title: "Writing CSS"
 ---
 
 When you are building a large application, CSS can quickly become a major pain point for every developer on the team. In this article, I want to cover the main issues you will encounter, and our solutions for them. These solutions are not very turn key and will require discipline and energy to maintain, but will save you countless hours or fighting the cascade and slowing your app down with specificity hacks, and `!important` at the end of every line.
