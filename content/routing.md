@@ -1,4 +1,6 @@
-# Meteor Guide: Routing
+---
+title: "Meteor Guide: Routing"
+---
 
 After reading this guide, you'll know:
 
@@ -71,9 +73,9 @@ The above pattern will match certain URLs. You may notice that one of the segmen
 
 | URL           | matches pattern? | pathParams	         | queryParams
 | ---- | ---- | ---- | ---- |
-| /	            | no		
-| /about	      | no		
-| /blog/        | no		
+| /	            | no | | |
+| /about	      | no | | |
+| /blog/        | no | | |
 | /blog/eMtGij5AFESbTKfkT |	yes |	{ postId: "eMtGij5AFESbTKfkT"} |	{ }
 | /blog/1	| yes	| { postId: "1"} | { }
 | /blog/1?commentSort=top	| yes	| { postId: "1"} | { commentSort: "top" }
@@ -233,7 +235,7 @@ In this case, the function of the `page-blog-post` component is just to get the 
 
 If you are experienced in Meteor, you know that in order for `BlogPosts.findOne(...)` in the snippet above to return anything useful, you need to subscribe to that data from the server using `Meteor.subscribe`. The `page-blog-post` template would be a great place to do that:
 
-```html
+```js
 Template["page-blog-post"].onCreated(function () {
   this.autorun(() => {
     this.subscribe("blog-post", FlowRouter.getParam("postId"));
