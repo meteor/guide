@@ -25,7 +25,7 @@ In this article, we'll look closely at how collections work in various places in
 
 When you create a collection on the server:
 ```js
-Todos = new Mongo.Collection('Todos');
+Todos = new Mongo.Collection('todos');
 ```
 
 You are creating a collection within MongoDB itself, and an interface to that collection to be used on the server. It's a fairly straightforward layer on top of the underlying Node MongoDB driver, but with a synchronous (fibers-based) API:
@@ -43,7 +43,7 @@ console.log(todo);
 
 On the client, when you write the same line:
 ```js
-Todos = new Mongo.Collection('Todos');
+Todos = new Mongo.Collection('todos');
 ```
 
 It does something totally different!
