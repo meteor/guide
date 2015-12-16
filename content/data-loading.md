@@ -92,11 +92,12 @@ What this means in practice is that you should place your subscription calls in 
 
 ```js
 Template.listsShowPage.onCreated(function() {
-  this.state = new ReactiveDict();
-  this.autorun(() => {
+  const template = this;
+  template.state = new ReactiveDict();
+  template.autorun(() => {
     const listId = FlowRouter.getParam('_id');
-    this.state.set({listId});
-    this.subscribe('list/todos', listId);
+    template.state.set({listId});
+    template.subscribe('list/todos', listId);
   });
 });
 ```
@@ -156,10 +157,11 @@ We've seen an example already of using an `autorun` to re-subscribe when the (re
 
 ```js
 Template.listsShowPage.onCreated(function() {
-  this.state = new ReactiveDict();
-  this.autorun(() => {
-    this.state.set('listId', FlowRouter.getParam('_id'));
-    this.subscribe('list/todos', this.state.get('listId'));
+  const template = this;
+  template.state = new ReactiveDict();
+  template.autorun(() => {
+    template.state.set('listId', FlowRouter.getParam('_id'));
+    template.subscribe('list/todos', template.state.get('listId'));
   });
 });
 ```
@@ -223,10 +225,11 @@ Then on the client side, we'd some kind of reactive state variable to control ho
 
 ```js
 Template.listsShowPage.onCreated(function() {
-  this.state = new ReactiveDict();
-  this.autorun(() => {
-    this.state.set('listId', FlowRouter.getParam('_id'));
-    this.subscribe('list/todos', this.state.get('listId'), this.state.get('requestedTodos'));
+  const template = this;
+  template.state = new ReactiveDict();
+  template.autorun(() => {
+    template.state.set('listId', FlowRouter.getParam('_id'));
+    template.subscribe('list/todos', template.state.get('listId'), template.state.get('requestedTodos'));
   });
 });
 ```
