@@ -92,11 +92,12 @@ What this means in practice is that you should place your subscription calls in 
 
 ```js
 Template.listsShowPage.onCreated(function() {
-  this.state = new ReactiveDict();
-  this.autorun(() => {
+  const template = this;
+  template.state = new ReactiveDict();
+  template.autorun(() => {
     const listId = FlowRouter.getParam('_id');
-    this.state.set({listId});
-    this.subscribe('list/todos', listId);
+    template.state.set({listId});
+    template.subscribe('list/todos', listId);
   });
 });
 ```
@@ -111,9 +112,11 @@ In this code snippet we can see two important techniques for subscribing in Blaz
 
 Subscribing to data puts it in your client-side collections. To use the data in your templates, you need to query those collections for that data. There are a few important rules of thumb when doing this.
 
-1. Always use the same query to fetch the data from the collection that you use to publish it.
+1. Always use specific queries to fetch data.
 
-  If you don't do this, then you open yourself up to problems if another subscription pushes data into the same collection. Although you may be confident that this is not the case, in an actively developed application, it's impossible to anticipate what may change in the future and this can be a source of hard to understand bugs.
+If you're publishing a subset of your data, it might be tempting to simply query for all data available in a collection (i.e. `Lists.find()`) in order to get that subset on the client, without re-specifying the Mongo selector you used to publish that data in the first place.
+
+  But if you do this, then you open yourself up to problems if another subscription pushes data into the same collection. Although you may be confident that this is not the case, in an actively developed application, it's impossible to anticipate what may change in the future and this can be a source of hard to understand bugs.
 
   Also, when changing subscriptions, there is a brief period where both subscriptions are loaded (see "Publication behavior when changing arguments" below), so when doing thing like pagination, it's exceedingly likely that this will be the case.
 
@@ -156,10 +159,11 @@ We've seen an example already of using an `autorun` to re-subscribe when the (re
 
 ```js
 Template.listsShowPage.onCreated(function() {
-  this.state = new ReactiveDict();
-  this.autorun(() => {
-    this.state.set('listId', FlowRouter.getParam('_id'));
-    this.subscribe('list/todos', this.state.get('listId'));
+  const template = this;
+  template.state = new ReactiveDict();
+  template.autorun(() => {
+    template.state.set('listId', FlowRouter.getParam('_id'));
+    template.subscribe('list/todos', template.state.get('listId'));
   });
 });
 ```
@@ -223,10 +227,11 @@ Then on the client side, we'd some kind of reactive state variable to control ho
 
 ```js
 Template.listsShowPage.onCreated(function() {
-  this.state = new ReactiveDict();
-  this.autorun(() => {
-    this.state.set('listId', FlowRouter.getParam('_id'));
-    this.subscribe('list/todos', this.state.get('listId'), this.state.get('requestedTodos'));
+  const template = this;
+  template.state = new ReactiveDict();
+  template.autorun(() => {
+    template.state.set('listId', FlowRouter.getParam('_id'));
+    template.subscribe('list/todos', template.state.get('listId'), template.state.get('requestedTodos'));
   });
 });
 ```
