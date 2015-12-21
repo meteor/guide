@@ -17,7 +17,7 @@ This is a set of articles outlining opinions on best-practice application develo
 
 Nothing in the Meteor guide is *required* to build a Meteor application---you can certainly use the platform in ways that contradict the principles and patterns of the guide. However, the guide is an attempt to document best practices and community conventions, so we hope that the majority of the Meteor community will benefit from adopting the practices documented here.
 
-The APIs of the Meteor platform are available a the [docs site](https://docs.meteor.com), and you can browse community packages on [atmosphere](https://atmospherejs.com).
+The APIs of the Meteor platform are available on the [docs site](https://docs.meteor.com), and you can browse community packages on [atmosphere](https://atmospherejs.com).
 
 The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
