@@ -74,7 +74,7 @@ You can read about the full Spacebars syntax [here](https://github.com/meteor/me
 
 <h3 id="data-contexts">Data contexts and lookup</h3>
 
-We've seen `{% raw %}{{todo.title}}{% endraw %}` accesses the `title` property of the `todo` item on the current data context. Additionaly, `..` access the parent data context (rarely a good idea), `list.todos.[0]` accesses the first element of the `todos` array on `list`.
+We've seen `{% raw %}{{todo.title}}{% endraw %}` accesses the `title` property of the `todo` item on the current data context. Additionally, `..` access the parent data context (rarely a good idea), `list.todos.[0]` accesses the first element of the `todos` array on `list`.
 
 Also, note that Spacebars is very forgiving of `null` values. It will not complain if you try to access a property on a `null` value (for instance `foo.bar` if `foo` is not defined), but instead simply treat it also as null. However there are exceptions to this---trying to call a `null` function, or doing the same *within* a helper will lead to exceptions.
 
@@ -162,7 +162,7 @@ You should be extremely careful about doing this, and always ensure you aren't r
 
 <h3 id="block-helpers">Block Helpers</h3>
 
-A block helper, called with `{% raw %}{{# }}{% endraw %}` is a helper that takes (and may render) a block of Spacebars. For instance, we saw the `{% raw %}{{#each .. in}}{% endraw %}` helper above which repeats a given block of Spacebars once per item in a list. You can also render a *component* as a block helper, rendering it's content via the `Template.contentBlock` and `Template.elseBlock`. For instance, you could create your own `{% raw %}{{#if}}{% endraw %}` helper with:
+A block helper, called with `{% raw %}{{# }}{% endraw %}` is a helper that takes (and may render) a block of Spacebars. For instance, we saw the `{% raw %}{{#each .. in}}{% endraw %}` helper above which repeats a given block of Spacebars once per item in a list. You can also render a *component* as a block helper, rendering its content via the `Template.contentBlock` and `Template.elseBlock`. For instance, you could create your own `{% raw %}{{#if}}{% endraw %}` helper with:
 
 ```html
 <template name="myIf">
@@ -283,13 +283,13 @@ Additionally, for similar reasons of clarity, always explicitly provide a data c
 
 <h3 id="use-each-in">Prefer `{% raw %}{{#each .. in}}{% endraw %}`</h3>
 
-For similar reasons to the above, it's better to use `{% raw %}{{#each todo in todos}}{% endraw %}` rather than the older `{% raw %}{{#each todos}}{% endraw %}`. The second sets the data context of it's internals to a raw `todo`, and makes it difficult to access the containing template's other data context.
+For similar reasons to the above, it's better to use `{% raw %}{{#each todo in todos}}{% endraw %}` rather than the older `{% raw %}{{#each todos}}{% endraw %}`. The second sets the data context of its internals to a raw `todo`, and makes it difficult to access the containing template's other data context.
 
-The only reason not to use `{% raw %}{{#each .. in}}{% endraw %}` because it makes it difficult to access the `todo` symbol inside event handlers. Typically the solution to this is simply to use a sub-component to render the inside of the loop.
+The only reason not to use `{% raw %}{{#each .. in}}{% endraw %}` is because it makes it difficult to access the `todo` symbol inside event handlers. Typically the solution to this is simply to use a sub-component to render the inside of the loop.
 
 <h3 id="use-template-instance">Use the template instance</h3>
 
-Although Blaze's simple API doesn't naturally lead to a componentized approach, you can use the *template instance* as a convenient place to modularize functionality. The template instance is `this` inside Blaze's lifecycle callbacks and can be accessed in event handlers and helpers as `Template.instance()`. It's also passed as second argument to event handlers.
+Although Blaze's simple API doesn't naturally lead to a componentized approach, you can use the *template instance* as a convenient place to modularize functionality. The template instance is `this` inside Blaze's lifecycle callbacks and can be accessed in event handlers and helpers as `Template.instance()`. It's also passed as the second argument to event handlers.
 
 We suggest a convention of naming it `instance` in these contexts and assigning it at the top of every relevant helper. For instance:
 
@@ -308,7 +308,7 @@ Template.listsShow.helpers({
 });
 
 Template.listsShow.events({
-  'click .js-cancel'(event, instance) {
+  'click .js-cancel':(event, instance) {
     instance.state.set('editing', false);
   }
 });
@@ -353,7 +353,7 @@ Then you can call that function from within an event handler:
 
 ```js
 Template.listsShow.events({
-  'submit .js-edit-form'(event, instance) {
+  'submit .js-edit-form':(event, instance) {
     event.preventDefault();
     instance.saveList();
   }
@@ -364,11 +364,11 @@ Template.listsShow.events({
 
 It's a bad idea to look up things directly in the DOM with jQuery's global `$()`. It means you are relying on things rendered outside of your component not interacting with your selector. Also, it limits your options on rendering *outside* of the main document (see testing section below).
 
-Instead, Blaze gives you `instance.$()` which scopes a lookup to within the current template instance. Typically you use this either from a `onRendered()` callback to setup external (e.g. jQuery) plugins, or from event handlers to call direct DOM functions. For instance, when a user adds a new todo, we want to focus it's `<input>` element:
+Instead, Blaze gives you `instance.$()` which scopes a lookup to within the current template instance. Typically you use this either from an `onRendered()` callback to setup external (e.g. jQuery) plugins, or from event handlers to call direct DOM functions. For instance, when a user adds a new todo, we want to focus its `<input>` element:
 
 ```js
 Template.listsShow.events({
-  'click .js-todo-add'(event, instance) {
+  'click .js-todo-add':(event, instance) {
     instance.$('.js-todo-new input').focus();
   }
 });
@@ -392,7 +392,7 @@ This is more or less the way that the [`kadira:blaze-layout`](https://atmosphere
 
 If you need to communicate *up* the component hierarchy, it's best to pass a *callback* for the sub-component to call.
 
-For instance, only one todo item can be currently in the editing state at a time, so the `listsShow` component manages the state of which is edited. So when you focus on an item, that item needs to tell the list's component to make it the "edited" one. To do that, we pass a callback into the `todosItem` component, and it calls it:
+For instance, only one todo item can be currently in the editing state at a time, so the `listsShow` component manages the state of which is edited. So when you focus on an item, that item needs to tell the list's component to make it the "edited" one. To do that, we pass a callback into the `todosItem` component, and it call it:
 
 ```html
 {{> todosItem (todoArgs todo)}}
@@ -413,7 +413,7 @@ Template.listsShow.helpers({
 });
 
 Template.todosItem.events({
-  'focus input[type=text]'() {
+  'focus input[type=text]':() {
     this.onEditing(true);
   }
 });
@@ -438,7 +438,7 @@ Template.listsShowPage.onRendered(function() {
 
 <h2 id="smart-components">Writing smart components with Blaze</h2>
 
-If your component needs to access state outside of its data context---for instance, data from the server via subscriptions or the the contents of client-side store, then you should be careful how you do that accessing. As discussed in the [data loading](data-loading.hmtl) and [UI](ui-ux.html#smart-components) articles, you should be careful and considered in how use such smart components.
+If your component needs to access state outside of its data context---for instance, data from the server via subscriptions or the contents of client-side store, then you should be careful how you do that accessing. As discussed in the [data loading](data-loading.hmtl) and [UI](ui-ux.html#smart-components) articles, you should be careful and considered in how you use such smart components.
 
 To begin with, all of the rules of thumb about reusable components apply to smart components. In addition:
 
@@ -456,7 +456,7 @@ Template.listsShowPage.onCreated(function() {
 });
 ```
 
-By using `this.subscribe()` (as opposed to `Meteor.subscribe`), the subscription state automatically gets amalagamated into the template instance's subscription readiness reactive state variable, which can be used both from within templates (via the `{% raw %}{{Template.subscriptionsReady}}{% endraw %}` helper) or within helpers (via `instance.subscriptionsReady()`).
+By using `this.subscribe()` (as opposed to `Meteor.subscribe`), the subscription state automatically gets amalgamated into the template instance's subscription readiness reactive state variable, which can be used both from within templates (via the `{% raw %}{{Template.subscriptionsReady}}{% endraw %}` helper) or within helpers (via `instance.subscriptionsReady()`).
 
 Notice as well in this case that we access the global client-side state store `FlowRouter` in this component, which we access via a instance method (`getListId()`), called both from the autorun, and from the `listArray` helper:
 
@@ -521,7 +521,7 @@ By making the `blurringInput` flexible and reusable, we can avoid re-implementin
 
 It's usually best to keep your view layer as "skinny" as possible and contain a component to whatever specific task it specifically needs to do. If there's heavy lifting involved (such as complicated rendering logic), it often makes sense to abstract it out into a utility library that simply deals with the logic alone and doesn't deal with the Blaze system at all.
 
-For instance, if a component requires a lot of complicated [D3](d3js.org) code for drawing graphs, it's likely that that code itself could live in a utility library that's called by the component. That makes it easier to abstract the code later and share it between various components that need to all draw graphs.
+For instance, if a component requires a lot of complicated [D3](http://d3js.org) code for drawing graphs, it's likely that that code itself could live in a utility library that's called by the component. That makes it easier to abstract the code later and share it between various components that all need to draw graphs.
 
 <h3 id="global-helpers">Global Helpers</h3>
 
@@ -529,7 +529,7 @@ One type of library that is useful is a global Spacebars helper. You can define 
 
 ```js
 Template.registerHelper('shortDate', (date) => {
-  return moment(date).format("MMM do YY");
+  return moment(date).format("MMM Do YY");
 });
 ```
 
@@ -603,9 +603,9 @@ Template.myTemplate.helpers({
 Another complicated topic in Blaze is name lookups. In what order does Blaze look when you write `{% raw %}{{something}}{% endraw %}`? It runs in the following order:
 
 1. Helper defined on the current component.
-2. Binding (eg. from `{% raw %}{{#let}}{% endraw %}` or `{% raw %}{{#each in}}{% endraw %}`) in current scope
-3. A named template
-4. Global helpers
+2. Binding (eg. from `{% raw %}{{#let}}{% endraw %}` or `{% raw %}{{#each in}}{% endraw %}`) in current scope.
+3. A named template.
+4. Global helpers.
 5. The current data context.
 
 <h3 id="build-system">Blaze and the build system</h3>
