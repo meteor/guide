@@ -264,7 +264,7 @@ Template.listsShow.onCreated(function() {
       list: {type: Function},
       todosReady: {type: Boolean},
       todos: {type: Mongo.Cursor}
-    }).validate(Template.currentData());
+    }).newContext().validate(Template.currentData());
   });
 });
 ```
