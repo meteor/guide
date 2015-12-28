@@ -369,6 +369,7 @@ Migrations.add({
 Note that we could make this migration faster by using an [Aggregation](https://docs.mongodb.org/v2.6/aggregation/) to gather the initial set of todo counts.
 
 <h3 id="running-migrations">Running migrations</h3>
+**Note that you should always take a database backup before running any migration!**
 
 To run a migration against your development database, it's easiest to use the Meteor shell:
 
@@ -379,9 +380,13 @@ Migrations.migrateTo('latest');
 
 If the migration logs anything to the console, you'll see it in the terminal window that is running the Meteor server.
 
-To run a migration against your production database, run your app locally in production mode (with production settings and environment variables, including database settings), and use the Meteor shell in the same way. What this does is run the `up()` function of all outstanding migrations, against your production database. In our case, it should ensure all lists have a `todoCount` field set.
+To run a migration against your production database, run add the following to your startup code (e.g. `/server/startup.js`):
 
-**Note that you should always take a database backup before running any migration!**
+```js
+Meteor.startup(function() {
+  Migrations.migrateTo('latest'); // alternatively, use the version number
+});
+```
 
 <h3 id="breaking-changes">Breaking schema changes</h3>
 
