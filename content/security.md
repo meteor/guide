@@ -306,7 +306,7 @@ Unfortunately, not all publications are as simple to secure as the example above
 For certain applications, for example pagination, you'll want to pass options into the publication to control things like how many documents should be sent to the client. There are some extra considerations to keep in mind for this particular case.
 
 1. **Passing a limit**: In the case where you are passing the `limit` option of the query from the client, make sure to set a maximum limit. Otherwise, a malicious client could request too many documents at once, which could raise performance issues.
-2. **Passing in a filter**: If you want to pass fields to filter on because you don't want all of the data, for example in the case of a search query, make sure to use MongoDB `$and` to intersect the filter coming from the client with the documents that client should be allowed to see, and remove any fields from the filter that the client shouldn't know about. Otherwise, a client could query on secret fields it's not supposed to be able to access.
+2. **Passing in a filter**: If you want to pass fields to filter on because you don't want all of the data, for example in the case of a search query, make sure to use MongoDB `$and` to intersect the filter coming from the client with the documents that client should be allowed to see. Also, you should whitelist the keys that the client can use to filter - if the client can filter on secret data, it can run a search to find out what that data is.
 3. **Passing in fields**: If you want the client to be able to decide which fields of the collection should be fetched, make sure to intersect that with the fields that client is allowed to see, so that you don't accidentally send secret data to the client.
 
 In summary, you should make sure that any options passed from the client to a publication can only restrict the data being requested, rather than extending it.
@@ -439,17 +439,15 @@ You can ensure that any unsecured connection to your app redirects to a secure c
 
 <h2 id="checklist">Security checklist</h2>
 
-// XXX to be finalized later
+This is a collection of points to check about your app that might catch common errors. However, it's not an exhaustive list yet---if we missed something, please let us know or file a pull request!
 
-1. Remove the `insecure` package.
-1. Remove the `autopublish` package.
-1. Validate all Method and publication arguments, and use `audit-argument-checks` to ensure this.
-1. Deny writes to the `profile` field on user documents // XXX link to accounts.
-1. Use Methods instead of client-side insert/update/remove and allow/deny.
-1. Use specific selectors and filter fields in publications.
-1. Don't use raw string inclusion in Blaze unless you really know what you are doing.
-1. Make sure secret API keys and passwords aren't in your source code.
-1. Use package scan as a safety net.
+1. Make sure your app doesn't have the `insecure` or `autopublish` packages.
+1. Validate all Method and publication arguments, and include the `audit-argument-checks` to check this automatically.
+1. [Deny writes to the `profile` field on user documents.](accounts.html#dont-use-profile)
+1. [Use Methods instead of client-side insert/update/remove and allow/deny.](security.html#allow-deny)
+1. Use specific selectors and [filter fields](http://guide.meteor.com/security.html#fields) in publications.
+1. Don't use [raw HTML inclusion in Blaze](blaze.html#rendering-html) unless you really know what you are doing.
+1. [Make sure secret API keys and passwords aren't in your source code.](security.html#api-keys)
 1. Secure the data, not the UI - redirecting away from a client-side route does nothing for security, it's just a nice UX feature.
-1. Don't ever trust user IDs passed from the client. Use `this.userId` inside Methods and publications.
-1. Set up browser policy, but know that not all browsers support it so it's mostly a convenience/extra layer thing
+1. [Don't ever trust user IDs passed from the client.](http://guide.meteor.com/security.html#user-id-client) Use `this.userId` inside Methods and publications.
+1. Set up [browser policy](https://atmospherejs.com/meteor/browser-policy), but know that not all browsers support it so it just provides an extra layer of security to users with modern browsers.

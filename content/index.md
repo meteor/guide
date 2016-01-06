@@ -1,15 +1,19 @@
 ---
-title: Welcome!
+title: Introduction
 order: 0
 ---
 
-This is a work in progress deployment of the Meteor Guide. We're tracking our progress writing articles using [Waffle.io](https://waffle.io/meteor/guide?label=article). See the example app we're working on to embody the principles from the guide at [meteor/todos](https://github.com/meteor/todos). Keep in mind that it's still a work in progress so some things are rough around the edges.
+<h2 id="what-is-meteor">What is Meteor?</h2>
 
-### How to contribute
+Meteor is a full-stack JavaScript platform for developing modern web and mobile applications. Meteor includes a key set of technologies for building connected-client reactive user interfaces, a build tool, and a curated set of packages from the Node.js and general JavaScript community.
 
-Read the [published guide articles](http://guide.meteor.com/). If you see something that could be better, click "edit on GitHub" at the bottom to file a PR, or open an issue for discussion!
+- Meteor allows you to develop in **one language**, JavaScript, in all environments: application server, web browser, and mobile device.
 
----
+- Meteor uses **data on the wire**, meaning the server sends data, not HTML, and the client renders it.
+
+- Meteor **embraces the ecosystem**, bringing the best parts of the extremely active JavaScript community to you in a careful and considered way.
+
+- Meteor provides **full stack reactivity**, allowing your UI to seamlessly reflect the true state of the world with minimal development effort.
 
 <h2 id="what-is-it">What is the Meteor Guide?</h2>
 
@@ -19,27 +23,21 @@ Nothing in the Meteor guide is *required* to build a Meteor application---you ca
 
 The APIs of the Meteor platform are available a the [docs site](https://docs.meteor.com), and you can browse community packages on [atmosphere](https://atmospherejs.com).
 
+<h3 id="audience">Target audience</h3>
+
 The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
-<h2 id="example-app">Example app</h2>
+<h3 id="example-app">Example app</h3>
 
-Most guides make reference to the Todos example application. This code is actively being developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
+Many articles reference the Todos example application. This code is being actively developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
 
-<h2 id="what-is-meteor">What is Meteor?</h2>
+<h2 id="guide-concepts">Guide development</h2>
 
-Meteor is a full-stack JavaScript platform for developing modern web and mobile applications. Meteor includes a key set of technologies for building connected-client reactive user interfaces, a build tool, and a curated set of packages from the Node.js and general JavaScript community.
+<h3 id="contributing">Contributing</h3>
 
- - Meteor allows you to develop in **one language**, JavaScript, in all environments, be it server, web browser or mobile device.
+Ongoing Meteor Guide development takes place **in the open** [on GitHub](https://github.com/meteor/guide). We encourage pull requests and issues to discuss problems with and changes that could be made to the content. We hope that keeping our process open and honest will make it clear what we plan to include in the guide and what changes will be coming in future Meteor versions.
 
- - Meteor prefers **data on the wire**, meaning the server sends data, not HTML, and the client renders it.
-
- - Meteor **embraces the ecosystem**, bringing the best parts of the extremely active JavaScript community to you in careful and considered way.
-
- - Meteor provides **full stack reactivity**, allowing you to write frontends that seamlessly reflect the true state of the world with minimal development effort.
-
-<h2 id="guide-concepts">Guide concepts</h2>
-
-The Meteor Guide is **developed in the open** at the [GitHub repository](https://github.com/meteor/guide). We encourage pull requests and issues to discuss problems with and changes that could be made to the content. We hope that keeping our process open and honest will make it clear what we plan to include in the guide and what changes will be coming in future Meteor versions.
+<h3 id="goals">Goals of the project</h3>
 
 The decisions made and practices outlined in the guide must necessarily be **opinionated**. Certain best practices will be highlighted and other valid approaches ignored. We aim to reach community consensus around major decisions but there will always be other ways to solve problems when developing your application. We believe it's important to know what the "standard" way to solve a problem is before branching out to other options. If an alternate approach proves itself superior, then it should make its way into a future version of the guide.
 
@@ -47,7 +45,17 @@ An important function of the guide is to **shape future development** in the Met
 
 Similarly, gaps in the platform highlighted by the guide can often be plugged by **community packages**; we hope that if you see an opportunity to improve the Meteor workflow by writing a package, that you take it! If you're not sure how best to design or architect your package, reach out on the forums and start a discussion.
 
-<h2 id="learning-more">Learning more about Meteor</h2>
+<h3 id="future">Future additions</h3>
+
+The Meteor Guide will never be done. In particular, it will be updated with new features released in every Meteor version. The current release targets Meteor 1.2.x. There are a few more articles we will add in the coming weeks to align with the Meteor 1.3 release, which will bring ECMAScript module support, seamless NPM integration, improved integration and unit testing, and better mobile features:
+
+1. Application structure
+2. Testing
+3. Code style and linting
+4. Forms and user input
+5. Mobile apps
+
+<h2 id="learning-more">Other Meteor resources</h2>
 
 1. The place to get started with Meteor is the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
