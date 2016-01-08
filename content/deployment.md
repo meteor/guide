@@ -1,6 +1,7 @@
 ---
 title: Deployment and Monitoring
 order: 9
+description: How to deploy, run, and monitor your Meteor app in production.
 ---
 
 After reading this guide, you'll know:
@@ -67,11 +68,15 @@ If you are following the above approach, you may also want to manually add the C
 
 <h2 id="deployment-options">Deployment options</h2>
 
-There are many options on where to deploy your Meteor application. We'll discuss some of the most popular ones here.
+Meteor is an open source platform, and you can run the apps that you make with Meteor anywhere just like regular Node.js applications. But operating Meteor apps *correctly*, so that your apps work for everyone, can be tricky if you are managing your infrastructure manually. This is why we recommend running production Meteor apps on Galaxy.
 
 <h3 id="galaxy">Galaxy (recommended)</h3>
 
-Our recommended option is to deploy to Galaxy, Meteor's paid hosting service. In order to deploy to Galaxy, you'll need to sign up for an account [here](https://www.meteor.com/why-meteor/pricing), and separately provision a MongoDB database (see below).
+The easiest way to operate your app with confidence is to use Galaxy, the service built by Meteor Development Group specifically to run Meteor apps.
+
+Galaxy is a distributed system that runs on Amazon AWS. If you understand what it takes to run Meteor apps correctly and just how Galaxy works, you’ll come to appreciate Galaxy’s value, and that it will save you a lot of time and trouble. Most large Meteor apps run on Galaxy today, and many of them have switched from custom solutions they used prior to Galaxy’s launch.
+
+In order to deploy to Galaxy, you'll need to sign up for an account [here](https://www.meteor.com/why-meteor/pricing), and separately provision a MongoDB database (see below).
 
 Once you've done that, you can [deploy to Galaxy](https://galaxy.meteor.com/help/deploying-to-galaxy) almost as easily as you can to Meteor's free servers. You just need to [add some environment variables to your settings file](https://galaxy.meteor.com/help/setting-environment-variables) to point it at your MongoDB, and you can deploy with:
 
@@ -79,7 +84,7 @@ Once you've done that, you can [deploy to Galaxy](https://galaxy.meteor.com/help
 DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy your-app.com --settings production-settings.json
 ```
 
-In order for galaxy to work with your custom domain (`your-app.com` in this case), you need to [set up your DNS to point at Galaxy](https://galaxy.meteor.com/help/configuring-dns). Once you've done this, you should be able to reach your site from a browser.
+In order for Galaxy to work with your custom domain (`your-app.com` in this case), you need to [set up your DNS to point at Galaxy](https://galaxy.meteor.com/help/configuring-dns). Once you've done this, you should be able to reach your site from a browser.
 
 You can also log into the Galaxy UI at https://galaxy.meteor.com. Once there you can manage your applications, monitor the number of connections and resource usage, view logs, and change settings.
 
@@ -95,23 +100,15 @@ Once you are setup with Galaxy, deployment is simple (just re-run the `meteor de
 
 If you are using Galaxy (or need a production quality, managed MongoDB for one of the other options listed here), it's usually a good idea to use a [MongoDB hosting provider](https://galaxy.meteor.com/help/configuring-mongodb). There are a variety of options out there, but a good choice is [Compose](https://compose.io). The main things to look for are support for oplog tailing, and a presence in the us-east-1 AWS region.
 
-<h3 id="custom-deployment">Custom deployment</h3>
+<h3 id="mup">Meteor Up</h3>
 
-The Meteor tool has a command `meteor build` that creates a deployment bundle, which is a complete node application which can be run on any host that can run node applications (once pointed at a MongoDB instance). You can host this application wherever you like and there are many options in terms of how you set it up and configure it.
+[Meteor Up](https://github.com/arunoda/meteor-up), often referred to as "mup", is an open source tool that can be used to deploy Meteor application to any online server over SSH. Mup handles some of the essential deployment requirements, but you will still need to do a lot of work to get your load balancing and version updates working smoothly - it's essentially a way to automate the manual steps of using `meteor build` and putting that bundle on your server.
 
-To run this application, you need to provide Node.js 0.10.x and a MongoDB server. The current release of Meteor has been tested with Node 0.10.41. You can then run the application by invoking `node`, specifying the HTTP port for the application to listen on, and the MongoDB endpoint.
+You can obtain a server running Ubuntu or Debian from many generic hosting providers. Mup can SSH into your server with the keys you provide in the config. You can also [watch this video](https://www.youtube.com/watch?v=WLGdXtZMmiI) for a more complete walkthrough on how to do it.
 
-```bash
-cd my_directory
-(cd programs/server && npm install)
-env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
-```
+<h3 id="free-hosting">Basic meteor.com hosting</h3>
 
-However, unless you have a specific need to roll your own hosting environment, the other options here are definitely easier, and probably make for a better setup than doing everything from scratch.
-
-<h3 id="free-hosting">Meteor's free hosting</h3>
-
-If you are still developing your application and want to see how it behaves online, or share it with a small group without needing a full production setup, you can get started quickly on the free hosting available at `meteor.com`.
+If you are in the process of developing your application and want to see how it behaves online, or share it with a small group without needing a full production setup, you can get started quickly on the free hosting available at `meteor.com`. We do **not** recommend hosting critical apps on a subdomain of meteor.com. Each app runs in a single process, and this free service is not capable of scaling to support production workloads.
 
 Deploying is simple, just type:
 
@@ -167,33 +164,19 @@ You can read more details about how to use these commands by using the help comm
 meteor help deploy
 ```
 
-<h3 id="mup">Deploying with Meteor Up</h3>
+<h3 id="custom-deployment">Custom deployment</h3>
 
-[Meteor Up](https://github.com/kadirahq/meteor-up), often referred to as "mup", is an open source tool that's used to deploy Meteor application to any online server over SSH.
+If you want to figure out your hosting solution completely from scratch, the Meteor tool has a command `meteor build` that creates a deployment bundle that contains a plain Node.js application. You can host this application wherever you like and there are many options in terms of how you set it up and configure it.
 
-To use mup, you need to install the `mup` tool via `npm`.
-
-```bash
-npm install -g mup
-```
-
-Once you've installed the command, you can initialize your project with `mup init`, which will create a `mup.json` file which you can use to configure your setup. You can read the [finer details here](https://github.com/kadirahq/meteor-up#example-file), but essentially you need to list the servers you would like to install to as well as some options on exactly how to set them up.
-
-To list those servers you'll first need to obtain some! A good option is [Digital Ocean](https://www.digitalocean.com), which will provide a Virtual Private Server for a very reasonable price. You'll need to ensure that Ubuntu or Debian is installed on the machine and mup can SSH into your server with the keys you provide in the config.
-
-Once you've configured mup, you can get your servers installed with
+To run this application, you need to provide Node.js 0.10.x and a MongoDB server. The current release of Meteor has been tested with Node 0.10.41. You can then run the application by invoking `node`, specifying the HTTP port for the application to listen on, and the MongoDB endpoint.
 
 ```bash
-mup setup
+cd my_directory
+(cd programs/server && npm install)
+env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
 ```
 
-Once you've done so, you can redeploy each time with:
-
-```bash
-mup deploy
-```
-
-You can also [watch this video](https://www.youtube.com/watch?v=WLGdXtZMmiI) for a more complete walkthrough on how to do it.
+However, unless you have a specific need to roll your own hosting environment, the other options here are definitely easier, and probably make for a better setup than doing everything from scratch. Operating a Meteor app in a way that it works correctly for everyone can be complex, and [Galaxy](#galaxy) handles a lot of the specifics like routing clients to the right containers and handling coordinated version updates for you.
 
 <h2 id="process">Deployment process</h2>
 
