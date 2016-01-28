@@ -332,8 +332,10 @@ Template.Invoices_newInvoice.onCreated(function() {
 });
 
 Template.Invoices_newInvoice.helpers({
+  
   errors(fieldName) {
-    return this.errors.get(fieldName);
+    const instance = Template.instance();
+    return instance.errors.get(fieldName);
   }
 });
 
