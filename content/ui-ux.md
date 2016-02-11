@@ -88,14 +88,14 @@ Template.Lists_show_page.helpers({
   // removed and a new copy is added when changing lists, which is
   // important for animation purposes.
   listIdArray() {
-    const instance = Template.instance();
-    const listId = instance.getListId();
+    const tmpl = Template.instance();
+    const listId = tmpl.getListId();
     return Lists.findOne(listId) ? [listId] : [];
   },
   listArgs(listId) {
-    const instance = Template.instance();
+    const tmpl = Template.instance();
     return {
-      todosReady: instance.subscriptionsReady(),
+      todosReady: tmpl.subscriptionsReady(),
       // We pass `list` (which contains the full list, with all fields, as a function
       // because we want to control reactivity. When you check a todo item, the
       // `list.incompleteCount` changes. If we didn't do this the entire list would
@@ -321,16 +321,16 @@ Template.Lists_show_page.onCreated(function() {
 
 Template.Lists_show_page.helpers({
   listArgs(listId) {
-    const instance = Template.instance();
+    const tmpl = Template.instance();
     const list = Lists.findOne(listId);
-    const requested = instance.state.get('requested');
+    const requested = tmpl.state.get('requested');
     return {
       list,
       todos: list.todos({}, {limit: requested}),
       requested,
-      countReady: instance.countSub.ready(),
+      countReady: tmpl.countSub.ready(),
       count: Counts.get(`list/todoCount${listId}`),
-      onNextPage: instance.onNextPage
+      onNextPage: tmpl.onNextPage
     };
   }
 });
@@ -355,8 +355,8 @@ Template.Lists_show_page.onCreated(function() {
   this.visibleTodos = new Mongo.Collection();
 
   this.getTodos = () => {
-    const list = Lists.findOne(this.this.getListId());
-    return list.todos({}, {limit: instance.state.get('requested')});
+    const list = Lists.findOne(this.getListId());
+    return list.todos({}, {limit: this.state.get('requested')});
   };
   // When the user requests it, we should sync the visible todos to reflect the true state of the world
   this.syncTodos = (todos) => {
@@ -382,21 +382,21 @@ Template.Lists_show_page.onCreated(function() {
 
 Template.Lists_show_page.helpers({
   listArgs(listId) {
-    const instance = Template.instance();
+    const tmpl = Template.instance();
     const list = Lists.findOne(listId);
-    const requested = instance.state.get('requested');
+    const requested = tmpl.state.get('requested');
     return {
       list,
       // we pass the *visible* todos through here
-      todos: instance.visibleTodos.find({}, {limit: requested}),
+      todos: tmpl.visibleTodos.find({}, {limit: requested}),
       requested,
-      countReady: instance.countSub.ready(),
+      countReady: tmpl.countSub.ready(),
       count: Counts.get(`list/todoCount${listId}`),
-      onNextPage: instance.onNextPage,
+      onNextPage: tmpl.onNextPage,
       // These two properties allow the user to know that there are changes to be viewed
       // and allow them to view them
-      hasChanges: instance.state.get('hasChanges'),
-      onShowChanges:instance.onShowChanges
+      hasChanges: tmpl.state.get('hasChanges'),
+      onShowChanges: tmpl.onShowChanges
     };
   }
 });
@@ -482,7 +482,7 @@ A good example of this is the editing state of the list from the Todos example a
 
 ```html
 {{#momentum plugin="fade"}}
-  {{#if instance.state.get 'editing'}}
+  {{#if tmpl.state.get 'editing'}}
     <form class="js-edit-form list-edit-form">...</form>
   {{else}}
     <div class="nav-group">...</div>
@@ -545,8 +545,8 @@ Template.Lists_show_page.helpers({
   // removed and a new copy is added when changing lists, which is
   // important for animation purposes.
   listIdArray() {
-    const instance = Template.instance();
-    const listId = instance.getListId();
+    const tmpl = Template.instance();
+    const listId = tmpl.getListId();
     return Lists.findOne(listId) ? [listId] : [];
   }
 });
