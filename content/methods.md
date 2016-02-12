@@ -106,7 +106,7 @@ Todos.methods.updateText = {
   },
 
   // Factor out Method body so that it can be called independently (3)
-  run({ todoId, newText }) {
+  run( todoId, newText ) {
     const todo = Todos.findOne(todoId);
 
     if (!todo.editableBy(this.userId)) {
@@ -182,7 +182,7 @@ Todos.methods.updateText = new ValidatedMethod({
     todoId: { type: String },
     newText: { type: String }
   }).validator(),
-  run({ todoId, newText }) {
+  run( todoId, newText ) {
     const todo = Todos.findOne(todoId);
 
     if (!todo.editableBy(this.userId)) {
