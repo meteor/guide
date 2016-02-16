@@ -34,3 +34,5 @@
   2. Overriding core/3rd party Atmosphere packages (content from http://guide.meteor.com/build-tool.html#atmosphere
   3. Overriding npm packages? (actually I don't know how to do this)
   4. Using `shrinkpack` to avoid depending on npm for deployments etc.
+
+Ensure we cover: http://docs.meteor.com/#/full/usingpackages
