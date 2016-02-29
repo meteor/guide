@@ -63,7 +63,7 @@ Meteor.publish('Lists.private', function() {
   return Lists.find({
     userId: this.userId
   }, {
-    fields: Lists.publicFields
+    fields: Lists.privateFields
   });
 });
 ```
