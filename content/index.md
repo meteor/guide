@@ -1,7 +1,7 @@
 ---
-title: Introduction
+title: Einleitung
 order: 0
-description: This is the guide for using Meteor, a full-stack JavaScript platform for developing modern web and mobile applications. Meteor includes a key set of technologies for building connected-client reactive applications, a build tool, and a curated set of packages from the Node.js and general JavaScript community.
+description: Das ist ein Leitfaden für Meteor, ein Full-stack JavaScript-Framework mit dem man moderne Anwendungen für das Internet und mobile Endgeräte entwickeln kann. Meteor beinhaltet einen Schlüsselsatz an Technologien, um mit dem Server verbundene, sog. reaktive Anwendungen zu entwickeln, ein Build-Tool, sowie ausgewählte Pakete der Node.js und JavaScript-Community.
 ---
 
 <h2 id="what-is-meteor">What is Meteor?</h2>
@@ -68,4 +68,4 @@ The Meteor Guide will never be done. In particular, it will be updated with new 
 
 5. [Atmosphere](https://atmospherejs.com) is the repository of community packages designed especially for Meteor.
 
-6. The [projects](https://www.meteor.com/projects) section of the Meteor website describes the projects that make up the Meteor platform. 
+6. The [projects](https://www.meteor.com/projects) section of the Meteor website describes the projects that make up the Meteor platform.
