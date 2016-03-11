@@ -20,13 +20,13 @@ Meteor ist eine Full-stack JavaScript-Plattform zum Entwickeln moderner Anwendun
 
 Der Leitfaden ist eine Reihe von Artikeln, der Meinungen und Best-practices zur Entwicklung von Anwendungen mit [Meteor](https://meteor.com) umreißen soll. Wir streben es an, übliche Vorgänge und Muster für die Entwicklung moderner Web- und Mobilanwendungen zu behandeln. Viele der hier aufgezeigten Konzepte sind also nicht zwingend spezifisch für Meteor und können auch auf andere Anwendungen mit modernen, interaktiven User Interfaces bezogen werden.
 
-Nichts in diesem Guide ist *erforderlich* um Meteor-Anwendungen zu bauen, du kannst die Plattform auch auf eine Art und Weise nutzen, die den Prinzipien und Mustern dieses Leitfaden widersprechen. Allerdings ist dieser Guide ein Versuch, Best-practices und Gepflogenheiten der Meteor Community zu dokumentieren. Deshalb hoffen wir, das der Großteil der Nutzer durch Anwendung der hier beschriebenen Vorgenhensweisen profitieren wird.
+Nichts in diesem Guide ist *erforderlich* um Meteor-Anwendungen zu bauen, du kannst die Plattform auch auf eine Art und Weise nutzen, die den Prinzipien und Mustern dieses Leitfaden widersprechen. Allerdings ist dieser Guide ein Versuch, Best-practices und Gepflogenheiten der Meteor Community zu dokumentieren. Deshalb hoffen wir, dass der Großteil der Nutzer durch Anwendung der hier beschriebenen Vorgenhensweisen profitieren wird.
 
 Die APIs der Meteor-Plattform findest du in der [Dokumentation](https://docs.meteor.com), die Packages der Community kannst du auf [Atmosphere](https://atmospherejs.com) durchstöbern.
 
 <h3 id="audience">Zielgruppe</h3>
 
-Dieser Guide soll fortgeschrittene Entwickler ansprechen, die bereits Erfahrungen mit Javascript, der Meteor-Plattform und Webentwicklung im Allgemeinen haben. Wenn du gerade deine ersten Schritte mit Meteor unternimmst, empfehlen wir das [offizielle Tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+Dieser Guide soll fortgeschrittene Entwickler ansprechen, die bereits Erfahrungen mit Javascript, der Meteor-Plattform und Webentwicklung im Allgemeinen haben. Wenn du gerade deine ersten Schritte mit Meteor unternimmst, empfehlen wir dir das [offizielle Tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
 <h3 id="example-app">Beispielapp</h3>
 
@@ -40,11 +40,11 @@ Die fortlaufende Entwicklung des Guides findet **in der Öffentlichkeit** [auf G
 
 <h3 id="goals">Ziele des Projekts</h3>
 
-Die Entscheidungen des Guides müssen zwingenderweise einer **Meinung** entsprechen. Wir werden bestimmte Best-practices  hervorheben, während wir andere, berechtigte Herangehensweisen ignorieren werden. Wir streben nach Übereinstimmung der Community-Meinungen rund um bedeutende Entscheidungen. Es wird aber stets möglich sein, Probleme während der Entwicklung einer App durch Alternativwege zu lösen. Wir halten es für wichtig, erst den "Standardweg" zu kennen, bevor wir andere Optionen in Betracht ziehen können. Sollte sich eine Alternative als überlegen herausstellen, sollte sie Einzug in den Meteor Guide finden.
+Die Entscheidungen und angewandten Methoden des Guides müssen zwingenderweise einer **Meinung** entsprechen. Wir werden bestimmte Best-practices  hervorheben, während wir andere berechtigte Herangehensweisen ignorieren werden. Wir streben nach Übereinstimmung der Community-Meinungen rund um bedeutende Entscheidungen. Es wird aber stets möglich sein, Probleme während der Entwicklung einer App durch Alternativwege zu lösen. Wir halten es für wichtig, erst den "Standardweg" zu kennen, bevor wir andere Optionen in Betracht ziehen können. Sollte sich eine Alternative als überlegen herausstellen, sollte sie Einzug in den Meteor Guide finden.
 
 Eine wichtige Funktion des Leitfadens ist es, die **zukünftige Entwicklung** der Plattform **zu formen**. Durch die Dokumentation von Best-practices rückt der Guide den Fokus auf Bereiche der Plattform, die besser, einfacher und leistungsfähiger sein könnten. Dadurch bündelt er in Zukunft die Wahlmöglichkeiten dieser.
 
-Gleichermaßen können die hervorgehobenen Differenzen durch **Community Packages** behoben werden. Wir hoffen, dass wenn du die Gelegenheit siehst, den Meteor-Workflow durch das Schreiben eines Packages zu verbessern, diese auch nutzt! Wenn du dir nicht sicher bist, wie du dein Package am besten designen oder aufbauen sollst, frage im Forum nach und starte eine Diskussion.
+Gleichermaßen können die durch uns hervorgehobenen Differenzen durch **Community Packages** behoben werden. Wir hoffen, dass wenn du die Gelegenheit siehst, den Meteor-Workflow durch das Schreiben eines Packages zu verbessern, diese auch nutzt! Wenn du dir nicht sicher bist, wie du dein Package am besten designen oder aufbauen sollst, frage im Forum nach und starte eine Diskussion.
 
 <h3 id="future">Zukünftige Ergänzungen</h3>
 
@@ -64,8 +64,8 @@ Der Meteor Guide wird niemals fertiggestellt werden. Insbesondere wird es durch 
 
 3. Besuche das (englischsprachige) [Forum für Diskussionen rund um Meteor](https://forums.meteor.com) um Projekte anzukündigen, Hilfe zu bekommen, über die Community zu reden oder über Änderungen des Meteor-Cores zu diskutieren.
 
-4. Die [Meteor Dokumentation](https://docs.meteor.com) ist der beste Ort, die API-Dokumentation des Cores zu finden.
+4. Die [Meteor Dokumentation](https://docs.meteor.com) ist der beste Ort, sich mit der API des Cores auseinanderzusetzen.
 
-5. [Atmosphere](https://atmospherejs.com) ist das Repository der Community-Packages, nur für Meteor designt.
+5. [Atmosphere](https://atmospherejs.com) ist das Repository der Community-Packages und wurde speziell für Meteor designt.
 
-6. Der Abschnitt [projects](https://www.meteor.com/projects) beschreibt die Projekte, die die Meteor ausmachen.
+6. Der Abschnitt [projects](https://www.meteor.com/projects) beschreibt die Projekte, die Meteor-Plattform ausmachen.
