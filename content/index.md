@@ -46,26 +46,26 @@ Eine wichtige Funktion des Leitfadens ist es, die **zukünftige Entwicklung** de
 
 Gleichermaßen können die hervorgehobenen Differenzen durch **Community Packages** behoben werden. Wir hoffen, dass wenn du die Gelegenheit siehst, den Meteor-Workflow durch das Schreiben eines Packages zu verbessern, diese auch nutzt! Wenn du dir nicht sicher bist, wie du dein Package am besten designen oder aufbauen sollst, frage im Forum nach und starte eine Diskussion.
 
-<h3 id="future">Future additions</h3>
+<h3 id="future">Zukünftige Ergänzungen</h3>
 
-The Meteor Guide will never be done. In particular, it will be updated with new features released in every Meteor version. The current release targets Meteor 1.2.x. There are a few more articles we will add in the coming weeks to align with the Meteor 1.3 release, which will bring ECMAScript module support, seamless NPM integration, improved integration and unit testing, and better mobile features:
+Der Meteor Guide wird niemals fertiggestellt werden. Insbesondere wird es durch neue Feature-Releases von Meteor aktualisiert werden. Die aktuelle Version des Guides zielt auf Version 1.2.x ab. Es gibt ein paar Artikel, die wir in den kommenden Wochen veröffentlichen werden, um auch Meteor 1.3 abzudecken. Meteor 1.3 wird ECMAScript-Modul Unterstützung, nahtlose NPM-Integration, verbesserte Integration und Unit-testing, und bessere Mobil-Features mit sich bringen:
 
-1. Application structure
-2. Testing
-3. Code style and linting
-4. Forms and user input
-5. Mobile apps
+1. Struktur der Anwendung
+2. Codetests
+3. Code style und Linting
+4. User Inputs
+5. Mobile Apps
 
-<h2 id="learning-more">Other Meteor resources</h2>
+<h2 id="learning-more">Andere Meteor-Ressourcen</h2>
 
-1. The place to get started with Meteor is the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+1. Der Ort, um erste Schritte mit Meteor zu unternehmen ist das [offizielle Tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
-2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) is the best place to ask (and answer!) technical questions. Be sure to add the meteor tag to your question.
+2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) ist der beste Platz, um technische Fragen zu stellen (und zu beantworten!). Bitte stelle sicher, die Frage mit *meteor* zu taggen.
 
-3. Visit the [Meteor discussion forums](https://forums.meteor.com) to announce projects, get help, talk about the community, or discuss changes to core.
+3. Besuche das (englischsprachige) [Forum für Diskussionen rund um Meteor](https://forums.meteor.com) um Projekte anzukündigen, Hilfe zu bekommen, über die Community zu reden oder über Änderungen des Meteor-Cores zu diskutieren.
 
-4. The [Meteor docs](https://docs.meteor.com) is the best place to find the core API documentation of the platform.
+4. Die [Meteor Dokumentation](https://docs.meteor.com) ist der beste Ort, die API-Dokumentation des Cores zu finden.
 
-5. [Atmosphere](https://atmospherejs.com) is the repository of community packages designed especially for Meteor.
+5. [Atmosphere](https://atmospherejs.com) ist das Repository der Community-Packages, nur für Meteor designt.
 
-6. The [projects](https://www.meteor.com/projects) section of the Meteor website describes the projects that make up the Meteor platform.
+6. Der Abschnitt [projects](https://www.meteor.com/projects) beschreibt die Projekte, die die Meteor ausmachen.
