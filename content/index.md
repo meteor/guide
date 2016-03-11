@@ -24,13 +24,13 @@ Nichts in diesem Guide ist *erforderlich* um Meteor-Anwendungen zu bauen, du kan
 
 Die APIs der Meteor-Platform findest du in der [Dokumentation](https://docs.meteor.com), die Packages der Community kannst du auf [Atmosphere](https://atmospherejs.com) durchstöbern.
 
-<h3 id="audience">Target audience</h3>
+<h3 id="audience">Zielgruppe</h3>
 
-The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+Dieser Guide soll fortgeschrittene Entwickler ansprechen, die bereits Erfahrungen mit Javascript, der Meteor-Platform und Webentwicklung im Allgemeinen haben. Wenn du gerade deine ersten Schritte mit Meteor unternimmst, empfehlen wir das [offizielle Tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
-<h3 id="example-app">Example app</h3>
+<h3 id="example-app">Beispielapp</h3>
 
-Many articles reference the Todos example application. This code is being actively developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
+Viele Artikel verweisen auf die Todos Beispielapp. Der Code für diese Anwendung wird neben dem Guide aktiv entwickelt. Du kannst dir den aktuellsten Quelltext für die App ansehen, Issues einreichen oder Vorschläge durch Pull Requests im [GitHub Repository](https://github.com/meteor/todos) machen.
 
 <h2 id="guide-concepts">Guide development</h2>
 
