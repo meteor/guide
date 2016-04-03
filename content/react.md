@@ -238,6 +238,73 @@ Although this `ListsShowPage` container is intended to be instantiated by the Re
 <ListsShowPage params={{id: '7'}}/>
 ```
 
+<h3 id="using-tracker-component">Using `Tracker.Component`</h3>
+
+Once you've run `npm i --save tracker-component`, you'll be able to create components with the `Tracker.Component` class, it allows you to create a [container component](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.by86emv9b) which provides data to your presentational components.
+
+> Note that "container components" are analogous to the "smart components" and "presentational components" to the "reusable components" in the pattern we document in the [UI/UX article](http://guide.meteor.com/ui-ux.html#components), if you'd like to read more about how this philosophy relates to Meteor.
+
+For example, in the Todos example app, we have a `ListsShow` component, which renders list metadata and the tasks in the list. In order to do so, it needs to [subscribe](data-loading.html#subscriptions) to the `todos.inList` publication, check that subscription's readiness, then fetch the list of todos from the `Todos` collection.
+
+It also needs to be responsive to reactive changes in the state of those actions (for instance if a todo changes due to the action of another user). All this data loading complexity is a typical use-case for a container-presentational component split, and `Tracker.Component` class makes it simple to do this.
+
+We simply define the `ListsShow` component as a presentational component that expects its data to be passed in using React `props`:
+
+```js
+import React from 'react';
+
+export default class ListsShow extends React.Component {
+  ...
+}
+
+ListsShow.propTypes = {
+  list: React.PropTypes.object,
+  todos: React.PropTypes.array,
+  loading: React.PropTypes.bool,
+  listExists: React.PropTypes.bool,
+};
+```
+
+Then we create a `ListsShowPage` container component which wraps it and provides a data source:
+
+```js
+import { Meteor } from 'meteor/meteor';
+import { Lists } from '../../api/lists/lists.js';
+import Tracker from 'tracker-component';
+import ListsShow from '../pages/ListsShow.jsx';
+
+export default class ListsShowPage extends Tracker.Component {
+  constructor(props) {
+    super(props);
+    this.autorun(() => {
+      const { id } = this.props;
+      this.subscribe('todos.inList', id);
+      const loading = !this.subscriptionsReady();
+      const list = Lists.findOne(id);
+      const listExists = !loading && !!list;
+      this.setState({
+        loading,
+        list,
+        listExists,
+        todos: listExists ? list.todos().fetch() : []
+      });
+    });
+  }
+  
+  render() {
+    return <ListsShow {...this.state} />
+  }
+}
+```
+
+The container component created will reactively rerender the wrapped component in response to any changes to [reactive data sources](https://atmospherejs.com/meteor/tracker) accessed from inside the function provided to it.
+
+Although this `ListsShowPage` container is intended to be instantiated by the React Router (which passes in the props automatically), if we did ever want to create one manually, we would need to pass in the props to the container component (which then get passed into our data function above):
+
+```js
+<ListsShowPage id="7" />
+```
+
 <h3 id="preventing-rerenders">Preventing re-renders</h3>
 
 Sometimes changes in your data can trigger re-computations which you know won't affect your UI. Although React is in general quite efficient in the face of unnecessary re-renders, if you need to control re-rendering, the above pattern allows you to easily use React's [`shouldComponentUpdate`](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) on the presentational component to avoid re-renders.
