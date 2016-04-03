@@ -117,7 +117,7 @@ For each module defined above, it makes sense to co-locate the various auxiliary
 
 <h3 id="startup-files">Startup files</h3>
 
-Some of your code isn't going to be a unit of business logic or UI, it's just some setup or configuration code that needs to run in the context of the app when it starts up. In the Todos example app, the `imports/startup/client/useraccounts-configuration.js` file configures the `useraccounts` login templates and the routes (see the [Accounts](accounts.html) article for more information about `useraccounts`). The `imports/startup/client/routes.js` configures all of the routes and then imports *all* other code that is required on the client, forming the main entry point for the rest of the client application:
+Some of your code isn't going to be a unit of business logic or UI, it's just some setup or configuration code that needs to run in the context of the app when it starts up. In the Todos example app, the `imports/startup/client/useraccounts-configuration.js` file configures the `useraccounts` login templates and the routes (see the [Accounts](accounts.html) article for more information about `useraccounts`). The `imports/startup/client/routes.js` configures all of the routes and then imports *all* other code that is required on the client, forming the main entry point for the rest of the client application. Note that, `startup` folder doesn't actually make the app to load it's files automatically, rather you need to explicitly `import` it in the entry point of your `main.js` file.
 
 ```js
 import { FlowRouter } from 'meteor/kadira:flow-router';
