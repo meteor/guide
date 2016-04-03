@@ -13,10 +13,20 @@
   1. The `ReactMeteorData` mixin
   2. The `ReactMeteorDataContainer` higher order component
   3. Containers vs. presentational components [call out to UX guide]
-  4. Optimizing re-renders with `shouldComponentUpdate`
+  4. Optimizing re-renders with `shouldComponentUpdate` and [pre-bindings](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
 
-6. Routing with React
-  2. FlowRouter
-    1. Using mounte
-  1. `react-router`
+4. Routing with React
+  1. FlowRouter
+    1. Using mount
+  2. `react-router`
     1. Basic demo, "spirit" of our routing guide
+
+5. Using Redux to Supplement Meteor
+  1. Advantages of Redux (rich dev/debug tools, time travel, dead simple undo/redo)
+  2. ???
+  3. Profit
+
+6. Performance Testing
+  1. React Perf Tools
+    1. Installation and Setup
+    2. Measuring Wasted Re-renders
