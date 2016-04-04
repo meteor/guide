@@ -49,7 +49,7 @@ The `package.js` file is the main file in every Meteor package. This is a JavaSc
 
 In this guide article, we will go over some important points for building packages, but we won't explain every part of the `package.js` API. To learn about all of the options, [read about the `package.js` API in the Meteor docs.](http://docs.meteor.com/#/full/packagejs)
 
-Don't forget to run `meteor add [my-package]` once you have finished developing your package in order to use it, even if the package is for internal use only and you don't intend to publish the package to Atmosphere.
+> Don't forget to run [`meteor add [my-package]`](http://docs.meteor.com/#/full/meteoradd) once you have finished developing your package in order to use it; this applies if the package is a local package for internal use only or if you have published the package to Atmosphere.
 
 <h2 id="adding-files">Adding files and assets</h2>
 
