@@ -117,7 +117,7 @@ For each module defined above, it makes sense to co-locate the various auxiliary
 
 <h3 id="importing-meteor-globals">Importing Meteor "pseudo-globals"</h3>
 
-For backwards compatibility Meteor 1.3 still provides Meteor's global namespacing for the Meteor core package as well as for other Meteor packages you include in your application. You can also still directly call functions such as [`Meteor.publish`](http://docs.meteor.com/#/full/meteor_publish), as in previous versions of Meteor, without first importing them. However, it is recommended best practice that you first load all the Meteor "pseudo-globals" using the `import { Name } from 'meteor/package' syntax` before using them. For instance:
+For backwards compatibility Meteor 1.3 still provides Meteor's global namespacing for the Meteor core package as well as for other Meteor packages you include in your application. You can also still directly call functions such as [`Meteor.publish`](http://docs.meteor.com/#/full/meteor_publish), as in previous versions of Meteor, without first importing them. However, it is recommended best practice that you first load all the Meteor "pseudo-globals" using the `import { Name } from 'meteor/package'` syntax before using them. For instance:
 
 ```js
 import { Meteor } from 'meteor/meteor';
