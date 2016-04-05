@@ -171,10 +171,10 @@ Even though it is recommended that you write your application to use ES2015 modu
 There are several load order rules. They are *applied sequentially* to all applicable files in the application, in the priority given below:
 
 1. HTML template files are *always* loaded before everything else
-2. Files beginning with `main.` are loaded **last**
-3. Files inside **any** `lib/` directory are loaded next
-4. Files with deeper paths are loaded next
-5. Files are then loaded in alphabetical order of the entire path
+2. Files inside **any** `lib/` directory are loaded next
+3. Files with deeper paths are loaded next
+4. Files are then loaded in alphabetical order of the entire path
+5. Files beginning with `main.` are loaded **last**
 
 ```js
   nav.html
