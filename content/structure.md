@@ -27,7 +27,7 @@ You can read about the module system in detail in the [`modules` package README]
 
 <h3 id="intro-to-import-export">Introduction to using `import` and `export`</h3>
 
-Meteor allows you to `import` not only JavaScript in your application, but also CSS and HTML:
+Meteor allows you to `import` not only JavaScript in your application, but also CSS and HTML to control load order:
 
 ```js
 import '../../api/lists/methods.js';  // import from relative path
@@ -41,7 +41,8 @@ Meteor also supports the standard E2015 modules `export` syntax:
 ```js
 export const listRenderHold = LaunchScreen.hold();  // named export
 export { Todos };                                   // named export
-export default { Lists };                           // default export
+export default Lists;                               // default export
+export default new Collection('lists');             // default export
 ```
 
 <h4 id="importing-from-packages">Importing from packages</h4>
@@ -208,7 +209,7 @@ import { EJSON } from 'meteor/ejson';
 
 <h2 id="load-order">Default file load order</h2>
 
-Even though it is recommended that you write your application to use ES2015 modules and the `imports/` directory, Meteor 1.3 continues to support eager loading of files, using these default load order rules, to provide backwards compatibility with applications written for Meteor 1.2 and earlier. You may combine both eager loading and lazy loading using `import` in a single app. Any import statements are evaluated in order they are listed in a file when that file is loaded and evaluated using these rules.
+Even though it is recommended that you write your application to use ES2015 modules and the `imports/` directory, Meteor 1.3 continues to support eager loading of files, using these default load order rules, to provide backwards compatibility with applications written for Meteor 1.2 and earlier. You may combine both eager loading and lazy loading using `import` in a single app. Any import statements are evaluated in the order they are listed in a file when that file is loaded and evaluated using these rules.
 
 There are several load order rules. They are *applied sequentially* to all applicable files in the application, in the priority given below:
 
