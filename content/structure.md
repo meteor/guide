@@ -32,7 +32,7 @@ Meteor allows you to `import` not only JavaScript in your application, but also 
 ```js
 import '../../api/lists/methods.js';  // import from relative path
 import '/imports/startup/client';     // import module with index.js from absolute path
-import './loading.html';              // import HTML from relative path
+import './loading.html';              // import Blaze compiled HTML from relative path
 import '/imports/ui/style.css';       // import CSS from absolute path
 ```
 
@@ -166,7 +166,7 @@ import '../../ui/accounts/accounts-templates.js';
 // Below here are the route definitions
 ```
 
-We then import both of these files in `/imports/startup/client/index.js`:
+We then import both of these files in `imports/startup/client/index.js`:
 
 ```js
 import './useraccounts-configuration.js';
@@ -179,7 +179,7 @@ This makes it easy to then import all the client startup code with a single impo
 import '/imports/startup/client';
 ```
 
-On the server, we use the same technique of importing all the startup code in `/imports/startup/server/index.js`:
+On the server, we use the same technique of importing all the startup code in `imports/startup/server/index.js`:
 
 ```js
 // This defines a starting set of data to be loaded if the app is loaded with an empty db.
