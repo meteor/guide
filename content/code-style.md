@@ -2,6 +2,7 @@
 title: Code style
 order: 2
 description: Suggested style guidelines for your code.
+discourseTopicId: 20189
 ---
 
 After reading this article, you'll know:
@@ -71,13 +72,13 @@ All of the code samples in this guide and future Meteor tutorials will use all o
 
 <h3 id="style-guide">Follow a JavaScript style guide</h3>
 
-We recommend choosing and sticking to a JavaScript style guide and enforcing it with tools. A popular option that we rcommend is the [AirBnB style guide](https://github.com/airbnb/javascript) with the ES6 extensions (and optionally React extensions).
+We recommend choosing and sticking to a JavaScript style guide and enforcing it with tools. A popular option that we recommend is the [Airbnb style guide](https://github.com/airbnb/javascript) with the ES6 extensions (and optionally React extensions).
 
 <h2 id="eslint">Check your code with ESLint</h2>
 
 "Code linting" is the process of automatically checking your code for common errors or style problems. For example, ESLint can determine if you have made a typo in a variable name, or some part of your code is unreachable because of a poorly written `if` condition.
 
-We recommend using the [AirBnB eslint configuration](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb) which verifies the AirBnB styleguide.
+We recommend using the [Airbnb eslint configuration](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb) which verifies the Airbnb styleguide.
 
 Below, you can find directions for setting up automatic linting at many different stages of development. In general, you want to run the linter as often as possible, because it's the fastest and easiest way to identify typos and small errors.
 
@@ -89,7 +90,7 @@ To setup ESLint in your application, you can install the following npm packages:
 npm install --save-dev eslint eslint-plugin-react eslint-plugin-meteor eslint-config-airbnb
 ```
 
-You can also add a `eslintConfig` section to your `package.json` to specify that you'd like to use the AirBnB config, and to enable [ESLint-plugin-Meteor](https://github.com/dferber90/eslint-plugin-meteor). You can also setup any extra rules you want to change, as well as adding a lint npm command:
+You can also add a `eslintConfig` section to your `package.json` to specify that you'd like to use the Airbnb config, and to enable [ESLint-plugin-Meteor](https://github.com/dferber90/eslint-plugin-meteor). You can also setup any extra rules you want to change, as well as adding a lint npm command:
 
 ```
 {
@@ -151,14 +152,14 @@ apm install linter-eslint
 Go to *Settings -> Packages.* Under "linter-eslint", click the *Settings* button. To allow atom to see ESLint, you need to set "Global Node Path" to your Node path. As indicated in Atom, you can find this out with the following command in the terminal:
 
 ```
-meteor npm config get prefix
+npm get prefix
 ```
 
 This will return something like `/usr/local`. Add this to the "Global Node Path", and check "Use Global Eslint":
 
 ![Set your "Global Node Path" and check "Use Global Eslint"](images/atom-configuration.png)
 
-Then **restart Atom** to activate linting.
+Then **restart** (or **reload** by pressing Ctrl+Alt+R / Cmd+Opt+R) Atom to activate linting.
 
 
 <h4 id="eslint-webstorm">WebStorm</h4>
@@ -239,7 +240,7 @@ Note that imports use relative paths, and include the file extension at the end 
 For [Atmosphere packages](using-packages.html), as the older pre-1.3 `api.export` syntax allowed more than one export per package, you'll tend to see non-default exports used for symbols. For instance:
 
 ```js
-// You'll need to destructure here, as Meteor could export more symbols
+// You'll need to deconstruct here, as Meteor could export more symbols
 import { Meteor } from 'meteor/meteor';
 
 // This will not work
@@ -264,7 +265,7 @@ If this template is a "smart" component that loads server data and accesses the 
 </template>
 ```
 
-Often when you are dealing with templates or UI components, you'll have several closely coupled files to manage. They could be two or more of HTML, CSS, and JavaScript. In this case, we recommend putting the files together in the same directory with the same name:
+Often when you are dealing with templates or UI components, you'll have several closely coupled files to manage. They could be two or more of HTML, CSS, and JavaScript files. In this case, we recommend putting these together in the same directory with the same name:
 
 ```
 # The Lists_show template from the Todos example app has 3 files:

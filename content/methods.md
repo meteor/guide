@@ -1,6 +1,6 @@
 ---
 title: "Methods"
-order: 5
+order: 12
 description: How to use Methods, Meteor's remote procedure call system, to write to the database.
 discourseTopicId: 19662
 ---
@@ -28,7 +28,7 @@ In a basic app, defining a Meteor Method is as simple as defining a function. In
 
 <h4 id="basic-defining">Defining</h4>
 
-Here's how you can use the built-in [`Meteor.methods` API](http://docs.meteor.com/#/full/meteor_methods) to define a Method. Note that Methods should always be defined in common code loaded on the client and the server to enable Optimistic UI. If you have some secret code in your Method, consult the [Security article](security.md#secret-code) for how to hide it from the client.
+Here's how you can use the built-in [`Meteor.methods` API](http://docs.meteor.com/#/full/meteor_methods) to define a Method. Note that Methods should always be defined in common code loaded on the client and the server to enable Optimistic UI. If you have some secret code in your Method, consult the [Security article](security.html#secret-code) for how to hide it from the client.
 
 This example uses the `aldeed:simple-schema` package, which is recommended in several other articles, to validate the Method arguments.
 
@@ -373,7 +373,7 @@ Template.Invoices_newInvoice.events({
 });
 ```
 
-As you can see, there is a fair amount of boilerplate to handle errors nicely in a form, but most of it can be easily abstracted by an off-the-shelf form framework or a simple application-specific wrapper of your own design. The final released version of the Meteor guide will have a new article about forms.
+As you can see, there is a fair amount of boilerplate to handle errors nicely in a form, but most of it can be easily abstracted by an off-the-shelf form framework or a simple application-specific wrapper of your own design.
 
 <h2 id="loading-data">Loading data with Methods</h2>
 

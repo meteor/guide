@@ -1,6 +1,6 @@
 ---
 title: Blaze
-order: 9
+order: 22
 description: How to use Blaze, Meteor's frontend rendering system, to build usable and maintainable user interfaces.
 discourseTopicId: 19666
 ---
@@ -233,7 +233,7 @@ Spacebars has a very strict HTML parser. For instance, you can't self-close a `d
 
 <h4 id="escaping">Escaping</h4>
 
-To insert literal curly braces: `{% raw %}{{ }}{% endraw %}` and the like, add a pipe character, `|`:
+To insert literal curly braces: `{% raw %}{{ }}{% endraw %}` and the like, add a pipe character, `|`, to the opening braces:
 
 ```
 <!-- will render as <h1>All about {{</h1> -->
@@ -245,7 +245,7 @@ To insert literal curly braces: `{% raw %}{{ }}{% endraw %}` and the like, add a
 
 <h2 id="reusable-components">Reusable components in Blaze</h2>
 
-In <a href="ui-ux">the UI/UX article</a> we discussed the merits of creating reusable components that interact with their environment in clear and minimal ways.
+In [UI/UX article](ui-ux.html#smart-components) we discussed the merits of creating reusable components that interact with their environment in clear and minimal ways.
 
 Although Blaze, which is a simple template-based rendering engine, doesn't enforce a lot of these principles (unlike other frameworks like React and Angular) you can enjoy most of the same benefits by following some conventions when writing your Blaze components. This section will outline some of these "best practices" for writing reusable Blaze components.
 

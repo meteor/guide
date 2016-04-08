@@ -18,14 +18,14 @@ Meteor is a full-stack JavaScript platform for developing modern web and mobile 
 
 <h3 id="quickstart">Quick start</h3>
 
-Meteor supports [OS X, Windows, and Linux](https://github.com/meteor/meteor/wiki/Supported-Platforms).
+Meteor supports [OS X, Windows, and Linux](https://www.meteor.com/install).
 
 On Windows?  [Download the official Meteor installer here](https://install.meteor.com/windows).
 
 On OS X or Linux?  Install the latest official Meteor release from your terminal:
 
 ```bash
-$ curl https://install.meteor.com/ | sh
+curl https://install.meteor.com/ | sh
 ```
 
 The Windows installer supports Windows 7, Windows 8.1, Windows Server
@@ -42,9 +42,12 @@ Run it locally:
 
 ```bash
 cd myapp
+meteor npm install
 meteor
 # Meteor server running on: http://localhost:3000/
 ```
+
+> Meteor comes with npm bundled so that you can type `meteor npm` without worrying about installing it yourself. If you like, you can also use a globally installed npm to manage your packages.
 
 <h2 id="learning-more">Meteor resources</h2>
 
@@ -89,12 +92,3 @@ The decisions made and practices outlined in the guide must necessarily be **opi
 An important function of the guide is to **shape future development** in the Meteor platform. By documenting best practices, the guide shines a spotlight on areas of the platform that could be better, easier, or more performant, and thus will be used to focus a lot of future platform choices.
 
 Similarly, gaps in the platform highlighted by the guide can often be plugged by **community packages**; we hope that if you see an opportunity to improve the Meteor workflow by writing a package, that you take it! If you're not sure how best to design or architect your package, reach out on the forums and start a discussion.
-
-
-3. Visit the [Meteor discussion forums](https://forums.meteor.com) to announce projects, get help, talk about the community, or discuss changes to core.
-
-4. The [Meteor docs](https://docs.meteor.com) is the best place to find the core API documentation of the platform.
-
-5. [Atmosphere](https://atmospherejs.com) is the repository of community packages designed especially for Meteor.
-
-6. The [projects](https://www.meteor.com/projects) section of the Meteor website describes the projects that make up the Meteor platform.

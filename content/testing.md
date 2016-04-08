@@ -1,7 +1,8 @@
 ---
 title: "Testing"
-order: 7
+order: 14
 description: How to test your Meteor application
+discourseTopicId: 20191
 ---
 
 <h2 id="introduction">Introduction</h2>
@@ -24,7 +25,7 @@ Entire books have been written on the subject of testing, so we will simply touc
 
 <h3 id="challenges-with-meteor">Challenges of testing in Meteor</h3>
 
-In most ways, testing a Meteor app is no different from testing any other full stack JavaScript application. However, compared to more traditional backend or frontend focused frameworks, two factors can make testing a little more challenging:
+In most ways, testing a Meteor app is no different from testing any other full stack JavaScript application. However, compared to more traditional backend or front-end focused frameworks, two factors can make testing a little more challenging:
 
 - **Client/server data**: Meteor's data system makes it simple to bridge the client-server gap and often allows you to build your application without thinking about how data moves around. It becomes critical to test that your code does actually work correctly across that gap. In traditional frameworks where you spend a lot of time thinking about interfaces between client and server you can often get away with testing both sides of the interface in isolation, but Meteor's [full app test mode](#test-modes) makes it easy to write [integration tests](#full-app-integration-test) that cover the full stack. Another challenge here is creating test data in the client context; we'll discuss ways to do this in the [section on generating test data](#generating-test-data) below.
 
@@ -40,6 +41,8 @@ This loads your application in a special "test mode". What this does is:
 2. *Does* eagerly load any file in our application (including in `imports/` folders) that look like `*.test[s].*`, or `*.spec[s].*`
 3. Sets the `Meteor.isTest` flag to be true.
 4. Starts up the test driver package ([see below](#driver-package)).
+
+> The [Meteor build tool](build-tool.html#what-it-does) and the `meteor test` command ignore any files located in any `tests/` directory. This allows you to put tests in this directory that you can run using a test runner outside of Meteor's built-in test tools and still not have those files loaded in your application. See Meteor's [default file load order](structure.html#load-order) rules.
 
 What this means is that you can write tests in files with a certain filename pattern and know they'll not be included in normal builds of your app. When your app runs in test mode, those files will be loaded (and nothing else will), and they can import the modules you want to test. As we'll see this is ideal for [unit tests](#unit-testing) and [simple integration tests](#simple-integration-test).
 
@@ -79,8 +82,10 @@ This package also doesn't do anything in development or production mode (in fact
 Test files themselves (for example a file named `todos-item.test.js` or `routing.app-specs.coffee`) can register themselves to be run by the test driver in the usual way for that testing library. For Mocha, that's by using `describe` and `it`:
 
 ```js
-describe('my module', () => {
-  it('does something that should be tested', () => {
+// Note: Arrow function use with Mocha is discouraged.
+// (see http://mochajs.org/#arrow-functions)
+describe('my module', function () {
+  it('does something that should be tested', function () {
     // This code will be executed by the test driver when the app is started
     // in the correct mode
   })
@@ -98,8 +103,8 @@ To ensure the database is clean, the [`xolvio:cleaner`](https://atmospherejs.com
 ```js
 import { resetDatabase } from 'meteor/xolvio:cleaner';
 
-describe('my module', () => {
-  beforeEach(() => {
+describe('my module', function () {
+  beforeEach(function () {
     resetDatabase();
   });
 });
@@ -116,8 +121,8 @@ Meteor.methods({
   'test.resetDatabase': () => resetDatabase();
 });
 
-describe('my module', done => {
-  beforeEach(done => {
+describe('my module', function (done) {
+  beforeEach(function (done) {
     // We need to wait until the method call is done before moving on, so we
     // use Mocha's async mechanism (calling a done callback)
     Meteor.call('test.resetDatabase', done);
@@ -125,7 +130,7 @@ describe('my module', done => {
 });
 ```
 
-As we've placed the code above in a test file, it *will not* load in normal development or production mode (which would a incredibly bad thing!). If you create a Atmosphere package with a similar feature, you should mark it as `testOnly` and it will similarly only load in test mode.
+As we've placed the code above in a test file, it *will not* load in normal development or production mode (which would be an incredibly bad thing!). If you create a Atmosphere package with a similar feature, you should mark it as `testOnly` and it will similarly only load in test mode.
 
 <h3 id="generating-test-data">Generating test data</h3>
 
@@ -216,6 +221,7 @@ A simple example of a reusable component to test is the `Todos_item` template. H
 
 ```js
 /* eslint-env mocha */
+/* eslint-disable func-names, prefer-arrow-callback */
 
 import { Factory } from 'meteor/factory';
 import { chai } from 'meteor/practicalmeteor:chai';
@@ -226,16 +232,16 @@ import { $ } from 'meteor/jquery';
 import { withRenderedTemplate } from '../../test-helpers.js';
 import '../todos-item.js';
 
-describe('Todos_item', () => {
-  beforeEach(() => {
+describe('Todos_item', function () {
+  beforeEach(function () {
     Template.registerHelper('_', key => key);
   });
 
-  afterEach(() => {
+  afterEach(function () {
     Template.deregisterHelper('_');
   });
 
-  it('renders correctly with simple data', () => {
+  it('renders correctly with simple data', function () {
     const todo = Factory.build('todo', { checked: false });
     const data = {
       todo,
@@ -304,8 +310,8 @@ In the [unit test above](#simple-unit-test) we saw a very limited example of how
   - (Using another package from the example app) to isolate a publication, the `publication-collector` package:
 
     ```js
-    describe('lists.public', () => {
-      it('sends all public lists', (done) => {
+    describe('lists.public', function () {
+      it('sends all public lists', function (done) {
         // Allows us to look at the output of a publication without
         // needing a client connection
         const collector = new PublicationCollector();
@@ -337,6 +343,7 @@ In the Todos example app, we have an integration test for the `Lists_show_page` 
 
 ```js
 /* eslint-env mocha */
+/* eslint-disable func-names, prefer-arrow-callback */
 
 import { Meteor } from 'meteor/meteor';
 import { Factory } from 'meteor/factory';
@@ -356,10 +363,10 @@ import '../lists-show-page.js';
 import { Todos } from '../../../api/todos/todos.js';
 import { Lists } from '../../../api/lists/lists.js';
 
-describe('Lists_show_page', () => {
+describe('Lists_show_page', function () {
   const listId = Random.id();
 
-  beforeEach(() => {
+  beforeEach(function () {
     StubCollections.stub([Todos, Lists]);
     Template.registerHelper('_', key => key);
     sinon.stub(FlowRouter, 'getParam', () => listId);
@@ -369,14 +376,14 @@ describe('Lists_show_page', () => {
     }));
   });
 
-  afterEach(() => {
+  afterEach(function () {
     StubCollections.restore();
     Template.deregisterHelper('_');
     FlowRouter.getParam.restore();
     Meteor.subscribe.restore();
   });
 
-  it('renders correctly with simple data', () => {
+  it('renders correctly with simple data', function () {
     Factory.create('list', { _id: listId });
     const timestamp = new Date();
     const todos = _.times(3, i => Factory.create('todo', {
@@ -417,6 +424,7 @@ In the Todos example application, we have a integration test which ensures that 
 
 ```js
 /* eslint-env mocha */
+/* eslint-disable func-names, prefer-arrow-callback */
 
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
@@ -446,8 +454,8 @@ const waitForSubscriptions = () => new Promise(resolve => {
 const afterFlushPromise = Promise.denodeify(Tracker.afterFlush);
 
 if (Meteor.isClient) {
-  describe('data available when routed', () => {
-    beforeEach(done => {
+  describe('data available when routed', function () {
+    beforeEach(function (done) {
       // First, ensure the data that we expect is loaded on the server
       generateData()
         // Then, route the app to the homepage
@@ -457,12 +465,12 @@ if (Meteor.isClient) {
         .nodeify(done);
     });
 
-    describe('when logged out', () => {
-      it('has all public lists at homepage', () => {
+    describe('when logged out', function () {
+      it('has all public lists at homepage', function () {
         assert.equal(Lists.find().count(), 3);
       });
 
-      it('renders the correct list when routed to', done => {
+      it('renders the correct list when routed to', function (done) {
         const list = Lists.findOne();
         FlowRouter.go('Lists.show', { _id: list._id });
 
@@ -583,6 +591,7 @@ Chimp will now look in the `tests/` directory (otherwise ignored by the Meteor t
 
 ```js
 /* eslint-env mocha */
+/* eslint-disable func-names, prefer-arrow-callback */
 
 // These are Chimp globals
 /* globals browser assert server */
@@ -593,13 +602,13 @@ function countLists() {
   return elements.value.length;
 };
 
-describe('list ui', () => {
-  beforeEach(() => {
+describe('list ui', function () {
+  beforeEach(function () {
     browser.url('http://localhost:3000');
     server.call('generateFixtures');
   });
 
-  it('can create a list @watch', () => {
+  it('can create a list @watch', function () {
     const initialCount = countLists();
 
     browser.click('.js-new-list');

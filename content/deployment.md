@@ -1,6 +1,6 @@
 ---
 title: Deployment and Monitoring
-order: 13
+order: 41
 description: How to deploy, run, and monitor your Meteor app in production.
 discourseTopicId: 19668
 ---
@@ -67,6 +67,21 @@ You want to put your CDN in front of the static assets that Meteor knows about. 
 
 If you are following the above approach, you may also want to manually add the CDN's hostname whenever you put an image/other asset URL in your application's code. To do this throughout your app, you can write a generic helper like `imageUrl()`.
 
+<h4 id="cdn-webfonts">CDNs and webfonts</h4>
+
+If you are hosting a webfont as part of your application and serving it via a CDN, you may need to configure the served headers for the font to allow cross-origin resource sharing (as the webfont is now served from a different origin to your site itself). You can do this easily enough in Meteor by adding a handler (you'll need to ensure your CDN is passing the header through):
+
+```js
+import { WebApp } from 'meteor/webapp';
+
+WebApp.rawConnectHandlers.use(function(req, res, next) {
+  if (req._parsedUrl.pathname.match(/\.(ttf|ttc|otf|eot|woff|font\.css|css)$/) {
+    res.setHeader('Access-Control-Allow-Origin', /* your hostname, or just '*' */);
+  }
+  next();
+});
+```
+
 <h2 id="deployment-options">Deployment options</h2>
 
 Meteor is an open source platform, and you can run the apps that you make with Meteor anywhere just like regular Node.js applications. But operating Meteor apps *correctly*, so that your apps work for everyone, can be tricky if you are managing your infrastructure manually. This is why we recommend running production Meteor apps on Galaxy.
@@ -109,12 +124,13 @@ You can obtain a server running Ubuntu or Debian from many generic hosting provi
 
 <h3 id="custom-deployment">Custom deployment</h3>
 
-If you want to figure out your hosting solution completely from scratch, the Meteor tool has a command `meteor build` that creates a deployment bundle that contains a plain Node.js application. You can host this application wherever you like and there are many options in terms of how you set it up and configure it.
+If you want to figure out your hosting solution completely from scratch, the Meteor tool has a command `meteor build` that creates a deployment bundle that contains a plain Node.js application. Any npm dependencies must be installed before issuing the `meteor build` command to be included in the bundle. You can host this application wherever you like and there are many options in terms of how you set it up and configure it.
 
-**NOTE** it's important that you build your bundle for the correct architecture. If you are building on your development machine, there's a good chance you are deploying to a different server architecture. You'll want to specify the correct arcitecture with `--architecture`:
+**NOTE** it's important that you build your bundle for the correct architecture. If you are building on your development machine, there's a good chance you are deploying to a different server architecture. You'll want to specify the correct architecture with `--architecture`:
 
 ```bash
 # for example if deploying to a Ubuntu linux server:
+npm install --production
 meteor build /path/to/build --architecture os.linux.x86_64
 ```
 
@@ -253,6 +269,6 @@ If your application contains a lot of publicly accessible content, then you prob
 
 To do so, we can use the [Prerender.io](https://prerender.io) service, thanks to the [`dfischer:prerenderio`](https://atmospherejs.com/dfischer/prerenderio) package. It's a simple as `meteor add`-ing it, and optionally setting your prerender token if you have a premium prerender account and would like to enable more frequent cache changes.
 
-If you’re using a Galaxy Team, Business, or Pro account to host your meteor apps, you can also take advantage of built-in automatic [Prerender.io](https://prerender.io) integration. Simply add [`mdg:seo`](https://atmospherejs.com/mdg/seo) to your app and Galaxy will take care of the rest.
+If you’re using [Galaxy to host your meteor apps](https://www.meteor.com/galaxy/signup), you can also take advantage of built-in automatic [Prerender.io](https://prerender.io) integration. Simply add [`mdg:seo`](https://atmospherejs.com/mdg/seo) to your app and Galaxy will take care of the rest.
 
 Chances are you also want to set `<title>` tags and other `<head>` content to make your site appear nicer in search results. The best way to do so is to use the [`kadira:dochead`](https://atmospherejs.com/kadira/dochead) package. The sensible place to call out to `DocHead` is from the `onCreated` callbacks of your page-level components.

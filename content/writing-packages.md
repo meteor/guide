@@ -1,5 +1,7 @@
 ---
 title: Writing Packages
+order: 31
+discourseTopicId: 20194
 ---
 
 After reading this article, you'll know:
@@ -19,17 +21,18 @@ If you want to distribute and reuse code that you've written for a Meteor applic
 
 The practice of writing npm packages is [well documented](https://docs.npmjs.com/getting-started/creating-node-modules) and we won't cover it here.
 
-However, if your package depends on an Atmosphere package (which, in Meteor 1.3, includes the Meteor core packages), or needs to take advantage of Meteor's [build system](#build-packages), then writing an Atmosphere package might be the best option.
+However, if your package depends on an Atmosphere package (which, in Meteor 1.3, includes the Meteor core packages), or needs to take advantage of Meteor's [build system](build-tool.html), then writing an Atmosphere package might be the best option.
 
 This article will cover some tips on how to do that.
 
-<h2 id="creating">Creating an Atmosphere Package</h2>
+<h2 id="creating">Creating an Atmosphere package</h2>
 
 To get started writing a package, use the Meteor command line tool:
 
 ```bash
 meteor create --package my-package
 ```
+> It is required that your `my-package` name take the form of `username:my-package`, where `username` is your Meteor Developer username, if you plan to publish your package to Atmosphere.
 
 If you run this inside an app, it will place the newly generated package in that app's `packages/` directory. Outside an app, it will just create a standalone package directory. The command also generates some boilerplate files for you:
 
@@ -45,6 +48,8 @@ The `package.js` file is the main file in every Meteor package. This is a JavaSc
 
 In this guide article, we will go over some important points for building packages, but we won't explain every part of the `package.js` API. To learn about all of the options, [read about the `package.js` API in the Meteor docs.](http://docs.meteor.com/#/full/packagejs)
 
+> Don't forget to run [`meteor add [my-package]`](http://docs.meteor.com/#/full/meteoradd) once you have finished developing your package in order to use it; this applies if the package is a local package for internal use only or if you have published the package to Atmosphere.
+
 <h2 id="adding-files">Adding files and assets</h2>
 
 The main function of an Atmosphere package is to contain source code (JS, CSS, and any transpiled languages) and assets (images, fonts, and more) that will be shared across different applications.
@@ -52,7 +57,6 @@ The main function of an Atmosphere package is to contain source code (JS, CSS, a
 <h3 id="adding-javascript">Adding JavaScript</h3>
 
 To add JavaScript files to a package, specify an entrypoint with [`api.mainModule()`](http://docs.meteor.com/#/full/pack_mainModule) in the package's `onUse` block (this will already have been done by `meteor create --package` above):
-
 
 ```js
 Package.onUse(function(api) {
@@ -75,27 +79,46 @@ You can also add any source file that would be compiled to a JS file (such as a 
 
 <h3 id="adding-css">Adding CSS</h3>
 
-To include CSS files with yor package, you can use [`api.addFiles()`](http://docs.meteor.com/#/full/pack_addFiles):
+To include CSS files with your package you can use [`api.addFiles()`](http://docs.meteor.com/#/full/pack_addFiles):
 
 ```js
 Package.onUse(function(api) {
-  api.addFiles('my-package.css');
+  api.addFiles('my-package.css', 'client');
 });
 ```
 
 The CSS file will be automatically loaded into any app that uses your package.
 
-<h3 id="adding-assets">Adding other Assets</h3>
+<h3 id="adding-style">Adding Sass, Less, or Stylus mixins/variables</h3>
 
-You can include other assets in your package, which you can later access with the [Assets API](http://docs.meteor.com/#/full/assets_getText) on the server, or via URL on the client, using [`api.addAssets`](http://docs.meteor.com/#/full/PackageAPI-addAssets):
+Just like packages can export JavaScript code, they can export reusable bits of CSS pre-processor code. You can also have a package that doesn't actually include any CSS, but just exports different bits of reusable mixins and variables. To get more details see Meteor [build tool CSS pre-processors](build-tool.html#css):
+
+```js
+Package.onUse(function(api) {
+  api.addFiles('my-package.scss', 'client');
+});
+```
+
+This Sass file will be eagerly evaluated and its compiled form will be added to the CSS of the app immediately.
+
+```js
+Package.onUse(function(api) {
+  api.addFiles([
+    'stylesheets/_util.scss',
+    'stylesheets/_variables.scss'
+  ], 'client', {isImport: true});
+});
+```
+
+These two Sass files will be lazily evaluated and only included in the CSS of the app if imported from some other file.
+
+<h3 id="adding-assets">Adding other assets</h3>
+
+You can include other assets, such as fonts, icons or images, to your package using [`api.addAssets`](http://docs.meteor.com/#/full/PackageAPI-addAssets):
 
 ```js
 Package.onUse(function(api) {
   api.addAssets([
-    'font/OpenSans-Light-webfont.eot',
-    'font/OpenSans-Light-webfont.svg',
-    'font/OpenSans-Light-webfont.ttf',
-    'font/OpenSans-Light-webfont.woff',
     'font/OpenSans-Regular-webfont.eot',
     'font/OpenSans-Regular-webfont.svg',
     'font/OpenSans-Regular-webfont.ttf',
@@ -104,19 +127,21 @@ Package.onUse(function(api) {
 });
 ```
 
+You can then access these files from the client from a URL `/packages/username_my-package/font/OpenSans-Regular-webfont.eot` or from the server using the [Assets API](http://docs.meteor.com/#/full/assets_getText).
+
 <h2 id="exporting">Exporting</h2>
 
 While some packages exist just to provide side effects to the app, most packages provide a reusable bit of code that can be used by the consumer with `import`. To export a symbol from your package, simply use the ES2015 `export` syntax in your `mainModule`:
 
 ```js
 // in my-package.js:
-export const name = 'my-package';
+export const myName = 'my-package';
 ```
 
 Now users of your package can import the symbol with:
 
 ```js
-import { name } from 'meteor/username:my-package';
+import { myName } from 'meteor/username:my-package';
 ```
 
 <h2 id="dependencies">Dependencies</h2>
@@ -136,7 +161,7 @@ Package.onUse(function(api) {
 
 One important feature of the Atmosphere package system is that it is single-loading: no two packages in the same app can have dependencies on conflicting versions of a single package. Read more about that in the section about version constraints below.
 
-<h4 id="meteor-version-dependencies">Depending on Meteor Version</h4>
+<h4 id="meteor-version-dependencies">Depending on Meteor version</h4>
 
 Note that the Meteor release version number is mostly a marketing artifact---the core Meteor packages themselves typically don't share this version number. This means packages can only depend on specific versions of the packages inside a Meteor release, but can't depend on a specific release itself. We have a helpful shorthand api called [`api.versionsFrom`](http://docs.meteor.com/#/full/pack_versions) that handles this for you by automatically filling in package version numbers from a particular release:
 
@@ -219,10 +244,6 @@ const React = require('react');
 
 > Note that `checkNpmVersions` will only output a warning if the user has installed a incompatible version of the npm package. So your `require` call may not give you what you expect. This is consistent with npm's handling of [peer dependencies](http://blog.npmjs.org/post/110924823920/npm-weekly-5).
 
-<h2 id="exporting-css-preprocessor-code">LESS, SCSS, or Stylus mixins/variables</h2>
-
-Just like packages can export JavaScript code, they can export reusable bits of CSS pre-processor code. You can have a package that doesn't actually include any CSS, but just exports different bits of reusable mixins and variables. Learn more about this in the [article about the Meteor build system](build-tool.html), which includes a section about CSS compilers.
-
 <h2 id="cordova-plugins">Cordova plugins</h2>
 
 Meteor packages can include [Cordova plugins](http://cordova.apache.org/plugins/) to ship native code for the Meteor mobile app container. This way, you can interact with the native camera interface, use the gyroscope, save files locally, and more.
@@ -231,7 +252,7 @@ Include Cordova plugins in your Meteor package by using [Cordova.depends](http:/
 
 Read more about using Cordova in the [mobile guide](mobile.html).
 
-<h2 id="testing">Testing Packages</h2>
+<h2 id="testing">Testing packages</h2>
 
 Meteor has a test mode for packages called `meteor test-packages`. If you are in a package's directory, you can run
 
@@ -271,6 +292,7 @@ To work around this, you can create a "scaffolding" test application, which is a
 
 If you've ever looked inside Meteor's package cache at `~/.meteor/packages`, you know that the on-disk format of a built Meteor package is completely different from the way the source code looks when you're developing the package. The idea is that the target format of a package can remain consistent even if the API for development changes.
 
+To publish your package to Atmosphere, run [`meteor publish`](http://docs.meteor.com/#/full/meteorpublish) from the package directory. To publish a package the package name must follow the format of `username:my-package` and the package must contain a [SemVer version number](#version-constraints).
 
 <h2 id="build-plugins">Build plugins</h2>
 
