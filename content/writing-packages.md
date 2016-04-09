@@ -282,7 +282,7 @@ From within your test entry point, you can import other files as you would in th
 
 You can read more about testing in Meteor in the [Testing article](testing.html).
 
-<h3 id="testing-with-peer-dependencies">Testing with npm dependencies</h3>
+<h3 id="testing-with-peer-dependencies">Testing with peer dependencies</h3>
 
 If your package makes use of [peer npm dependencies](#peer-npm-dependencies), you cannot currently use `test-packages` to write package tests (as the dependencies will not be included in the special test app).
 
