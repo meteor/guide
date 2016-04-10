@@ -123,7 +123,6 @@ Importing styles from an Atmosphere package using the `{}` package name syntax:
 ```less
 @import '{my-package:pretty-buttons}/buttons/styles.import.less';
 ```
-> Any CSS files in an Atmosphere package are declared with `api.addFiles`, and therefore will be eagerly evaluated, and automatically bundled with all the other CSS in your app.
 
 Importing styles from an npm package using the `{}` syntax:
 
