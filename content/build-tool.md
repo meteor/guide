@@ -115,7 +115,7 @@ Importing styles from your app:
 @import '{}/imports/ui/stylesheets/button.less';   // absolute path with `{}` syntax
 ```
 ```js
-import '../../imports/ui/stylesheets/styles.css';  // imort CSS from JS
+import '../../imports/ui/stylesheets/styles.css';  // import CSS from JS
 ```
 
 Importing styles from an Atmosphere package using the `{}` package name syntax:
