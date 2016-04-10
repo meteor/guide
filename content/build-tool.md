@@ -93,7 +93,7 @@ CSS framework compatibility should be a primary concern when picking a pre-proce
 
 An important feature shared by all of the available CSS pre-processors is the ability to import files. This lets you split your CSS into smaller pieces, and provides a lot of the same benefits that you get from JavaScript modules:
 
-1. You can control the load order of files by encoding dependencies through imports.
+1. You can control the load order of files by encoding dependencies through imports, since the load order of CSS matters.
 2. You can create reusable CSS "modules" that just have variables and mixins and don't actually generate any CSS.
 
 In Meteor, each of your `.scss`, `.less`, or `.styl` source files will be one of two types: "source" or "import".
