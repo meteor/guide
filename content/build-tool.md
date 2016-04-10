@@ -75,7 +75,7 @@ If you would like to write your UI in Angular, you will need to switch out Meteo
 
 <h2 id="css">CSS and CSS pre-processors</h2>
 
-All your CSS style files will processed using Meteor's default file load order rules, and then concatenated and minified in a production build. However, it's no secret that writing raw CSS can often be a hassle as there's no way to share common CSS code between different selectors or have a consistent color scheme between different elements. CSS compilers, or pre-processors, solve these issues by adding extra features on top of the CSS language like variables, mixins, math, and more, and in some cases also significantly change the syntax of CSS to be easier to read and write.
+All your CSS style files will processed using Meteor's default file load order rules along with any import statements, and  in a production build also concatenated and minified. However, it's no secret that writing plain CSS can often be a hassle as there's no way to share common CSS code between different selectors or have a consistent color scheme between different elements. CSS compilers, or pre-processors, solve these issues by adding extra features on top of the CSS language like variables, mixins, math, and more, and in some cases also significantly change the syntax of CSS to be easier to read and write.
 
 <h3 id="css-which-preprocessor">Sass, Less, or Stylus?</h3>
 
