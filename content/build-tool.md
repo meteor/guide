@@ -124,10 +124,15 @@ Importing styles from an Atmosphere package using the `{}` package name syntax:
 @import '{my-package:pretty-buttons}/buttons/styles.import.less';
 ```
 
+> CSS files in an Atmosphere package are declared with `api.addFiles`, and therefore will be eagerly evaluated, and automatically bundled with all the other CSS in your app.
+
 Importing styles from an npm package using the `{}` syntax:
 
 ```less
-@import '{}/node_modules/package-name/button.less';
+@import '{}/node_modules/npm-package-name/button.less';
+```
+```js
+import 'import 'npm-package-name/stylesheets/styles.css';  // CSS from JS
 ```
 
 For more examples and details on importing styles and using `@imports` with packages see [Using Packages](using-packages.html) in the Meteor Guide.
