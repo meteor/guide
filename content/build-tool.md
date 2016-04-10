@@ -118,7 +118,7 @@ Importing styles from your app:
 import '../../imports/ui/stylesheets/styles.css';  // CSS from JS with relative path
 ```
 
-Importing styles from an  Atmosphere package using the `{}` package name syntax:
+Importing styles from an Atmosphere package using the `{}` package name syntax:
 
 ```less
 @import '{my-package:pretty-buttons}/buttons/styles.import.less';
