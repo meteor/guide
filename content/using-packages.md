@@ -115,7 +115,7 @@ This will create an `npm-shrinkwrap.json` file containing the exact versions of 
 Atmosphere packages are packages written specifically for Meteor. Atmosphere packages have several advantages over npm when used with Meteor. In particular, Atmosphere packages can:
 
 - Depend on core Meteor packages, such as `ddp` and `blaze`
-- Explicitly include non-javascript files including Less, Sass, Stylus and static assets
+- Explicitly include non-javascript files including CSS, Less, Sass, Stylus and static assets
 - Take advantage of Meteor's [build system](build-tool.html) to be automatically transpiled from languages like CoffeeScript
 - Have a well defined way to ship different code for client and server, enabling different behavior in each context
 - Get direct access to Meteor's [package namespacing](#package-namespacing) and package global exports without having to explicitly use ES2015 `import`
@@ -224,7 +224,7 @@ Notice that this is just the normal JavaScript syntax for declaring a variable t
 
 In addition to local scope and package scope, there are also package exports. A package export is a "pseudo global" variable that a package makes available for you to use when you install that package. For example, the `email` package exports the `Email` variable. If your app uses the `email` package (and _only_ if it uses the `email` package!) then your app can access the `Email` symbol and you can call `Email.send`. Most packages have only one export, but some packages might have two or three (for example, a package that provides several classes that work together).
 
-> It is recommended that you use the `ecmascript` package and first call `import { Email } from 'meteor/email';` before calling `Email.send` in your app. It is also recommended that package developer's now use ES2015 `export const myName = 'my-package';` from their main JavaScript file instead of `api.export`.
+> It is recommended that you use the `ecmascript` package and first call `import { Email } from 'meteor/email';` before calling `Email.send` in your app. It is also recommended that package developers now use ES2015 `export` from their main JavaScript file instead of `api.export`.
 
 Your app sees only the exports of the packages that you use directly. If you use package A, and package A uses package B, then you only see package A's exports. Package B's exports don't "leak" into your namespace just because you used package A. Each app or package only sees their own globals plus the APIs of the packages that they specifically use and depend upon.
 
