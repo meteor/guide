@@ -1,5 +1,5 @@
 # Summary
 
 * [Introduction](content/index.md)
-* Application structure
+* [Application structure](structure)
 
