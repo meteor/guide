@@ -19,4 +19,3 @@
 * [Build system](content/build-tool.md)
 * [Security](content/security.md)
 * [Deployment and Monitoring](content/deployment.md)
-
