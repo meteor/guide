@@ -1,6 +1,6 @@
 # Summary
 
-* [Introduction](content/index.md)
+* [Introduction](README.md)
 * [Code style](content/code-style.md)
 * [Migrating to Meteor 1.3](content/1.3-migration.md)
 * [Collections and Schemas](content/collections.md)
@@ -14,8 +14,8 @@
 * [React](content/react.md)
 * [Angular](content/angular.md)
 * [Using Packages](content/using-packages.md)
-* [Writing Packages](content/using-packages.md)
 * [Mobile](content/mobile.md)
 * [Build system](content/build-tool.md)
 * [Security](content/security.md)
 * [Deployment and Monitoring](content/deployment.md)
+
