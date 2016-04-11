@@ -1,6 +1,7 @@
 # Summary
 
 * [Introduction](content/index.md)
+* [Introduction](content/index.md)
 * [Code style](content/code-style.md)
 * [Migrating to Meteor 1.3](content/1.3-migration.md)
 * [Collections and Schemas](content/collections.md)
