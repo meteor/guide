@@ -1,4 +1,4 @@
 # Summary
 
-* [Introduction](content/indexmd.md)
+* [Introduction](content/index.md)
 
