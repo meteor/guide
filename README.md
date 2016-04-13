@@ -5,3 +5,5 @@
 - See the example app we're working to embody the principles from the guide at [meteor/todos](https://github.com/meteor/todos)
 - Read the [contribution guidelines](CONTRIBUTING.md)
 - See the [change log](CHANGELOG.md)
+
+Random change
