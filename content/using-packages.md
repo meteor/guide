@@ -57,6 +57,8 @@ import moment from 'moment';
 const moment = require('moment');
 ```
 
+This works in most cases. But since moment is special, you need use either `import * as moment from 'moment';` or `import moment = require('moment');`
+
 This imports the default export from the package into the symbol `moment`.
 
 You can also import specific functions from a package using the destructuring syntax:
