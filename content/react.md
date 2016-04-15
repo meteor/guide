@@ -253,6 +253,24 @@ FlowRouter.route('/lists/:_id', {
 
 Note that `react-mounter` automatically mounts the layout component on a `#react-root` node, which you can change by using the `withOptions()` function.
 
+<h4 id="passing-data-into-a-flowrouter-route">Passing data into a route</h4>
+
+To pass data into a route from a parent component when defining a route in FlowRouter, you can do this by passing the data as an argument in the function call for the given component, and then transfer the props into the component using the JSX spread attribute:
+
+```js
+FlowRouter.route('/', {
+  name: 'homepage',
+  action() {
+    mount(AppContainer, {
+      main: (props) => <Homepage {...props} />
+    })
+  }
+})
+```
+
+[Here is a detailed walk-through](http://coderchronicles.org/2016/04/15/using-data-in-meteor-with-react-and-flowrouter/) of how to do this.
+
+
 <h3 id="using-react-router">React Router</h3>
 
 Using React Router is also straightforward. Once you `npm install --save react-router`, you can simply export a list of nested routes as you would in any other React Router driven React application:
