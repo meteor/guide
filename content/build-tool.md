@@ -111,11 +111,11 @@ In all three Meteor supported CSS pre-processors you can import other style file
 Importing styles from your app:
 
 ```less
-@import '../imports/ui/stylesheets/colors.less';   // a relative path
+@import '../stylesheets/colors.less';   // a relative path
 @import '{}/imports/ui/stylesheets/button.less';   // absolute path with `{}` syntax
 ```
 ```js
-import '../../imports/ui/stylesheets/styles.css';  // import CSS from JS
+import '../stylesheets/styles.css';  // import CSS from JS
 ```
 
 Importing styles from an Atmosphere package using the `{}` package name syntax:
