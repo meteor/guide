@@ -93,6 +93,11 @@ Importing styles from an npm package with a relative path:
 @import '../../node_modules/npm-package-name/colors.less';
 ```
 
+Importing CSS from an npm package from another style file;
+```js
+@import 'npm-package-name/stylesheets/styles.css';
+```
+
 Importing CSS from an npm package in a JavaScript file using ES2015 `import`;
 ```js
 import 'npm-package-name/stylesheets/styles.css';
