@@ -98,7 +98,7 @@ Importing CSS from an npm package from another style file;
 @import 'npm-package-name/stylesheets/styles.css';
 ```
 
-You can also import CSS direclty from a JavaScript file to control load order if you have the `ecmascript` package installed.
+You can also import CSS directly from a JavaScript file to control load order if you have the `ecmascript` package installed.
 
 Importing CSS from an npm package in a JavaScript file using ES2015 `import`;
 ```js
