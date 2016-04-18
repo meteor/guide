@@ -105,6 +105,8 @@ Importing CSS from an npm package in a JavaScript file using ES2015 `import`;
 import 'npm-package-name/stylesheets/styles.css';
 ```
 
+> When importing CSS from a JavaScript file the CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's <head> tag insided <style>...</style> after the main concatenated CSS file. 
+
 <h3 id="npm-shrinkwrap">npm shrinkwrap</h3>
 
 `package.json` typically encodes a version range, and so each `npm install` command can sometimes lead to a different result if new versions have been published in the meantime. In order to ensure that you and the rest of your team are using the same exact same version of each package, it's a good idea to use `npm shrinkwrap` after making any dependency changes to `package.json`:
