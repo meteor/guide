@@ -115,7 +115,7 @@ In this guide article, we will go over some important points for building packag
 
 <h2 id="adding-files">Adding files and assets</h2>
 
-The main function of an Atmosphere package is to contain source code (JS, CSS, and any transpiled languages) and assets (images, fonts, and more) that will be shared across different applications.
+The main function of a Meteor package is to contain source code (JS, CSS, and any transpiled languages) and assets (images, fonts, and more) that will be shared across different applications.
 
 <h3 id="adding-javascript">Adding JavaScript</h3>
 
