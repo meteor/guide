@@ -12,7 +12,7 @@ After reading this guide, you'll know:
 3. How the Blaze rendering engine works under the hood and some advanced techniques for using it.
 4. How to test Blaze templates.
 
-Blaze is Meteor's built in reactive rendering library. Usually, templates are written in [Spacebars](https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md), a variant of [Handlebars](http://handlebarsjs.com) designed to take advantage of [Tracker](https://github.com/meteor/meteor/tree/devel/packages/tracker), Meteor's reactivity system. These templates are compiled into JavaScript UI components that are rendered by the Blaze library.
+Blaze is Meteor's built-in reactive rendering library. Usually, templates are written in [Spacebars](https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md), a variant of [Handlebars](http://handlebarsjs.com) designed to take advantage of [Tracker](https://github.com/meteor/meteor/tree/devel/packages/tracker), Meteor's reactivity system. These templates are compiled into JavaScript UI components that are rendered by the Blaze library.
 
 Blaze is not required to build applications in Meteor---you can also easily use [React](http://react-in-meteor.readthedocs.org/en/latest/) or [Angular](http://www.angular-meteor.com) to develop your UI. However, this particular article will take you through best practices in building an application in Blaze, which is used as the UI engine in all of the other articles.
 
@@ -183,9 +183,9 @@ A block helper, called with `{% raw %}{{# }}{% endraw %}` is a helper that takes
 </template>
 ```
 
-<h3 id="builtin-block-helpers">Builtin Block Helpers</h3>
+<h3 id="builtin-block-helpers">Built-in Block Helpers</h3>
 
-There are a few builtin block helpers that are worth knowing about:
+There are a few built-in block helpers that are worth knowing about:
 
 <h4 id="if-unless">If / Unless</h4>
 
@@ -225,7 +225,7 @@ Note that `name` and `color` (and `todo` above) are only added to scope in the t
 
 <h4 id="each-and-with">Each and With</h4>
 
-There are also two Spacebars built in helpers, `{% raw %}{{#each}}{% endraw %}`, and `{% raw %}{{#with}}{% endraw %}`, which we do not recommend using (see [use each-in](#use-each-in) below). These block helpers change the data context within a template, which can be difficult to reason about.
+There are also two Spacebars built-in helpers, `{% raw %}{{#each}}{% endraw %}`, and `{% raw %}{{#with}}{% endraw %}`, which we do not recommend using (see [use each-in](#use-each-in) below). These block helpers change the data context within a template, which can be difficult to reason about.
 
 Like `{% raw %}{{#each .. in}}{% endraw %}`, `{% raw %}{{#each}}{% endraw %}` iterates over an array or cursor, changing the data context within its content block to be the item in the current iteration. `{% raw %}{{#with}}{% endraw %}` simply changes the data context inside itself to the provided object. In most cases it's better to use `{% raw %}{{#each .. in}}{% endraw %}` and `{% raw %}{{#let}}{% endraw %}` instead, just like it's better to declare a variable than use the JavaScript `with` keyword.
 
