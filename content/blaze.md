@@ -221,7 +221,7 @@ The `{% raw %}{{#let}}{% endraw %}` helper is useful to capture the output of a 
 {{/let}}
 ```
 
-Note that `name` and `color` (and `todo` above) are only added to scope in the template, they *are not* added to the data context. Specifically this means if you call a helper, they will not be on `this`. So if you need to access them in a helper, you should pass them in as an argument (like we do with `(todoArgs todo)` above).
+Note that `name` and `color` (and `todo` above) are only added to scope in the template; they *are not* added to the data context. Specifically this means that inside helpers and event handlers, you cannot access them with `this.name` or `this.color`. If you need to access them inside a helper, you should pass them in as an argument (like we do with `(todoArgs todo)` above).
 
 <h4 id="each-and-with">Each and With</h4>
 
@@ -296,7 +296,15 @@ Additionally, for better clarity, always explicitly provide a data context to an
 
 For similar reasons to the above, it's better to use `{% raw %}{{#each todo in todos}}{% endraw %}` rather than the older `{% raw %}{{#each todos}}{% endraw %}`. The second sets the entire data context of its children to a single `todo` object, and makes it difficult to access any context from outside of the block.
 
-The only reason not to use `{% raw %}{{#each .. in}}{% endraw %}` would be because it makes it difficult to access the `todo` symbol inside event handlers. Typically the solution to this is simply to use a sub-component to render the inside of the loop.
+The only reason not to use `{% raw %}{{#each .. in}}{% endraw %}` would be because it makes it difficult to access the `todo` symbol inside event handlers. Typically the solution to this is to use a sub-component to render the inside of the loop:
+
+```html
+{{#each todo in todos}}
+  {{> Todos_item todo=todo}}
+{{/each}}
+```
+
+Now you can access `this.todo` inside `Todos_item` event handlers and helpers.
 
 <h3 id="pass-data-into-helpers">Pass data into helpers</h3>
 
