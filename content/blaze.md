@@ -177,6 +177,8 @@ A block helper, called with `{% raw %}{{# }}{% endraw %}` is a helper that takes
 <template name="caller">
   {{#myIf condition=true}}
     <h1>I'll be rendered!</h1>
+  {{else}}
+    <h1>I won't be rendered</h1>    
   {{/myIf}}
 </template>
 ```
