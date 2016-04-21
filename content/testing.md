@@ -223,7 +223,7 @@ A simple example of a reusable component to test is the `Todos_item` template. H
 /* eslint-env mocha */
 /* eslint-disable func-names, prefer-arrow-callback */
 
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { chai } from 'meteor/practicalmeteor:chai';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
@@ -346,7 +346,7 @@ In the Todos example app, we have an integration test for the `Lists_show_page` 
 /* eslint-disable func-names, prefer-arrow-callback */
 
 import { Meteor } from 'meteor/meteor';
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { Random } from 'meteor/random';
 import { chai } from 'meteor/practicalmeteor:chai';
 import { StubCollections } from 'meteor/stub-collections';
@@ -511,7 +511,7 @@ Similar to the way we cleared the database using a method in the `beforeEach` in
 // ensuring the method is always available
 
 import { Meteor } from 'meteor/meteor';
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
