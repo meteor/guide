@@ -190,7 +190,7 @@ Sometimes a package will have no exports and simply have side effects when inclu
 
 > For backwards compatibility with Meteor 1.2 and early releases, Meteor by default makes available directly to your app all symbols referenced in `api.export` in any packages you have installed. However, it is recommended that you import these symbols first before using them.
 
-<h4 id="">Importing styles from Atmosphere</h3>
+<h4 id="">Importing styles from Atmosphere</h4>
 
 Using any of Meteor's supported CSS pre-processors you can import other style files using the `{package-name}` syntax as long as those files are designated to be lazily evaluated as "import" files. To get more details on how to determine this see [CSS source versus import](build-tool.html#css-source-vs-import) files.
 
