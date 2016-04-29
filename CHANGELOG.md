@@ -4,6 +4,7 @@ order: 1001
 description: A log of significant changes to the Meteor Guide.
 ---
 
+- 2016/04/29: Changed Build Section organization to separate Atmosphere and npm.  [Discussed here](https://github.com/meteor/guide/pull/390#issuecomment-212577341). [PR #410](https://github.com/meteor/guide/pull/410)
 - 2016/04/16: Switch order of Code Style and Application structure sections. [PR #383](https://github.com/meteor/guide/pull/383)
 - 2016/04/16: Added "Writing Packages - Creating an npm package" and "Using Packages - Overriding packages - npm". [PR #381](https://github.com/meteor/guide/pull/381)
 - 2016/04/07: Add more examples and details on application structure using imports. [PR #356](https://github.com/meteor/guide/pull/356)
