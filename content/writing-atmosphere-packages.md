@@ -193,7 +193,7 @@ Npm.depends({
 });
 ```
 
-You can import the dependency from within you package code in the same way that you would inside an [application](using-packages.html#using-npm):
+You can import the dependency from within you package code in the same way that you would inside an [application](using-npm-packages.html#using-npm):
 
 ```js
 import github from 'github';
