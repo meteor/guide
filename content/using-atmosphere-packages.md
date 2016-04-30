@@ -1,7 +1,7 @@
 ---
 title: Using Atmosphere Packages
 order: 28
-discourseTopicId: 20192
+discourseTopicId: 20193
 ---
 
 <h2 id="atmosphere-searching">Searching for packages</h2>

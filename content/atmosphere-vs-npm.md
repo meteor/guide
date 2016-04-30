@@ -1,7 +1,7 @@
 ---
 title: Atmosphere vs. npm
 order: 27
-discourseTopicId: 20192
+discourseTopicId: 20193
 ---
 
 Building an application completely from scratch is a tall order. This is one of the main reasons you might consider using Meteor in the first place - you can focus on writing the code that is specific to your app, instead of reinventing wheels like user login and data synchronization. To streamline your workflow even further, it makes sense to use community packages from [npm](https://www.npmjs.com) and [Atmosphere](https://atmospherejs.com). Many of these packages are recommended in the guide, and you can find more in the online directories.
