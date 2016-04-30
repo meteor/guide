@@ -1,7 +1,7 @@
 ---
 title: Using npm Packages
 order: 30
-discourseTopicId: 20192
+discourseTopicId: 20193
 ---
 
 <h2 id="npm-searching">Searching for packages</h2>
