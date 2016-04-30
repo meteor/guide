@@ -43,7 +43,7 @@ Meteor officially supports three user interface (UI) rendering libraries, [Blaze
   - If you're using React, the most popular mobile web React framework is [Reapp](http://reapp.io/).
 - **Native**
   - You can connect any native iOS or Android app to a Meteor server via [DDP](https://www.meteor.com/ddp). For iOS, use the [`meteor-ios`](https://github.com/martijnwalraven/meteor-ios) framework.
-  - You can write native clients in Javascript using [React Native](https://facebook.github.io/react-native/). For the most recent information on how to use React Native with Meteor, see [Spencer Carli's blog](https://medium.com/@spencer_carli).
+  - You can write native clients in Javascript using [React Native](https://facebook.github.io/react-native/). For the most recent information on how to use React Native with Meteor, see [this reference](https://github.com/spencercarli/react-native-meteor-index).
 
 <h2 id="components">UI components</h2>
 
