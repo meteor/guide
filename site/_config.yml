@@ -104,6 +104,12 @@ pagination_dir: page
 ## Themes: http://hexo.io/themes/
 theme: meteor
 
+# Aliases
+alias:
+  using-packages.html: atmosphere-vs-npm.html
+  writing-packages.html: atmosphere-vs-npm.html
+
+
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
