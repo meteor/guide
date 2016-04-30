@@ -4,8 +4,6 @@ order: 31
 discourseTopicId: 20194
 ---
 
-**NOTE:** If you want to override a package that already exists in the npm registry, [use this method](#overriding-npm-packages).
-
 To create a new npm package:
 
 ```bash
