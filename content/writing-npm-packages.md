@@ -29,6 +29,8 @@ import { myPackageLog } from 'my-package'
 myPackageLog(); // > "logged from my-package"
 ```
 
+When choosing a name for your npm package, be sure to follow the [npm guidelines](https://docs.npmjs.com/files/package.json#name).
+
 <h2 id="including-in-app">Including in your app</h2>
 
 When you are developing a new npm package for your app, there are a couple methods for including the package in your app:
