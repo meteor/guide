@@ -4,7 +4,7 @@ order: 30
 discourseTopicId: 20192
 ---
 
-npm is a repository of general JavaScript packages. These packages were originally intended solely for the Node.js server-side environment, but as the JavaScript ecosystem matured, solutions arose to enable the use of npm packages in other environments such the browser. Today, npm is used for all types of JavaScript packages.
+<h2 id="npm-searching">Searching for packages</h2>
 
 The best way to find npm packages is by searching on [npmjs.com](https://www.npmjs.com/). There are also some websites that have special search features specifically for certain kinds of packages, like the aptly named [react-components.com](http://react-components.com/).
 
