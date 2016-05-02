@@ -109,7 +109,6 @@ Read the documentation for each package listed below to see how to indicate whic
 In all three Meteor supported CSS pre-processors you can import other style files from both relative and absolute paths in your app and from both npm and Meteor Atmosphere packages. 
 
 ```less
-// foo.less
 @import '../stylesheets/colors.less';   // a relative path
 @import '{}/imports/ui/stylesheets/button.less';   // absolute path with `{}` syntax
 ```
@@ -117,7 +116,6 @@ In all three Meteor supported CSS pre-processors you can import other style file
 You can also import CSS from a JavaScript file if you have the `ecmascript` package installed:
 
 ```js
-// foo.js
 import '../stylesheets/styles.css';
 ```
 
@@ -126,7 +124,6 @@ import '../stylesheets/styles.css';
 Importing styles from an Atmosphere package using the `{}` package name syntax:
 
 ```less
-// foo.less
 @import '{my-package:pretty-buttons}/buttons/styles.import.less';
 ```
 
@@ -135,11 +132,9 @@ Importing styles from an Atmosphere package using the `{}` package name syntax:
 Importing styles from an npm package using the `{}` syntax:
 
 ```less
-// foo.less
 @import '{}/node_modules/npm-package-name/button.less';
 ```
 ```js
-// foo.js
 import 'npm-package-name/stylesheets/styles.css';
 ```
 

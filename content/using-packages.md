@@ -84,7 +84,6 @@ Using any of Meteor's [supported CSS pre-processors](build-tool.html#css) you ca
 Importing styles from an npm package with an absolute path using the `{}` syntax, for instance with Less:
 
 ```less
-// foo.less
 @import '{}/node_modules/npm-package-name/button.less';
 ```
 
@@ -97,7 +96,6 @@ Importing styles from an npm package with a relative path:
 You can also import CSS directly from a JavaScript file to control load order if you have the `ecmascript` package installed:
 
 ```js
-// foo.js
 import 'npm-package-name/stylesheets/styles.css';
 ```
 
