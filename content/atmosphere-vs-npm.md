@@ -13,10 +13,12 @@ Building an application completely from scratch is a tall order. This is one of 
 Atmosphere packages are packages written specifically for Meteor and have several advantages over npm when used with Meteor. In particular, Atmosphere packages can:
 
 - Depend on core Meteor packages, such as `ddp` and `blaze`
-- Include non-javascript files including CSS and static assets
-- Take advantage of Meteor's [build system](build-tool.html) to be automatically transpiled from languages like CoffeeScript and SASS
+- Explicitly include non-javascript files including CSS, Less, Sass, Stylus and static assets
+- Take advantage of Meteor's [build system](build-tool.html) to be automatically transpiled from languages like CoffeeScript
 - Have a well defined way to ship different code for client and server, enabling different behavior in each context
-- Include build plugins for Meteor's build system
+- Get direct access to Meteor's [package namespacing](using-atmosphere-packages.md#package-namespacing) and package global exports without having to explicitly use ES2015 `import`
+- Enforce exact version dependencies between packages using Meteor's [constraint resolver](writing-atmosphere-packages.md#version-constraints)
+- Include [build plugins](build-tool.html#compiles-with-build-plugins) for Meteor's build system
 - Include pre-built binary code for different server architectures, such as Linux or Windows
 
 If your package depends on an Atmosphere package (which, in Meteor 1.3, includes the Meteor core packages), or needs to take advantage of Meteor's [build system](build-tool.html), writing an Atmosphere package might be the best option for now.
