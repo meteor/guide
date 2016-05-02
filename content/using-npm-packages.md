@@ -61,37 +61,6 @@ You can also import other files or JS entry points from a package:
 import { parse } from 'graphql/language';
 ```
 
-<h3 id="npm-styles">Importing styles from npm</h3>
-
-Using any of Meteor's [supported CSS pre-processors](build-tool.html#css) you can import other style files from both relative and absolute paths from an npm package.
-
-Importing styles from an npm package with an absolute path using the `{}` syntax:
-
-```less
-@import '{}/node_modules/npm-package-name/button.less';
-```
-
-Importing styles from an npm package with a relative path:
-
-```less
-@import '../../node_modules/npm-package-name/colors.less';
-```
-
-Importing CSS from an npm package from another style file;
-```js
-@import 'npm-package-name/stylesheets/styles.css';
-```
-
-You can also import CSS directly from a JavaScript file to control load order if you have the `ecmascript` package installed.
-
-Importing CSS from an npm package in a JavaScript file using ES2015 `import`;
-```js
-import 'npm-package-name/stylesheets/styles.css';
-```
-
-> When importing CSS from a JavaScript file that CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's `<head>` tag inside `<style>...</style>` after the main concatenated CSS file.
-
-
 <h2 id="npm-shrinkwrap">npm Shrinkwrap</h2>
 
 `package.json` typically encodes a version range, and so each `npm install` command can sometimes lead to a different result if new versions have been published in the meantime. In order to ensure that you and the rest of your team are using the same exact same version of each package, it's a good idea to use `npm shrinkwrap` after making any dependency changes to `package.json`:
