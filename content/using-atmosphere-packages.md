@@ -44,6 +44,53 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 Typically a package will export one or more symbols which you'll need to grab with the destructuring syntax. Sometimes a package will have no exports and simply have side effects when included in your app. In such cases you don't need to import the package at all.
 
+<h3 id="importing-atmosphere-styles">Importing styles from Atmosphere</h3>
+
+Using any of Meteor's supported CSS pre-processors you can import other style files using the `{package-name}` syntax as long as those files are designated to be lazily evaluated as "import" files. To get more details on how to determine this see [CSS source versus import](build-tool.html#css-source-vs-import) files.
+
+```less
+@import '{prefix:package-name}/buttons/styles.import.less';
+```
+
+> CSS files in an Atmosphere package are declared with `api.addFiles`, and therefore will be eagerly evaluated by default, and then bundled with all the other CSS in your app.
+
+<h3 id="peer-npm-dependencies">Peer npm dependencies</h3>
+
+Atmosphere packages can ship with contained [npm dependencies](writing-packages.html#npm-dependencies), in which case you don't need to do anything to make them work. However, some Atmosphere packages will expect that you have installed certain "peer" npm dependencies in your application.
+
+Typically the package will warn you if you have not done so. For example, if you install the [`react-meteor-data`](https://atmospherejs.com/meteor/react-meteor-data) package into your app, you'll also need to [install](#installing-npm) the [`react`](https://www.npmjs.com/package/react) and the [`react-addons-pure-render-mixin`](https://www.npmjs.com/package/react-addons-pure-render-mixin) packages:
+
+```bash
+meteor npm install --save react react-addons-pure-render-mixin
+meteor add react-meteor-data
+```
+
+<h2 id="package-namespacing">Atmosphere package namespacing</h2>
+
+Each Atmosphere package that you use in your app exists in its own separate namespace, meaning that it sees only its own global variables and any variables provided by the packages that it specifically uses. When a top-level variable is defined in a package, it is either declared with local scope or package scope.
+
+```js
+/**
+ * local scope - this variable is not visible outside of the block it is
+ * declared in and other packages and your app won't see it
+ */
+const alicePerson = {name: "alice"};
+
+/**
+ * package scope - this variable is visible to every file inside of the
+ * package where it is declared and to your app
+ */
+bobPerson = {name: "bob"};
+```
+
+Notice that this is just the normal JavaScript syntax for declaring a variable that is local or global. Meteor scans your source code for global variable assignments and generates a wrapper that makes sure that your globals don't escape their appropriate namespace.
+
+In addition to local scope and package scope, there are also package exports. A package export is a "pseudo global" variable that a package makes available for you to use when you install that package. For example, the `email` package exports the `Email` variable. If your app uses the `email` package (and _only_ if it uses the `email` package!) then your app can access the `Email` symbol and you can call `Email.send`. Most packages have only one export, but some packages might have two or three (for example, a package that provides several classes that work together).
+
+> It is recommended that you use the `ecmascript` package and first call `import { Email } from 'meteor/email';` before calling `Email.send` in your app. It is also recommended that package developers now use ES2015 `export` from their main JavaScript file instead of `api.export`.
+
+Your app sees only the exports of the packages that you use directly. If you use package A, and package A uses package B, then you only see package A's exports. Package B's exports don't "leak" into your namespace just because you used package A. Each app or package only sees their own globals plus the APIs of the packages that they specifically use and depend upon.
+
 <h2 id="peer-npm-dependencies">Peer npm Dependencies</h2>
 
 Atmosphere packages can ship with contained [npm dependencies](writing-atmosphere-packages.html#npm-dependencies), in which case you don't need to do anything to make them work. However, some Atmosphere packages will expect that you have installed certain "peer" npm dependencies in your application.
