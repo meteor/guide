@@ -20,8 +20,8 @@ Meteor officially supports three user interface (UI) rendering libraries, [Blaze
 
 
 **Syntax**
-- Blaze uses an easy-to-learn [Handlebars](http://handlebarsjs.com)-like template syntax, with logic like `{% raw %}{{#if}}{% endraw %}` and `{% raw %}{{#each}}{% endraw %}` interspersed in your HTML files. Template functions and CSS-selector events maps are written in Javascript files.
-- React uses [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), with which you write your HTML in Javascript. While it doesn't have the logic-view separation most libraries have, it also has the most flexibility. Template functions are TODO
+- Blaze uses an easy-to-learn [Handlebars](http://handlebarsjs.com)-like template syntax, with logic like `{% raw %}{{#if}}{% endraw %}` and `{% raw %}{{#each}}{% endraw %}` interspersed in your HTML files. Template functions and CSS-selector events maps are written in JavaScript files.
+- React uses [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), with which you write your HTML in JavaScript. While it doesn't have the logic-view separation most libraries have, it also has the most flexibility. Template functions are TODO
 - Angular uses HTML with [special attribute syntax](https://angular.io/docs/ts/latest/guide/cheatsheet.html) for logic and events. Template functions are TODO
 - React and Angular enforce a better component structure, which makes developing larger apps easier.
 
@@ -43,7 +43,7 @@ Meteor officially supports three user interface (UI) rendering libraries, [Blaze
   - If you're using React, the most popular mobile web React framework is [Reapp](http://reapp.io/).
 - **Native**
   - You can connect any native iOS or Android app to a Meteor server via [DDP](https://www.meteor.com/ddp). For iOS, use the [`meteor-ios`](https://github.com/martijnwalraven/meteor-ios) framework.
-  - You can write native clients in Javascript using [React Native](https://facebook.github.io/react-native/). For the most recent information on how to use React Native with Meteor, see [this reference](https://github.com/spencercarli/react-native-meteor-index).
+  - You can write native clients in JavaScript using [React Native](https://facebook.github.io/react-native/). For the most recent information on how to use React Native with Meteor, see [this reference](https://github.com/spencercarli/react-native-meteor-index).
 
 <h2 id="components">UI components</h2>
 
