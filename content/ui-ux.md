@@ -23,7 +23,7 @@ Meteor officially supports three user interface (UI) rendering libraries, [Blaze
 - Blaze uses an easy-to-learn [Handlebars](http://handlebarsjs.com)-like template syntax, with logic like `{% raw %}{{#if}}{% endraw %}` and `{% raw %}{{#each}}{% endraw %}` interspersed in your HTML files. Template functions and CSS-selector events maps are written in JavaScript files.
 - React uses [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), with which you write your HTML in JavaScript. While it doesn't have the logic-view separation most libraries have, it also has the most flexibility. Template functions are TODO
 - Angular uses HTML with [special attribute syntax](https://angular.io/docs/ts/latest/guide/cheatsheet.html) for logic and events. Template functions are TODO
-- React and Angular enforce a better component structure, which makes developing larger apps easier.
+- React and Angular enforce a better component structure, which makes developing larger apps easier. (Although you can add component structure to Blaze by [following conventions](blaze.html#reusable-components) or using the [Blaze Components](http://components.meteorapp.com/) or [ViewModel](https://viewmodel.org/) packages.)
 
 **Community**
 - Blaze has many full-stack Meteor packages on Atmosphere, such as [`useraccounts:core`](https://atmospherejs.com/useraccounts/core) and [`aldeed:autoform`](https://atmospherejs.com/aldeed/autoform).
