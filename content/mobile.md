@@ -173,7 +173,7 @@ You can specify multiple targets, so `meteor run ios android-device` will run th
 
 A Meteor app should be able to connect to a server in order to load data and to enable [hot code push](#hot-code-push), which automatically updates a running app when you make changes to its files. During development, this means the device and the computer you run `meteor` on will have to be part of the same WiFi network, and the network configuration shouldn't prevent the device from reaching the server. You may have to change your firewall or router settings to allow for this (no client isolation).
 
-`meteor run` will try to detect the local IP address of the computer running the command automatically. If this fails, or if you would like your mobile app to connect to a different server, you can specify an address using the `--mobile-server` option.
+`meteor run` will try to detect the local IP address of the computer running the command automatically. If this fails, or if you would like your mobile app to connect to a different server, you can specify an address using the `--mobile-server` option.  (Note that if you've already set the `ROOT_URL` environment variable to a URL which the mobile app can connect to, you don't also need to use `--mobile-server`).
 
 <h3 id="running-on-ios">How to run your app on an iOS device</h3>
 
