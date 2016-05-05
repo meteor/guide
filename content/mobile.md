@@ -142,7 +142,7 @@ Cordova will detect an Android SDK installed in various standard locations autom
 - Add `$ANDROID_HOME/tools`, and `$ANDROID_HOME/platform-tools` to your `PATH`
 
 You can do this by adding these lines to your `~/.bash_profile` file (or the equivalent file for your shell environment, like `~/.zshrc`):
-```
+```sh
 # Android
 export ANDROID_HOME="/Users/<username>/Library/Android/sdk"
 export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
@@ -493,6 +493,50 @@ The problem with this mechanism is that it overrides complete files, so it is no
 If you need to customize configuration files, a workaround is to create a dummy Cordova plugin. In its `plugin.xml`, you can specify a [`config-file` element](https://cordova.apache.org/docs/en/dev/plugin_ref/spec.html#config-file) to selectively change parts of configuration files, including `config.xml`.
 
 > We recommend using these approaches only if absolutely required and if your customizations can not be handled by standard configuration options.
+
+As an example, if your app displayed a Google Doc using an iFrame embed, you would get an error in XCode:
+
+```text
+ERROR Internal navigation rejected - <allow-navigation> not set
+for url='https://docs.google.com/document/d/yourdocid/pub?embedded=true'
+```
+
+To fix this, you need to add an `<allow-navigation>` entry to the iOS `config.xml`. There is no `App.*` function that will add this to your `mobile-config.js`, so you can create a Cordova plugin do to so:
+
+```sh
+cd myapp
+mkdir private/my-cordova-plugin
+```
+
+And create a single file `private/my-cordova-plugin/plugin.xml`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="com.myapp.mycordovaplugin"
+        version="0.0.1">
+  <name>my-cordova-plugin</name>
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <allow-navigation href="https://docs.google.com"/>
+    </config-file>
+ </platform>
+</plugin>
+```
+
+Then add this plugin to your app:
+
+```sh
+meteor add cordova:my-cordova-plugin@file://private/my-cordova-plugin
+meteor run ios
+```
+
+Finally, verify that after running, the `config.xml` was modified correctly. The iOS and Android versions are located here:
+
+```text
+.meteor/local/cordova-build/platforms/ios/My App/config.xml
+.meteor/local/cordova-build/platforms/android/res/xml/config.xml
+```
 
 <h2 id="building-and-submitting">Submitting your mobile app to the store</h2>
 
