@@ -42,7 +42,7 @@ Meteor.publish('lists.public', function() {
 });
 ```
 
-There are a few things to understand about this code block. First, we've named the publication with the unique string `Lists.public`, and that will be how we access it from the client. Second, we are simply returning a Mongo *cursor* from the publication function. Note that the cursor is filtered to only return certain fields from the collection, as detailed in the [Security article](security.html#fields).
+There are a few things to understand about this code block. First, we've named the publication with the unique string `lists.public`, and that will be how we access it from the client. Second, we are simply returning a Mongo *cursor* from the publication function. Note that the cursor is filtered to only return certain fields from the collection, as detailed in the [Security article](security.html#fields).
 
 What that means is that the publication will simply ensure the set of data matching that query is available to any client that subscribes to it. In this case, all lists that do not have a `userId` setting. So the collection named `Lists` on the client will have all of the public lists that are available in the server collection named `Lists` while that subscription is open. In this particular example in the Todos application, the subscription is initialized when the app starts and never stopped, but a later section will talk about [subscription life cycle](data-loading.html#patterns).
 
@@ -148,7 +148,7 @@ If you're publishing a subset of your data, it might be tempting to simply query
 
 But if you do this, then you open yourself up to problems if another subscription pushes data into the same collection, since the data returned by `Lists.find()` might not be what you expected anymore. In an actively developed application, it's often hard to anticipate what may change in the future and this can be a source of hard to understand bugs.
 
-Also, when changing between subscriptions, there is a brief period where both subscriptions are loaded (see [Publication behavior when changing arguments](#publication-behavior-with-arguments) below), so when doing thing like pagination, it's exceedingly likely that this will be the case.
+Also, when changing between subscriptions, there is a brief period where both subscriptions are loaded (see [Publication behavior when changing arguments](#publication-behavior-with-arguments) below), so when doing things like pagination, it's exceedingly likely that this will be the case.
 
 <h4 id="fetch-near-subscribe">Fetch the data nearby where you subscribed to it</h4>
 
@@ -531,7 +531,7 @@ Then when a client calls `Meteor.subscribe('Posts.all')` the following things ha
 
 3. The publication handler identifies that the return value is a cursor. This enables a convenient mode for publishing cursors.
 
-4. The server sets up a query observer on that cursor, unless a such an observer already exists on the server (for any user), in which case that observer is re-used.
+4. The server sets up a query observer on that cursor, unless such an observer already exists on the server (for any user), in which case that observer is re-used.
 
 5. The observer fetches the current set of documents matching the cursor, and passes them back to the subscription (via the `this.added()` callback).
 

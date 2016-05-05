@@ -16,7 +16,7 @@ The main Atmosphere website provides additional curation features like trending 
 
 <h3 id="atmosphere-naming">Package naming</h3>
 
-You may notice that, with the exception of Meteor platform packages, all packages on Atmosphere have a name of the form `prefix:name`. The prefix is the name of the organization or user that published the package. Meteor uses such a convention of package naming to make sure that it's clear who has published a certain package, and to avoid an ad-hoc namespacing convention. Meteor platform packages do not have any `prefix:`.
+You may notice that, with the exception of Meteor platform packages, all packages on Atmosphere have a name of the form `prefix:package-name`. The prefix is the Meteor Developer username of the organization or user that published the package. Meteor uses such a convention for package naming to make sure that it's clear who has published a certain package, and to avoid an ad-hoc namespacing convention. Meteor platform packages do not have any `prefix:`.
 
 <h2 id="installing-atmosphere">Installing Atmosphere Packages</h2>
 
@@ -26,13 +26,27 @@ To install an Atmosphere package, you simply run `meteor add`:
 meteor add kadira:flow-router
 ```
 
-This will add the newest version of the desired package that is compatible with the other packages in your app. If you want to specify a particular version, you can specify it by adding a suffix to the package name, like so: `meteor add kadira:flow-router@2.10.0`.
+This will add the newest version of the desired package that is compatible with the other packages in your app. If you want to specify a particular version, you can specify it by adding a suffix to the package name like: `meteor add kadira:flow-router@2.10.0`.
 
 Regardless of how you add the package to your app, its actual version will be tracked in the file at `.meteor/versions`. This means that anybody collaborating with you on the same app is guaranteed to have the same package versions as you. If you want to update to a newer version of a package after installing it, use `meteor update`. You can run `meteor update` without any arguments to update all packages and Meteor itself to their latest versions, or pass a specific package to update just that one, for example `meteor update kadira:flow-router`.
 
 If your app is running when you add a new package, Meteor will automatically download it and restart your app for you.
 
 > The actual files for a given version of an Atmosphere package are stored in your local `~/.meteor/packages` directory.
+
+To see all the Atmosphere packages installed run:
+
+```bash
+meteor list
+```
+
+To remove an unwanted Atmosphere package run:
+
+```bash
+meteor remove kadira:flow-router
+```
+
+You can get more details on all the package commands in the [Meteor Command line documentation](http://docs.meteor.com/#/full/meteorhelp).
 
 <h2 id="using-atmosphere">Using Atmosphere Packages</h2>
 
@@ -42,9 +56,13 @@ To use an Atmosphere Package in your app you can import it with the `meteor/` pr
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 ```
 
-Typically a package will export one or more symbols which you'll need to grab with the destructuring syntax. Sometimes a package will have no exports and simply have side effects when included in your app. In such cases you don't need to import the package at all.
+Typically a package will export one or more symbols, which you'll need to reference with the destructuring syntax. You can find these exported symbols by either looking in that package's `package.js` file for [`api.export`](http://docs.meteor.com/#/full/pack_export) calls or by looking in that package's main JavaScript file for ES2015 `export ` calls like `export const packageName = 'package-name';`.
 
-<h3 id="importing-atmosphere-styles">Importing styles from Atmosphere</h3>
+Sometimes a package will have no exports and simply have side effects when included in your app. In such cases you don't need to import the package at all after installing.
+
+> For backwards compatibility with Meteor 1.2 and early releases, Meteor by default makes available directly to your app all symbols referenced in `api.export` in any packages you have installed. However, it is recommended that you import these symbols first before using them.
+
+<h3 id="importing-atmosphere-styles">Importing styles from Atmosphere packages</h3>
 
 Using any of Meteor's supported CSS pre-processors you can import other style files using the `{package-name}` syntax as long as those files are designated to be lazily evaluated as "import" files. To get more details on how to determine this see [CSS source versus import](build-tool.html#css-source-vs-import) files.
 

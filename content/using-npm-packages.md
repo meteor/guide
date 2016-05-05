@@ -16,21 +16,21 @@ Tools like [browserify](http://browserify.org) and [webpack](https://webpack.git
 
 <h2 id="installing-npm">Installing npm Packages</h2>
 
-npm packages are configured in a `package.json` file at the root of your project. If you create a new Meteor project, you will have such a file created for you; if not you can run `meteor npm init` to create one.
+npm packages are configured in a `package.json` file at the root of your project. If you create a new Meteor project, you will have such a file created for you. If not you can run `meteor npm init` to create one.
 
-To install a package into your app, you can run the `npm install` command with the `--save` flag:
+To install a package into your app you run the `npm install` command with the `--save` flag:
 
 ```bash
 meteor npm install --save moment
 ```
 
-This will both update your `package.json` with information about the dependency, and download the package into your app's local `node_modules/` directory. Typically, you don't check the `node_modules/` directory into source control, and your teammates run `meteor npm install` to get up to date when dependencies change:
+This will both update your `package.json` with information about the dependency and download the package into your app's local `node_modules/` directory. Typically, you don't check the `node_modules/` directory into source control and your teammates run `meteor npm install` to get up to date when dependencies change:
 
 ```bash
 meteor npm install
 ```
 
-If the package is just a development dependency (i.e. it's used for testing, linting or the like), then you can use `--save-dev`. That way if you have some kind of build script, it can do `npm install --production` and avoid installing packages it doesn't need.
+If the package is just a development dependency (i.e. it's used for testing, linting or the like) then you should use `--save-dev`. That way if you have some kind of build script, it can do `npm install --production` and avoid installing packages it doesn't need.
 
 For more information about `npm install`, check out the [official documentation](https://docs.npmjs.com/getting-started/installing-npm-packages-locally).
 
@@ -38,7 +38,7 @@ For more information about `npm install`, check out the [official documentation]
 
 <h2 id="using-npm">Using npm Packages</h2>
 
-To use an npm package from a file in your application, you simply `import` the name of the package:
+To use an npm package from a file in your application you simply `import` the name of the package:
 
 ```js
 import moment from 'moment';
@@ -65,7 +65,7 @@ import { parse } from 'graphql/language';
 
 Using any of Meteor's [supported CSS pre-processors](build-tool.html#css) you can import other style files from both relative and absolute paths from an npm package.
 
-Importing styles from an npm package with an absolute path using the `{}` syntax:
+Importing styles from an npm package with an absolute path using the `{}` syntax, for instance with Less:
 
 ```less
 @import '{}/node_modules/npm-package-name/button.less';
@@ -77,19 +77,13 @@ Importing styles from an npm package with a relative path:
 @import '../../node_modules/npm-package-name/colors.less';
 ```
 
-Importing CSS from an npm package from another style file;
-```js
-@import 'npm-package-name/stylesheets/styles.css';
-```
+You can also import CSS directly from a JavaScript file to control load order if you have the `ecmascript` package installed:
 
-You can also import CSS directly from a JavaScript file to control load order if you have the `ecmascript` package installed.
-
-Importing CSS from an npm package in a JavaScript file using ES2015 `import`;
 ```js
 import 'npm-package-name/stylesheets/styles.css';
 ```
 
-> When importing CSS from a JavaScript file that CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's `<head>` tag inside `<style>...</style>` after the main concatenated CSS file.
+> When importing CSS from a JavaScript file, that CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's `<head>` tag inside `<style>...</style>` after the main concatenated CSS file.
 
 <h2 id="npm-shrinkwrap">npm Shrinkwrap</h2>
 
@@ -101,7 +95,7 @@ meteor npm install --save moment
 meteor npm shrinkwrap
 ```
 
-This will create an `npm-shrinkwrap.json` file containing the exact versions of each dependency, and you should check this file into source control. For even more precision (the contents of a given version of a package *can* change), and to avoid a reliance on the npm server during deployment, you can consider using [`npm shrinkpack`](#npm-shrinkpack) also. We'll cover that in the advanced section.
+This will create an `npm-shrinkwrap.json` file containing the exact versions of each dependency, and you should check this file into source control. For even more precision (the contents of a given version of a package *can* change), and to avoid a reliance on the npm server during deployment, you should consider using [`npm shrinkpack`](#npm-shrinkpack).
 
 <h2 id="async-callbacks">Asyncronous Callbacks</h2>
 
@@ -168,26 +162,21 @@ If you wanted to refactor this and create a completely fiber-wrapper GitHub clie
 
 <h3 id="promises">Promises</h3>
 
-Recently, a lot of npm packages have been moving to Promises instead of callbacks for their API. This means you actually get a return value from the asynchronous function, but it's just an empty shell where the real value is filled in later. If you are using a package that has a promise-based API, you can convert it to synchronous-looking code very easily.
+Recently, a lot of npm packages have been moving to Promises instead of callbacks for their API. This means you actually get a return value from the asynchronous function, but it's just an empty shell where the real value is filled in later.
 
-First, add the Meteor promise package:
+The good news is that Promises can be used with the new ES2015 `async/await` syntax (available in the `ecmascript` package since Meteor 1.3) in a natural and synchronous-looking style on both the client and the server.
 
-```sh
-meteor add promise
-```
+If you declare your function `async` (which ends up meaning it returns a Promise itself), then you can use the `await` keyword to wait on other promise inside. This makes it very easy to serially call Promise-based libraries:
 
-Now, you can use `Promise.await` to get a return value from a promise-returning function. For example, here is how you could send a text message using the Node Twilio API:
 
 ```js
-sendTextMessage() {
-  const promise = client.sendMessage({
-    to:'+16515556677',
+async function sendTextMessage(user) {
+  const toNumber = await phoneLookup.findFromEmail(user.emails[0].address);
+  return await client.sendMessage({
+    to: toNumber,
     from: '+14506667788',
     body: 'Hello world!'
   });
-
-  // Wait for and return the result
-  return Promise.await(promise);
 }
 ```
 

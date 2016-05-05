@@ -29,5 +29,4 @@ npm is a repository of general JavaScript packages. These packages were original
 
 If you want to distribute and reuse code that you've written for a Meteor application, then you should consider publishing that code on npm if it's general enough to be consumed by a wider JavaScript audience. It's simple to [use npm packages in Meteor applications](using-npm-packages.html#using-npm), and possible to [use npm packages within Atmosphere packages](writing-atmosphere-packages.html#npm-dependencies), so even if your main audience is Meteor developers, npm might be the best choice.
 
-
-
+> Meteor comes with npm bundled so that you can type `meteor npm` without worrying about installing it yourself. If you like, you can also use a globally installed npm to manage your packages.
