@@ -61,23 +61,11 @@ You can also import other files or JS entry points from a package:
 import { parse } from 'graphql/language';
 ```
 
-<<<<<<< 6f7182cae20b5f3134b1e289fd3beb08eaac356c
-<<<<<<< 83f0e0ac8bebc4b527a39fb590caa1d0e78f9da8
-=======
->>>>>>> Adding back missing content
 <h3 id="npm-styles">Importing styles from npm</h3>
 
 Using any of Meteor's [supported CSS pre-processors](build-tool.html#css) you can import other style files from both relative and absolute paths from an npm package.
 
-<<<<<<< 6f7182cae20b5f3134b1e289fd3beb08eaac356c
-<<<<<<< 14449c103fcfd93fd9d4c766b5544ad16fbe4414
 Importing styles from an npm package with an absolute path using the `{}` syntax, for instance with Less:
-=======
-Importing styles from an npm package with an absolute path using the `{}` syntax:
->>>>>>> Added back missing nam styles section
-=======
-Importing styles from an npm package with an absolute path using the `{}` syntax:
->>>>>>> Adding back missing content
 
 ```less
 @import '{}/node_modules/npm-package-name/button.less';
@@ -89,43 +77,14 @@ Importing styles from an npm package with a relative path:
 @import '../../node_modules/npm-package-name/colors.less';
 ```
 
-<<<<<<< 6f7182cae20b5f3134b1e289fd3beb08eaac356c
-<<<<<<< 14449c103fcfd93fd9d4c766b5544ad16fbe4414
 You can also import CSS directly from a JavaScript file to control load order if you have the `ecmascript` package installed:
 
-=======
-=======
->>>>>>> Adding back missing content
-Importing CSS from an npm package from another style file;
-```js
-@import 'npm-package-name/stylesheets/styles.css';
-```
-
-You can also import CSS directly from a JavaScript file to control load order if you have the `ecmascript` package installed.
-
-Importing CSS from an npm package in a JavaScript file using ES2015 `import`;
-<<<<<<< 6f7182cae20b5f3134b1e289fd3beb08eaac356c
->>>>>>> Added back missing nam styles section
-=======
->>>>>>> Adding back missing content
 ```js
 import 'npm-package-name/stylesheets/styles.css';
 ```
 
-<<<<<<< 6f7182cae20b5f3134b1e289fd3beb08eaac356c
-<<<<<<< 14449c103fcfd93fd9d4c766b5544ad16fbe4414
 > When importing CSS from a JavaScript file, that CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's `<head>` tag inside `<style>...</style>` after the main concatenated CSS file.
-=======
-> When importing CSS from a JavaScript file that CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's `<head>` tag inside `<style>...</style>` after the main concatenated CSS file.
 
->>>>>>> Added back missing nam styles section
-
-=======
->>>>>>> Revert "Added back missing nam styles section"
-=======
-> When importing CSS from a JavaScript file that CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's `<head>` tag inside `<style>...</style>` after the main concatenated CSS file.
-
->>>>>>> Adding back missing content
 <h2 id="npm-shrinkwrap">npm Shrinkwrap</h2>
 
 `package.json` typically encodes a version range, and so each `npm install` command can sometimes lead to a different result if new versions have been published in the meantime. In order to ensure that you and the rest of your team are using the same exact same version of each package, it's a good idea to use `npm shrinkwrap` after making any dependency changes to `package.json`:
