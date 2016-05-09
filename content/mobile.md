@@ -531,10 +531,15 @@ meteor add cordova:my-cordova-plugin@file://private/my-cordova-plugin
 meteor run ios
 ```
 
-Finally, verify that after running, the `config.xml` was modified correctly. The iOS and Android versions are located here:
+Finally, verify that after running, the `config.xml` was modified correctly. In our example, only the iOS version should have changed:
 
 ```text
 .meteor/local/cordova-build/platforms/ios/My App/config.xml
+```
+
+The Android version is located here:
+
+```text
 .meteor/local/cordova-build/platforms/android/res/xml/config.xml
 ```
 
