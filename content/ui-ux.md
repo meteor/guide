@@ -19,23 +19,23 @@ After reading this guide, you'll know:
 Meteor officially supports three user interface (UI) rendering libraries, [Blaze](blaze.html), [React](react.html) and [Angular](http://www.angular-meteor.com). Blaze was created as part of Meteor when it launched in 2011, React was created by Facebook in 2013, and Angular was created by Google in 2010. All three have been used successfully by large production apps. Blaze is the easiest to learn and has the most full-stack Meteor packages, but React and Angular are more developed and have larger communities.
 
 
-**Syntax**
+### Syntax
 - Blaze uses an easy-to-learn [Handlebars](http://handlebarsjs.com)-like template syntax, with logic like `{% raw %}{{#if}}{% endraw %}` and `{% raw %}{{#each}}{% endraw %}` interspersed in your HTML files. Template functions and CSS-selector events maps are written in JavaScript files.
 - React uses [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), with which you write your HTML in JavaScript. While it doesn't have the logic-view separation most libraries have, it also has the most flexibility. Template functions and event handlers are defined in the same file as the HTML part of the component, which usually makes it easier to understand how they are tied together.
 - Angular uses HTML with [special attribute syntax](https://angular.io/docs/ts/latest/guide/cheatsheet.html) for logic and events. Template helpers are written in the accompanying JavaScript file along with events, which are called by name from inside HTML attributes. 
 - React and Angular enforce a better component structure, which makes developing larger apps easier. (Although you can add component structure to Blaze by [following conventions](blaze.html#reusable-components) or using the [Blaze Components](http://components.meteorapp.com/) or [ViewModel](https://viewmodel.org/) packages.)
 
-**Community**
+### Community
 - Blaze has many full-stack Meteor packages on Atmosphere, such as [`useraccounts:core`](https://atmospherejs.com/useraccounts/core) and [`aldeed:autoform`](https://atmospherejs.com/aldeed/autoform).
 - React has 41k stars on Github and 13k npm libraries.
 - Angular has 11k stars on Github and 4k npm libraries.
 
-**Performance**
+### Performance
  - Render performance varies a lot depending on the situation. All three libraries are very quick at rendering simple apps, but can take a noticeable amount of time with more complex apps.
  - Angular and React have had more performance optimization work put into them than Blaze and in general will perform better. However, there are some cases when Blaze does better (for instance an `{% raw %}{{#each}}{% endraw %}` over a changing cursor).
  - [One test](http://info.meteor.com/blog/comparing-performance-of-blaze-react-angular-meteor-and-angular-2-with-meteor) benchmarks Angular 2 as the best, followed by React and Angular 1, followed by Blaze. 
 
-**Mobile**  
+### Mobile
 - **Cordova**
   - All three libraries work fine in a Cordova web view, and you can use mobile CSS libraries like Ionic's CSS with any view library.
   - The most advanced mobile web framework is [Ionic 2](http://ionicframework.com/docs/v2/), which uses Angular 2.
