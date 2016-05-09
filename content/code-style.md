@@ -134,25 +134,26 @@ If you get errors from the default `meteor create myapp` such as:
   1:24  error  Unable to resolve path to module 'meteor/meteor'  import/no-unresolved
 ```
 
-then you can quiet them by adding to `rules` in `eslintConfig`, for instance:
+then you can quiet them by adding [`eslint-import-resolver-meteor`](https://github.com/clayne11/eslint-import-resolver-meteor) plugin
+
+`meteor npm install --save-dev eslint eslint-plugin-import eslint-import-resolver-meteor`
+
+Following that, register the resolver in `settings` in `eslintConfig`.  For instance,
 
 ```
 {
   ...
   "eslintConfig": {
    ...
-    "rules": {
-      "meteor/eventmap-params": [
-        2, { "templateInstanceParamName": "instance" }
-      ],
-      "import/no-unresolved": [
-        2, { "ignore": ["^meteor/"] }
-      ]
+    "rules": {},
+    "settings": {
+      "import/resolver": "meteor"
     }
   }
 }
 ```
 
+The `"rules": {}` is there to highlight that there were no customized ignore rules.
 
 For more details, read the [Getting Started](http://eslint.org/docs/user-guide/getting-started) directions from the ESLint website.
 
