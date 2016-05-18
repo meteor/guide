@@ -1,6 +1,6 @@
 ---
 title: "URLs and Routing"
-order: 4
+order: 20
 description: How to drive your Meteor app's UI using URLs with FlowRouter.
 discourseTopicId: 19663
 ---
@@ -228,7 +228,7 @@ Template.Lists_show_page.helpers({
 
 It's the `listShow` component (a reusuable component) that actually handles the job of rendering the content of the page. As the page component is passing the arguments into the reusuable component, it is able to be quite mechanical and the concerns of talking to the router and rendering the page have been separated.
 
-<h3 id="route-rendering-logic">Route related rendering logic</h3>
+<h3 id="route-rendering-logic">Changing page when logged out</h3>
 
 There are types of rendering logic that appear related to the route but which also seem related to user interface rendering. A classic example is authorization; for instance, you may want to render a login form for some subset of your pages if the user is not yet logged in.
 
@@ -302,9 +302,11 @@ Now that you have this package, you can use helpers in your templates to display
 In some cases you want to change routes based on user action outside of them clicking on a link. For instance, in the example app, when a user creates a new list, we want to route them to the list they just created. We do this by calling `FlowRouter.go()` once we know the id of the new list:
 
 ```js
+import { insert } from '../../api/lists/methods.js';
+
 Template.App_body.events({
   'click .js-new-list'() {
-    const listId = Lists.methods.insert.call();
+    const listId = insert.call();
     FlowRouter.go('Lists.show', { _id: listId });
   }
 });
@@ -380,7 +382,7 @@ If you need to wait on specific data that you aren't already subscribed to at cr
 ```js
 Template.App_rootRedirector.onCreated(() => {
   // If we needed to open this subscription here
-  this.subscribe('Lists.public');
+  this.subscribe('lists.public');
 
   // Now we need to wait for the above subscription. We'll need the template to
   // render some kind of loading state while we wait, too.
@@ -401,7 +403,7 @@ However, if we wanted to wait for the method to return from the server, we can p
 ```js
 Template.App_body.events({
   'click .js-new-list'() {
-    Lists.methods.insert.call((err, listId) => {
+    lists.insert.call((err, listId) => {
       if (!err) {
         FlowRouter.go('Lists.show', { _id: listId });  
       }
@@ -431,7 +433,7 @@ The second is when the URL is valid, but doesn't actually match any data. In thi
 
 ```html
 <template name="Lists_show_page">
-    {{#each listId in listIdArray}}
+  {{#each listId in listIdArray}}
     {{> Lists_show (listArgs listId)}}
   {{else}}
     {{> App_notFound}}
@@ -451,7 +453,7 @@ As we've discussed, Meteor is a framework for client rendered applications, but 
 
 Although Meteor allows you to [write low-level connect handlers](http://docs.meteor.com/#/full/webapp) to create any kind of API you like on the server-side, if you all you want to do is create a RESTful version of your Methods and Publications, you can often use the [`simple:rest`](http://atmospherejs.com/simple/rest) package to do this easily. See the [Data Loading](data-loading.html#publications-as-rest) and [Methods](methods.html) articles for more information.
 
-If you need more control, you can use the comphrensive [`nimble:restivus`](https://atmospherejs.com/nimble/restivus) package to create more or less whatever you need in whatever ontology you require.
+If you need more control, you can use the comprehensive [`nimble:restivus`](https://atmospherejs.com/nimble/restivus) package to create more or less whatever you need in whatever ontology you require.
 
 <h4 id="server-side-rendering">Server Rendering</h4>
 

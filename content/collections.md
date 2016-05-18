@@ -1,6 +1,6 @@
 ---
 title: Collections and Schemas
-order: 1
+order: 10
 description: How to define, use, and maintain MongoDB collections in Meteor.
 discourseTopicId: 19660
 ---
@@ -216,7 +216,7 @@ class ListsCollection extends Mongo.Collection {
 
     // Call the original `insert` method, which will validate
     // against the schema
-    return super(list, callback);
+    return super.insert(list, callback);
   }
 }
 
@@ -234,7 +234,7 @@ class ListsCollection extends Mongo.Collection {
   // ...
   remove(selector, callback) {
     Package.todos.Todos.remove({listId: selector});
-    return super(selector, callback);
+    return super.remove(selector, callback);
   }
 }
 ```
@@ -294,7 +294,7 @@ We are then able to wire in the denormalizer into the mutations of the `Todos` c
 class TodosCollection extends Mongo.Collection {
   insert(doc, callback) {
     doc.createdAt = doc.createdAt || new Date();
-    const result = super(doc, callback);
+    const result = super.insert(doc, callback);
     incompleteCountDenormalizer.afterInsertTodo(doc);
     return result;
   }

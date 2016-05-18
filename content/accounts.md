@@ -1,6 +1,6 @@
 ---
 title: Users and Accounts
-order: 5
+order: 13
 description: How to build user login functionality into a Meteor app. Let your users log in with passwords, Facebook, Google, GitHub, and more.
 discourseTopicId: 19664
 ---
@@ -399,7 +399,7 @@ For more details about the data stored in the user database, read the section be
 Now that you have the access token, you need to actually make a request to the appropriate API. Here you have two options:
 
 1. Use the [`http` package](http://docs.meteor.com/#/full/http) to access the service's API directly. You'll probably need to pass the access token from above in a header. For details you'll need to search the API documentation for the service.
-2. Use a package from Atmosphere or NPM that wraps the API into a nice JavaScript interface. For example, if you're trying to load data from Facebook you could use the [fbgraph](https://www.npmjs.com/package/fbgraph) NPM package. Read more about how to use NPM with your app in the [Build System article](build-tool.html#npm).
+2. Use a package from Atmosphere or npm that wraps the API into a nice JavaScript interface. For example, if you're trying to load data from Facebook you could use the [fbgraph](https://www.npmjs.com/package/fbgraph) npm package. Read more about how to use npm with your app in the [Build System article](build-tool.html#npm).
 
 <h2 id="displaying-user-data">Loading and displaying user data</h2>
 
@@ -425,7 +425,7 @@ We suggest using the `this.userId` property on the context of Methods and public
 
 ```js
 // Accessing this.userId inside a publication
-Meteor.publish('Lists.private', function() {
+Meteor.publish('lists.private', function() {
   if (!this.userId) {
     return this.ready();
   }
@@ -441,7 +441,7 @@ Meteor.publish('Lists.private', function() {
 ```js
 // Accessing this.userId inside a Method
 Meteor.methods({
-  'Todos.methods.updateText'({ todoId, newText }) {
+  'todos.updateText'({ todoId, newText }) {
     new SimpleSchema({
       todoId: { type: String },
       newText: { type: String }
@@ -450,7 +450,7 @@ Meteor.methods({
     const todo = Todos.findOne(todoId);
 
     if (!todo.editableBy(this.userId)) {
-      throw new Meteor.Error('Todos.methods.updateText.unauthorized',
+      throw new Meteor.Error('todos.updateText.unauthorized',
         'Cannot edit todos in a private list that is not yours');
     }
 

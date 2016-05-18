@@ -1,6 +1,6 @@
 ---
 title: User Interfaces
-order: 6
+order: 21
 description: General tips for structuring your UI code, independent of your view rendering technology.
 discourseTopicId: 19665
 ---
@@ -14,11 +14,44 @@ After reading this guide, you'll know:
 5. How to build components that can cope with a variety of different data sources.
 6. How to use animation to keep users informed of changes.
 
+<h2 id="view-layers">View layers</h2>
+
+Meteor officially supports three user interface (UI) rendering libraries, [Blaze](blaze.html), [React](react.html) and [Angular](http://www.angular-meteor.com). Blaze was created as part of Meteor when it launched in 2011, React was created by Facebook in 2013, and Angular was created by Google in 2010. All three have been used successfully by large production apps. Blaze is the easiest to learn and has the most full-stack Meteor packages, but React and Angular are more developed and have larger communities.
+
+
+<h3 id="syntax">Syntax</h3>
+
+- Blaze uses an easy-to-learn [Handlebars](http://handlebarsjs.com)-like template syntax, with logic like `{% raw %}{{#if}}{% endraw %}` and `{% raw %}{{#each}}{% endraw %}` interspersed in your HTML files. Template functions and CSS-selector events maps are written in JavaScript files.
+- React uses [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), with which you write your HTML in JavaScript. While it doesn't have the logic-view separation most libraries have, it also has the most flexibility. Template functions and event handlers are defined in the same file as the HTML part of the component, which usually makes it easier to understand how they are tied together.
+- Angular uses HTML with [special attribute syntax](https://angular.io/docs/ts/latest/guide/cheatsheet.html) for logic and events. Template helpers are written in the accompanying JavaScript file along with events, which are called by name from inside HTML attributes. 
+- React and Angular enforce a better component structure, which makes developing larger apps easier. (Although you can add component structure to Blaze by [following conventions](blaze.html#reusable-components) or using the [Blaze Components](http://components.meteorapp.com/) or [ViewModel](https://viewmodel.org/) packages.)
+
+<h3 id="community">Community</h3>
+
+- Blaze has many full-stack Meteor packages on Atmosphere, such as [`useraccounts:core`](https://atmospherejs.com/useraccounts/core) and [`aldeed:autoform`](https://atmospherejs.com/aldeed/autoform).
+- React has 41k stars on Github and 13k npm libraries.
+- Angular has 11k stars on Github and 4k npm libraries.
+
+<h3 id="performance">Performance</h3>
+
+ - Render performance varies a lot depending on the situation. All three libraries are very quick at rendering simple apps, but can take a noticeable amount of time with more complex apps.
+ - Angular and React have had more performance optimization work put into them than Blaze and in general will perform better. However, there are some cases when Blaze does better (for instance an `{% raw %}{{#each}}{% endraw %}` over a changing cursor).
+ - [One test](http://info.meteor.com/blog/comparing-performance-of-blaze-react-angular-meteor-and-angular-2-with-meteor) benchmarks Angular 2 as the best, followed by React and Angular 1, followed by Blaze. 
+
+<h3 id="mobile">Mobile</h3>
+
+- **Cordova**
+  - All three libraries work fine in a Cordova web view, and you can use mobile CSS libraries like Ionic's CSS with any view library.
+  - The most advanced mobile web framework is [Ionic 2](http://ionicframework.com/docs/v2/), which uses Angular 2.
+  - Ionic 1 uses Angular 1, but there are also [Blaze](http://meteoric-doc.com/) and [React](http://reactionic.github.io/) ports.
+  - If you're using React, the most popular mobile web React framework is [Reapp](http://reapp.io/).
+- **Native**
+  - You can connect any native iOS or Android app to a Meteor server via [DDP](https://www.meteor.com/ddp). For iOS, use the [`meteor-ios`](https://github.com/martijnwalraven/meteor-ios) framework.
+  - You can write native clients in JavaScript using [React Native](https://facebook.github.io/react-native/). For the most recent information on how to use React Native with Meteor, see [this reference](https://github.com/spencercarli/react-native-meteor-index).
+
 <h2 id="components">UI components</h2>
 
-In Meteor, we officially support three user interface (UI) rendering libraries, [Blaze](blaze.html), [React](http://react-in-meteor.readthedocs.org/en/latest/) and [Angular](http://www.angular-meteor.com).
-
-Regardless of the rendering library that you are using, there are some patterns in how you build your User Interface (UI) that will help make your app's code easier to understand, test, and maintain. These patterns, much like general patterns of modularity, revolve around making the interfaces to your UI elements very clear and avoiding using techniques that bypass these known interfaces.
+Regardless of the view layer that you are using, there are some patterns in how you build your User Interface (UI) that will help make your app's code easier to understand, test, and maintain. These patterns, much like general patterns of modularity, revolve around making the interfaces to your UI elements very clear and avoiding using techniques that bypass these known interfaces.
 
 In this article, we'll refer to the elements in your user interface as "components". Although in some systems, you may refer to them as "templates", it can be a good idea to think of them as something more like a component, which has an API and internal logic, rather than a template, which is just a bit of HTML.
 
@@ -80,7 +113,7 @@ Template.Lists_show_page.onCreated(function() {
   this.getListId = () => FlowRouter.getParam('_id');
 
   this.autorun(() => {
-    this.subscribe('Todos.inList', this.getListId());
+    this.subscribe('todos.inList', this.getListId());
   });
 });
 
@@ -115,21 +148,25 @@ Template.Lists_show_page.helpers({
 
 <h2 id="styleguides">Visually testing reusable components</h2>
 
-A useful property of reusable components is that you can render them anywhere because they don't rely on complicated environments. One very useful thing that this enables is a component _style guide_ or harness.
+A useful property of reusable components is that you can render them anywhere because they don't rely on complicated environments. This is very useful when paired with component explorers, debug-only apps that allow you to explore, visualize, and test your UI components.
 
-To use a style guide, you need to add two things to your app:
+<img src="images/chromatic-how-it-works.png">
 
-1. A list of "entries", where each entry is a component with a list of specifications. Each specification is a list of arguments which trigger different behavior when passed to the component.
+A component explorer does two things:
 
-2. A special route in the development version of the application that renders each of the components for each specification.
+1. <b>Indexes</b> your apps components so they are easy to find
+2. <b>Renders</b> components using developer-defined states and stubbed data
 
-For instance, in Galaxy, we have a component style guide that renders each reusable component either one specification at a time, or with all specifications at once.
+For instance, in Galaxy, we use a component explorer called Chromatic to render each component one specification at a time or with all specifications at once.
 
-<img src="images/galaxy-styleguide.png">
 
-Such rendering enables very quick development of visual aspects of the component in all possible states. Typically in a complex application, it can be quite difficult to achieve certain states of components purely by "using" the application. For example, in Galaxy, the component screen enters a very complex state if two deploys to the same application are happening simultaneously. It would be hard to test this component by using the application and trying to get it into that state.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SRXvg-_Suo0" frameborder="0" allowfullscreen></iframe>
 
-You can learn more about this technique from [this talk](https://www.youtube.com/watch?v=bTQOvYy_Z3w&app=desktop) by Phil Cockfield from Respondly.
+
+Using Chromatic enables rapid development of complex components. Typically in a large application, it can be quite difficult to achieve certain states of components purely by "using" the application. For example, a component in Galaxy can enter a complex state if two deploys of the same app happen simultaneously. With Chromatic we're able to define this state at the component level and test it independently of the application logic.
+
+You can use [Chromatic component explorer](https://github.com/meteor/chromatic) in your Meteor + React app with `meteor add mdg:chromatic`. Similar projects built in React are [UI Harness](http://www.uiharness.com/) by Phil Cockfield and [React Storybook](https://github.com/kadirahq/react-storybook) by Arunoda Susiripala.
+
 
 <h2 id="ui-patterns">User interface patterns</h2>
 
@@ -141,16 +178,88 @@ Internationalization (i18n) is the process of generalizing the UI of your app in
 
 <h4 id="places-to-i18n">Places to translate</h4>
 
-It's useful to consider the various places in the system that user-readable strings exist and make sure that you are properly using the i18n system to generate those strings in each case. We'll go over the implementation for each case in the section about [`tap:i18n`](#tap-i18n) below.
+It's useful to consider the various places in the system that user-readable strings exist and make sure that you are properly using the i18n system to generate those strings in each case. We'll go over the implementation for each case in the section about [`tap:i18n`](#tap-i18n-js) below.
 
 1. **HTML templates.** This is the most obvious place---in the content of UI components that the user sees.
 2. **Client JavaScript messages.** Alerts or other messages that are generated on the client side are shown to the user, and should also be translated.
 3. **Server JavaScript messages and emails.** Messages or errors generated by the server can often be user visible. An obvious place is emails and any other server generated messages, such as mobile push notifications, but more subtle places are return values and error messages on method calls. Errors should be sent over the wire in a generic form and translated on the client.
 4. **Data in the database.** A final place where you may want to translate is actual user-generated data in your database. For example, if you are running a wiki, you might want to have a mechanism for the wiki pages to be translated to different languages. How you go about this will likely be unique to your application.
 
-<h4 id="tap-i18n">Using `tap:i18n`</h4>
+<h4 id="tap-i18n-js">Using `tap:i18n` in JavaScript</h4>
 
-XXX: We're going to leave out this section until there is more clarity around modules in Meteor 1.3. Right now i18n is a bit complicated in the all-packages approach we have taken for the Todos example app.
+To use `tap:i18n`, first `meteor add tap:i18n` to add it to your app. Then we need to add a translation JSON file for our default language (`en` for English) -- we can put it at `i18n/en.i18n.json`. Once we've done that we can import and use the `TAPi18n.__()` function to get translations for strings or keys within our JavaScript code.
+
+For instance for errors in the Todos example app, we create a `errors` module that allows us to easily alert a translated error for all of the errors that we can potentially throw from methods:
+
+```js
+import { TAPi18n } from 'meteor/tap:i18n';
+
+export const displayError = (error) =>  {
+  if (error) {
+    // It would be better to not alert the error here but inform the user in some
+    // more subtle way
+    alert(TAPi18n.__(error.error));
+  }
+};
+```
+
+The `error.error` field is the first argument to the `Meteor.Error` constructor, and we use it to uniquely name and namespace all the errors we use in the application. We then define the English text of those errors in `i18n/en.i18n.json`:
+
+```json
+{
+    "lists": {
+    "makePrivate": {
+      "notLoggedIn": "Must be logged in to make private lists.",
+      "lastPublicList": "Cannot make the last public list private."
+    },
+    "makePublic": {
+    ...
+    }
+    ...
+}
+```
+
+<h4 id="tap-i18n-blaze">Using `tap:i18n` in Blaze</h4>
+
+We can also easily use translations in Blaze templates. To do so, we can use the `{% raw %}{{_ }}{% endraw %}` helper. In the Todos app we use the actual string that we want to output in English as the i18n key, which means we don't need to provide an English translation, although perhaps in a real app you might want to provide keys from the beginning.
+
+For example in `app-not-found.html`:
+
+```html
+<template name="App_notFound">
+  <div class="page not-found">
+    <nav>
+      <div class="nav-group">
+        <a href="#" class="js-menu nav-item"><span class="icon-list-unordered"></span></a>
+      </div>
+    </nav>
+
+    <div class="content-scrollable">
+      <div class="wrapper-message">
+        <div class="title-message">{{_ 'Page not found'}}</div>
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+<h4 id="tap-i18n-changing-language">Changing Language</h4>
+
+To set and change the language that a user is seeing, you should call `TAPi18n.setLanguage(fn)`, where `fn` is a (possibly reactive) function that returns the current language. For instance you could write
+
+```js
+// A store to use for the current language
+export const CurrentLanguage = new ReactiveVar('en');
+
+
+import CurrentLanguage from '../stores/current-language.js';
+TAPi18n.setLanguage(() => {
+  CurrentLanguage.get();
+});
+```
+
+Then somewhere in your UI you can `CurrentLanguage.set('es')` when a user chooses a new language.
+
 
 <h3 id="event-handling">Event handling</h3>
 
@@ -165,12 +274,17 @@ If you do not, you'll see performance problems across the board: you'll be flood
 To throttle writes, a typical approach is to use underscore's [`.throttle()`](http://underscorejs.org/#throttle) or [`.debounce()`](http://underscorejs.org/#debounce) functions. For instance, in the Todos example app, we throttle writes on user input to 300ms:
 
 ```js
+import {
+  updateText,
+} from '../../api/todos/methods.js';
+
+
 Template.Todos_item.events({
   // update the text of the item on keypress but throttle the event to ensure
   // we don't flood the server with updates (handles the event at most once
   // every 300ms)
   'keyup input[type=text]': _.throttle(function(event) {
-    Todos.methods.updateText.call({
+    updateText.call({
       todoId: this.todo._id,
       newText: event.target.value
     }, (err) => {
@@ -351,15 +465,17 @@ However, it is possible to do this thanks to our split between smart and reusabl
 Template.Lists_show_page.onCreated(function() {
   // ...
 
-  // The visible todos are the todos that the user can actually see on the screen
-  // (whereas Todos are the todos that actually exist)
-  this.visibleTodos = new Mongo.Collection();
+  // The visible todos are the todos that the user can
+  // actually see on the screen (whereas Todos are the
+  // todos that actually exist)
+  this.visibleTodos = new Mongo.Collection(null);
 
   this.getTodos = () => {
-    const list = Lists.findOne(this.this.getListId());
+    const list = Lists.findOne(this.getListId());
     return list.todos({}, {limit: instance.state.get('requested')});
   };
-  // When the user requests it, we should sync the visible todos to reflect the true state of the world
+  // When the user requests it, we should sync the visible todos to
+  // reflect the true state of the world
   this.syncTodos = (todos) => {
     todos.forEach(todo => this.visibleTodos.insert(todo));
     this.state.set('hasChanges', false);
@@ -371,8 +487,9 @@ Template.Lists_show_page.onCreated(function() {
   this.autorun((computation) => {
     const todos = this.getTodos();
 
-    // If this autorun re-runs, the list id or set of todos must have changed, so we should
-    // flag it to the user so they know there are changes to be seen.
+    // If this autorun re-runs, the list id or set of todos must have 
+    // changed, so we should flag it to the user so they know there
+    // are changes to be seen.
     if (!computation.firstRun) {
       this.state.set('hasChanges', true);
     } else {
@@ -394,8 +511,8 @@ Template.Lists_show_page.helpers({
       countReady: instance.countSub.ready(),
       count: Counts.get(`list/todoCount${listId}`),
       onNextPage: instance.onNextPage,
-      // These two properties allow the user to know that there are changes to be viewed
-      // and allow them to view them
+      // These two properties allow the user to know that there
+      // are changes to be viewed and allow them to view them
       hasChanges: instance.state.get('hasChanges'),
       onShowChanges:instance.onShowChanges
     };
@@ -403,7 +520,7 @@ Template.Lists_show_page.helpers({
 });
 ```
 
-The reusable sub-component can then use the `hasChanges` argument to determine if it show some kind of callout to the user to indicate changes are available, and then use the `onShowChanges` callback to trigger them to be shown.
+The reusable sub-component can then use the `hasChanges` argument to determine if it should show some kind of callout to the user to indicate changes are available, and then use the `onShowChanges` callback to trigger them to be shown.
 
 <h3 id="optimistic-ui">Optimistic UI</h3>
 
@@ -416,9 +533,11 @@ So when should you wait for the server and when not? It basically comes down to 
 For instance, in the Todos example app, when creating a new list, the list creation will basically always succeed, so we write:
 
 ```js
+import { insert } from '../../api/lists/methods.js';
+
 Template.App_body.events({
   'click .js-new-list'() {
-    const listId = Lists.methods.insert.call((err) => {
+    const listId = insert.call((err) => {
       if (err) {
         // At this point, we have already redirected to the new list page, but
         // for some reason the list didn't get created. This should almost never
@@ -528,7 +647,7 @@ Let's consider the case of the Todos example app. Here we do a similar thing to 
 
 This looks like it should just work, but there's one problem: Sometimes the rendering system will prefer to simply change an existing component rather than switching it out and triggering the animation system. For example in the Todos example app, when you navigate between lists, by default Blaze will try to simply re-render the `Lists_show` component with a new `listId` (a changed argument) rather than pull the old list out and put in a new one. This is an optimization that is nice in principle, but that we want to avoid here for animation purposes. More specifically, we want to make sure the animation *only* happens when the `listId` changes and not on other reactive changes.
 
-To do so in this case, we can use a little trick (that is specific to Blaze, although similar techniques apply to other rendering engines) of using the fact that the `{% raw %}{{#each}}{% endraw %}` helper diffs arrays of strings, and completely re-renders elements when they change.
+To do so in this case, we can use a little trick (that is specific to Blaze, although similar techniques apply to other view layers) of using the fact that the `{% raw %}{{#each}}{% endraw %}` helper diffs arrays of strings, and completely re-renders elements when they change.
 
 ```html
 <template name="Lists_show_page">
