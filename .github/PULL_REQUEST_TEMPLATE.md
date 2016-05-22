@@ -1,7 +1,9 @@
 <!--
-  Thanks for submitting a PR! We'll try to look at it as soon as possible.
-
-  Use this field to describe your pull request.
-
-  Please update the [changelog](https://github.com/meteor/guide/blob/master/CHANGELOG.md) for significant changes.
+🙌 Thanks for submitting a PR 😃 We should get to it soon.
 -->
+
+TODO:  
+
+- [ ] If this is a significant change, update [CHANGELOG.md](https://github.com/meteor/guide/blob/master/CHANGELOG.md)
+- [ ] Use `<h2 id="foo">` instead of `## Foo` for headers
+- [ ] Leave a blank line after each header
