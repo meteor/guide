@@ -223,7 +223,7 @@ const withDiv = function withDiv(callback) {
   }
 };
 
-export const function withRenderedTemplate(template, data, callback) {
+export default function withRenderedTemplate(template, data, callback) {
   withDiv((el) => {
     const ourTemplate = _.isString(template) ? Template[template] : template;
     Blaze.renderWithData(ourTemplate, data, el);
@@ -247,7 +247,7 @@ import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 
 
-import { withRenderedTemplate } from '../../test-helpers.js';
+import withRenderedTemplate from '../../test-helpers.js';
 import '../todos-item.js';
 
 describe('Todos_item', function () {
@@ -289,7 +289,7 @@ If you're testing code that makes use of globals, you'll need to import those gl
 
 ```js
 // logging.js
-export const function logTodos() {
+export function logTodos() {
   console.log(Todos.findOne());
 }
 ```
@@ -299,7 +299,7 @@ then you'll need to import `Todos` both in that file and in the test:
 ```js
 // logging.js
 import { Todos } from './todos.js'
-export const function logTodos() {
+export function logTodos() {
   console.log(Todos.findOne());
 }
 ```
