@@ -223,7 +223,7 @@ const withDiv = function withDiv(callback) {
   }
 };
 
-export default function withRenderedTemplate(template, data, callback) {
+export const withRenderedTemplate = function(template, data, callback) {
   withDiv((el) => {
     const ourTemplate = _.isString(template) ? Template[template] : template;
     Blaze.renderWithData(ourTemplate, data, el);
@@ -247,7 +247,7 @@ import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 
 
-import withRenderedTemplate from '../../test-helpers.js';
+import { withRenderedTemplate } from '../../test-helpers.js';
 import '../todos-item.js';
 
 describe('Todos_item', function () {
