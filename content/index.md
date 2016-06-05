@@ -61,7 +61,7 @@ meteor
 
 4. [Meteor 文档](https://docs.meteor.com)是找到 Meteor API 文档最好的地方。
 
-5. [Atmosphere](https://atmospherejs.com)是社区为 Meteor 设计的包的专属仓库。
+5. [Atmosphere](https://atmospherejs.com) 是社区为 Meteor 设计的包的专属仓库。
 
 6. [Awesome Meteor](https://github.com/Urigo/awesome-meteor) 是一个社区维护的[包](https://github.com/Urigo/awesome-meteor#getting-started)与[资源](https://github.com/Urigo/awesome-meteor#resources)的列表。
 
