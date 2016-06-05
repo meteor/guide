@@ -1,45 +1,47 @@
 ---
-title: Introduction
+title: 介绍
 order: 0
-description: This is the guide for using Meteor, a full-stack JavaScript platform for developing modern web and mobile applications.
+description: 这是使用 Meteor，一个用于开发现代网页和移动应用的全栈 JavaScript 平台。
 ---
 
 <!--  XXX: note that this content is somewhat duplicated on the docs, and should be updated in parallel -->
-<h2 id="what-is-meteor">What is Meteor?</h2>
+<h2 id="what-is-meteor">什么是 Meteor</h2>
 
-Meteor is a full-stack JavaScript platform for developing modern web and mobile applications. Meteor includes a key set of technologies for building connected-client reactive applications, a build tool, and a curated set of packages from the Node.js and general JavaScript community.
+Meteor 是一个用于开发现代网页和移动应用的全栈 JavaScript 平台。Meteor 包含了一些用来构建连接客户端的实时应用的关键技术，一个构建工具，和一套精心维护的、来自 Node.js 和广泛 JavaScript 的社区的包。
 
-- Meteor allows you to develop in **one language**, JavaScript, in all environments: application server, web browser, and mobile device.
+- Meteor 使你能使用 **一种语言** 来开发，即 JavaScript，在所有的环境中：应用服务器、网页浏览器和移动设备。
 
-- Meteor uses **data on the wire**, meaning the server sends data, not HTML, and the client renders it.
+- Meteor 在网络上传输 **数据**，而不是 HTML，并由客户端来渲染。
 
-- Meteor **embraces the ecosystem**, bringing the best parts of the extremely active JavaScript community to you in a careful and considered way.
+- Meteor **拥抱整个生态系统**，以一种谨慎的方式将相当活跃的 JavaScript 社区中最棒的部分带给你。
 
-- Meteor provides **full stack reactivity**, allowing your UI to seamlessly reflect the true state of the world with minimal development effort.
+- Meteor 提供 **全栈响应性**，使你无需耗费太大精力就能让你的 UI 无缝地反应世界的实际状态。
 
-<h2 id="quickstart">Quick start</h2>
+<h2 id="quickstart">快速上手</h2>
 
-Meteor supports [OS X, Windows, and Linux](https://www.meteor.com/install).
+Meteor 支持 [OS X、Windows 和 Linux](https://www.meteor.com/install).
 
-On Windows?  [Download the official Meteor installer here](https://install.meteor.com/windows).
+Windows？  [在这里下载官方 Meteor 安装包。](https://install.meteor.com/windows).
 
-On OS X or Linux?  Install the latest official Meteor release from your terminal:
+OS X 或 Linux？从你的终端安装最新的官方 Meteor 发行版。
 
 ```bash
 curl https://install.meteor.com/ | sh
 ```
 
-The Windows installer supports Windows 7, Windows 8.1, Windows Server
-2008, and Windows Server 2012.  The command line installer supports Mac OS X
-10.7 (Lion) and above, and Linux on x86 and x86_64 architectures.
+> 译注：若上述地址无法使用，可以尝试使用 `curl http://install-cn.ourmeteor.com/1.3.2.4 | sh`。其中 `1.3.2.4` 是版本号，我们将保持它更新到最新版。
 
-Once you've installed Meteor, create a project:
+Windows 安装包支持 Windows 7、Windows 8.1、Windows Server
+2008 及 Windows Server 2012。命令行安装器支持 Mac OS X
+10.7 (Lion) 或更高版本，及 x86 和 x86_64 架构的 Linux。
+
+当你安装了 Meteor 后，创建一个项目：
 
 ```bash
 meteor create myapp
 ```
 
-Run it locally:
+本地运行它：
 
 ```bash
 cd myapp
@@ -48,7 +50,8 @@ meteor
 # Meteor server running on: http://localhost:3000/
 ```
 
-> Meteor comes with npm bundled so that you can type `meteor npm` without worrying about installing it yourself. If you like, you can also use a globally installed npm to manage your packages.
+> Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
+> 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。
 
 <h2 id="learning-more">Meteor resources</h2>
 
