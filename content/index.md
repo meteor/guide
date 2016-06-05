@@ -31,9 +31,7 @@ curl https://install.meteor.com/ | sh
 
 > 译注：若上述地址无法使用，可以尝试使用 `curl http://install-cn.ourmeteor.com/1.3.2.4 | sh`。其中 `1.3.2.4` 是版本号，我们将保持它更新到最新版。
 
-Windows 安装包支持 Windows 7、Windows 8.1、Windows Server
-2008 及 Windows Server 2012。命令行安装器支持 Mac OS X
-10.7 (Lion) 或更高版本，及 x86 和 x86_64 架构的 Linux。
+Windows 安装包支持 Windows 7、Windows 8.1、Windows Server 2008 及 Windows Server 2012。命令行安装器支持 Mac OS X 10.7 (Lion) 或更高版本，及 x86 和 x86_64 架构的 Linux。
 
 当你安装了 Meteor 后，创建一个项目：
 
