@@ -51,19 +51,19 @@ meteor
 > Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
 > 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。
 
-<h2 id="learning-more">Meteor resources</h2>
+<h2 id="learning-more">Meteor 资源</h2>
 
-1. The place to get started with Meteor is the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+1. 开始上手 Meteor 的地方是[官方教程](https://www.meteor.com/tutorials/blaze/creating-an-app)。
 
-2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) is the best place to ask (and answer!) technical questions. Be sure to add the meteor tag to your question.
+2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) 是问技术问题最好的地方（当然答也是）。记得加上 meteor 标签。
 
-3. Visit the [Meteor discussion forums](https://forums.meteor.com) to announce projects, get help, talk about the community, or discuss changes to core.
+3. 访问 [Meteor 论坛](https://forums.meteor.com) 来宣布项目、获得帮助、与社区讨论或讨论 Meteor 核心的改动。
 
-4. The [Meteor docs](https://docs.meteor.com) is the best place to find the core API documentation of the platform.
+4. [Meteor 文档](https://docs.meteor.com)是找到 Meteor API 文档最好的地方。
 
-5. [Atmosphere](https://atmospherejs.com) is the repository of community packages designed especially for Meteor.
+5. [Atmosphere](https://atmospherejs.com)是社区为 Meteor 设计的包的专属仓库。
 
-6. [Awesome Meteor](https://github.com/Urigo/awesome-meteor) is a community-curated list of [packages](https://github.com/Urigo/awesome-meteor#getting-started) and [resources](https://github.com/Urigo/awesome-meteor#resources).
+6. [Awesome Meteor](https://github.com/Urigo/awesome-meteor) 是一个社区维护的[包](https://github.com/Urigo/awesome-meteor#getting-started)与[资源](https://github.com/Urigo/awesome-meteor#resources)的列表。
 
 <h2 id="what-is-it">What is the Meteor Guide?</h2>
 
