@@ -49,7 +49,7 @@ meteor
 ```
 
 > Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
-> 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。
+> 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。你也许希望使用一个 npm 镜像，但是 Meteor 自带的尚不支持使用镜像。
 
 <h2 id="learning-more">Meteor 资源</h2>
 

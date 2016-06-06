@@ -59,7 +59,7 @@ secondStatement();
 
 <h3 id="ecmascript">使用 `ecmascript` 包</h3>
 
-ECMAScript, the language standard on which every browser's JavaScript implementation is based, has moved to yearly standards releases. The newest complete standard is ES2015, which includes some long-awaited and very significant improvements to the JavaScript language. Meteor's `ecmascript` package compiles this standard down to regular JavaScript that all browsers can understand using the [popular Babel compiler](https://babeljs.io/). It's fully backwards compatible to "regular" JavaScript, so you don't have to use any new features if you don't want to. We've put a lot of effort into making advanced browser features like source maps work great with this package, so that you can debug your code using your favorite developer tools without having to see any of the compiled output.
+ECMAScript，所有浏览器的 JavaScript 实现的语言标准，转移到了一种基于年份的发行周期。最新的一份完整标准是 ES2015，里面包含了对 JavaScript 语言很多久等了的、显著的提升。 Meteor 的 `ecmascript` 包通过 [热门的 Babel 编译器](https://babeljs.io/) 将符合这个标准的代码编译成普通的、所有浏览器都能解析的 JavaScript。It's fully backwards compatible to "regular" JavaScript, so you don't have to use any new features if you don't want to. We've put a lot of effort into making advanced browser features like source maps work great with this package, so that you can debug your code using your favorite developer tools without having to see any of the compiled output.
 
 The `ecmascript` package is included in all new apps and packages by default, and compiles all files with the `.js` file extension automatically. See the [list of all ES2015 features supported by the ecmascript package](https://docs.meteor.com/packages/ecmascript.html#Supported-ES2015-Features).
 
@@ -85,16 +85,16 @@ Below, you can find directions for setting up automatic linting at many differen
 
 <h3 id="eslint-installing">安装及运行 ESLint</h3>
 
-To setup ESLint in your application, you can install the following [npm](https://docs.npmjs.com/getting-started/what-is-npm) packages:
+安装这些 [npm](https://docs.npmjs.com/getting-started/what-is-npm) 包以在你的应用里配置 ESLint：
 
 ```
 meteor npm install --save-dev eslint-config-airbnb eslint-plugin-import eslint-plugin-meteor eslint-plugin-react eslint-plugin-jsx-a11y eslint
 ```
 
 > Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
-> 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。
+> 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。你也许希望使用一个 npm 镜像，但是 Meteor 自带的尚不支持使用镜像。
 
-You can also add a `eslintConfig` section to your `package.json` to specify that you'd like to use the Airbnb config, and to enable [ESLint-plugin-Meteor](https://github.com/dferber90/eslint-plugin-meteor). You can also setup any extra rules you want to change, as well as adding a lint npm command:
+你也可以在 `package.json` 中添加 `eslintConfig` 一节来指定你使用 Airbnb 方案，并启用 [ESLint-plugin-Meteor](https://github.com/dferber90/eslint-plugin-meteor)。你还可以配置其他条目，比如添加一个叫 `lint` 的 npm 命令：
 
 ```
 {
@@ -116,13 +116,13 @@ You can also add a `eslintConfig` section to your `package.json` to specify that
 }
 ```
 
-To run the linter, you can now simply type:
+键入以下内容来运行检查器：
 
 ```bash
 meteor npm run lint
 ```
 
-If you get errors from the default `meteor create myapp` such as:
+如果你在一个 `meteor create myapp` 生成的项目中得到下面这样的错误：
 
 ```bash
 /opt/www/sites/me/myapp/client/main.js
@@ -134,7 +134,7 @@ If you get errors from the default `meteor create myapp` such as:
   1:24  error  Unable to resolve path to module 'meteor/meteor'  import/no-unresolved
 ```
 
-then you can quiet them by adding to `rules` in `eslintConfig`, for instance:
+你只要在 `eslintConfig` 的 `rules` 里添加一些东西就能让它闭嘴，像这样：
 
 ```
 {
@@ -154,7 +154,7 @@ then you can quiet them by adding to `rules` in `eslintConfig`, for instance:
 ```
 
 
-For more details, read the [Getting Started](http://eslint.org/docs/user-guide/getting-started) directions from the ESLint website.
+更多细节请在 ESLint 网站上 [Getting Started](http://eslint.org/docs/user-guide/getting-started) 一节了解。
 
 <h3 id="eslint-editor">与你的编辑器集成</h3>
 
@@ -175,7 +175,7 @@ A side note for Emmet users: You can use *\<ctrl-e\>* to expand HTML tags in .js
 
 <h4 id="eslint-atom">Atom</h4>
 
-Using ESLint with Atom is simple. Just install these three packages:
+在 Atom 上安装 ESLint 很简单，只要安装这些包就好了：
 
 ```bash
 apm install language-babel
@@ -183,7 +183,7 @@ apm install linter
 apm install linter-eslint
 ```
 
-Then **restart** (or **reload** by pressing Ctrl+Alt+R / Cmd+Opt+R) Atom to activate linting.
+然后 **重启** （或者按下 Ctrl+Alt+R / Cmd+Opt+R 来 **重载**） Atom 来激活它。
 
 
 <h4 id="eslint-webstorm">WebStorm</h4>

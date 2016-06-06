@@ -12,6 +12,10 @@
 
 ### 翻译规范
 
+#### 中西混排
+
+* 保留原文时，保留对应的单复数形式，但不保留语态，如：「We linted our code. Publications worked.」应译为「我们 lint 了代码。Publications 工作正常。」
+
 #### 中文、英文、数字混排时空格的使用
 
 * 英文与非标点的中文之间需要有一个空格，如「Meteor 是一个用于开发现代网页和移动应用的全栈 JavaScript 平台。」而不是「Meteor是一个用于开发现代网页和移动应用的全栈JavaScript平台。」。
