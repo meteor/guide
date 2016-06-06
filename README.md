@@ -1,5 +1,7 @@
 # Meteor 官方指南中译本
 
+[![Build Status](https://travis-ci.org/ourmeteor/guide-zh.svg?branch=master)](https://travis-ci.org/ourmeteor/guide-zh)
+
 [阅读指南](http://guide-zh.ourmeteor.com/)
 
 ## 如何贡献翻译
