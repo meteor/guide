@@ -14,23 +14,23 @@ discourseTopicId: 20192
 
 <h2 id="introduction">介绍</h2>
 
-[React](https://facebook.github.io/react/) 是由 Facebook 团队开发并维护，用于构建响应式用户界面的 JavaScript 库。React 是 Meteor 所支持的三种渲染库之一，其他两者分别是 [Blaze](blaze.html) 和 [Angular](angular.html)。
+[React](https://facebook.github.io/react/) 是由 Facebook 团队开发并维护，用于构建响应式用户界面的 JavaScript 库。React 是 Meteor 所支持的三种渲染库之一，其它两者分别是 [Blaze](blaze.html) 和 [Angular](angular.html)。若有兴趣，你可以在这里查看他们[三者的比较](ui-ux.html#view-layers)。
 
 React 有着一个活跃并且仍在不断壮大的生态系统，并且，搭配着各种不同的框架，React 已经被广泛地应用于生产实践中。
 
 想了解更多关于 React 的知识并且快速上手，请参考 [React documentation](https://facebook.github.io/react/docs/getting-started.html)。[thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) 这篇文章更是很好地阐明了 React 背后的哲学思想。
 
-想要快速入门如何在 Meteor 中使用 React，你可以查看 [React tutorial](https://www.meteor.com/tutorials/react/creating-an-app)。[`react` branch](https://github.com/meteor/todos/tree/react) 是一个使用了 React 来进行构建的更加完整的 Meteor 示例应用，你也可以通过它来进行更深入的学习。本章教程中的部分示例代码可能会引用自这个应用。
+想要在 Meteor 中上快速上手使用 React，你可以参考 [React tutorial](https://www.meteor.com/tutorials/react/creating-an-app)。若想要进一步了解如何使用 React 开发更加完整的 Meteor 应用，请参考  [Todos 应用示例](https://github.com/meteor/todos/tree/react)。这篇文章会在一些地方引用这个示例的部分代码。
 
 <h3 id="using-with-meteor">React 的安装与使用</h3>
 
-为了在 Meteor 1.3 项目中安装 React，你只需要将它添加到这个项目的 npm 依赖中即可：
+在 Meteor 1.3 中安装 React，只需将它添加到 npm 依赖：
 
 ```sh
 npm install --save react react-dom
 ```
 
-这将会在你的项目中安装 `react` 并允许你在项目文件中通过 `import React from 'react'` 来访问它。绝大部分 React 代码是用 [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html) 格式来编写的，不过你不用担心编译问题，如果你在项目中添加了 `ecmascript` 这个 Atmosphere 包，那么你可以[在 Meteor 项目中直接编写并使用JSX文件](http://guide.meteor.com/build-tool.html#react-jsx)，而这个包，则是所有 Meteor 应用默认安装的。
+这将会在你的项目中安装 `react` 并允许你在项目文件中通过 `import React from 'react'` 来使用它。绝大部分 React 代码是用 [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html) 格式来编写的，不过你不用担心编译问题，如果你在项目中添加了 `ecmascript` 这个 Atmosphere 包，那么你可以[在 Meteor 项目中直接编写并使用JSX文件](http://guide.meteor.com/build-tool.html#react-jsx)，而这个包，则是所有 Meteor 应用默认安装的。
 
 ```jsx
 import React from 'react';
@@ -57,7 +57,7 @@ Meteor.startup(() => {
 });
 ```
 
-当然，为了使上述代码生效，你需要在你的 HTML 文件的 body 中的任意位置添加 `<div id="app"></div>`。
+当然，为了使上述代码生效，你需要在你的 HTML 文件的 body 中的某一位置添加 `<div id="app"></div>`。
 
 每一个新创建的 Meteor 应用都自带 Meteor 的默认模板系统 - Blaze。如果你不打算在项目中[同时使用 React 和 Blaze](#using-with-blaze)，你可以通过以下命令从你的项目中删除 Blaze：
 
@@ -103,7 +103,7 @@ export default class MyGriddler extends React.Component {
 </template>
 ```
 
-你需要通过一个helper来传递一个 React 组件类：
+你需要通过一个 helper 来传递一个 React 组件类：
 
 ```js
 import { Template } from 'meteor/templating';
@@ -118,7 +118,7 @@ Template.userDisplay.helpers({
 })
 ```
 
-`component` 这个参数的值正是需要被渲染的 React 组件，它应该通过一个helper进行传入。
+`component` 这个参数的值正是需要被渲染的 React 组件，它应该通过一个 helper 进行传入。
 
 其他所有的参数都将各自作为一个 React 组件的 prop 传入这个组件。
 
@@ -177,17 +177,19 @@ const App = () => (
 
 <h2 id="data">使用 Meteor 的数据系统</h2>
 
-React 是一个前端渲染库，因此，它并不关心数据是如何流入及流出组件。另一方面，Meteor 对于数据的处理方式非常执着。Meteor应用通过 [publications](data-loading.html) 和 [methods](methods.html) 来实际运作，而它们分别被用于订阅和修改应用数据。
+React 是一个前端渲染库，因此，它并不关心数据是如何流入及流出组件的。另一方面，Meteor 对于数据的处理方式非常执着。Meteor 应用通过 [publications](data-loading.html) 和 [methods](methods.html) 来实际运作，而它们分别被用于订阅和修改应用数据。
 
 为了集成这两大系统，我们开发了 [`react-meteor-data`](https://atmospherejs.com/meteor/react-meteor-data) 包，利用 Meteor 的响应式系统 [Tracker](https://www.meteor.com/tracker)，使得 React 组件能够响应数据的改变。
 
 <h3 id="using-createContainer">使用 `createContainer`</h3>
 
-一旦你运行了 `meteor add react-meteor-data`，你就可以导入 `createContainer` 函数来创建可以向 presentational 组件提供数据的 [container 组件](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.by86emv9b)。（译者注：presentational 有表现、展现的意思，presentational 组件即只负责表现样式的组件，它们不关心需要渲染的数据从哪里来。而相对应地，container 组件则只关心如何获取数据并传递给presentational 组件。）
+一旦你运行了 `meteor add react-meteor-data`，你就可以导入 `createContainer` 函数来创建 [container 组件](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.by86emv9b)，并用它向表现型组件 (presentational component) 提供其所需的数据。
 
-> 提一下，“container 组件” 和 “presentational 组件” 分别类似于我们在一种设计模式中提到的 “smart 组件” 和 “reusable 组件”，如果你想了解更多这种思想和 Meteor 之间的关系，请查看这篇文章 [UI/UX article](http://guide.meteor.com/ui-ux.html#components)。
+> 译者注：presentational 有表现、展现的意思，表现型组件 (presentational component) 即只负责表现样式的组件，它们不关心需要渲染的数据从哪里来。而相对应地，container 组件则只关心如何获取数据并传递给表现型组件。
 
-例如，在 Todos 示例应用中，我们有一个 `ListPage` 组件，它负责渲染一个 list 的基本信息以及这个 list 中的所有 tasks。为了做到这些，它需要 [订阅](data-loading.html#subscriptions) `todos.inList` 这个发布，检查这个订阅是否就绪，然后从 `Todos` 数据集中查询数据。
+> 提一下，「container 组件」 和 「表现型组件」 分别类似于我们在一种设计模式中提到的 「智能组件」 和 「可复用组件」，如果你想了解更多关于这种思想和 Meteor 之间的关系，请参考这篇文章 [UI/UX article](http://guide.meteor.com/ui-ux.html#components)。
+
+例如，在 Todos 示例应用中，我们有一个 `ListPage` 组件，它负责渲染一个 list 的基本信息以及这个 list 中的所有 tasks。为了做到这些，它需要 [订阅](data-loading.html#subscriptions) `todos.inList` 这个publication，检查这个subscription是否就绪，然后从 `Todos` 数据集中查询数据。
 
 它还需要实时响应相关操作所带来的数据变化（例如，因为另一个用户的某种操作而导致一个 todo 发生改变）。所有这些数据加载的复杂性都是要求 container-presentational 组件分离的典型用例，而 `createContainer()` 函数则使得这种分离变得非常容易。
 
@@ -245,9 +247,9 @@ export default ListContainer = createContainer(({ params }) => {
 
 <h2 id="routing">路由</h2>
 
-在 Meteor-React 应用的路由方面，这里有两个主流选项。无论选择哪一个，我们都建议你在开发应用前，先查阅我们的 [Routing article](routing.html) 来了解一些关于 Meteor 路由的通用原则。
+在 Meteor-React 应用的路由方面，这里有两个主流选项。无论选择哪一个，我们都建议你在开发应用前，先查阅我们的 [「路由」章节](routing.html) 来了解一些关于 Meteor 路由的通用原则。
 
-- [`kadira:flow-router`](https://atmospherejs.com/kadira/flow-router) 是一个面向 Meteor 的路由器。它可以支持 React 和 Blaze。更多信息可参考 [Routing article](routing.html)。
+- [`kadira:flow-router`](https://atmospherejs.com/kadira/flow-router) 是一个面向 Meteor 的路由器。它可以支持 React 和 Blaze。更多信息可参考 [「路由」章节](routing.html)。
 
 - [`react-router`](https://www.npmjs.com/package/react-router) 是一个面向 React 的路由器，它在 React 社区中非常流行，你也能很方便地在 Meteor 应用中使用它。
 
@@ -274,7 +276,7 @@ FlowRouter.route('/lists/:_id', {
 });
 ```
 
-注意，`react-mounter` 会将布局组件挂载到 `#react-root` 节点下。你可以通过 `withOptions()` 函数来更改这个设定。
+注意，`react-mounter` 会将布局组件挂载到 `#react-root` 这个DOM节点下。你可以通过 `withOptions()` 函数来更改这个设定。
 
 在下面这个例子中，你的 `App` 组件会通过 `main` prop 收到一个实例化后的 React 组件并渲染它：
 
@@ -287,7 +289,7 @@ const App = (props) => (
 );
 
 export default AppContainer = createContainer(props => {
-  // 这里的props中会有一项叫做 `main`，它是由 router 传入的
+  // 这里的 props 中会有一项叫做 `main`，它是由 router 传入的
   // 我们返回的所有东西都会被*添加*到 props 中
   return {
     user: Meteor.user(),
@@ -334,11 +336,11 @@ Meteor.startup(() => {
 });
 ```
 
-当你在 Meteor 应用中使用 React Router 时，你可以像使用 Flow Router 一样大致遵守 [same principles](routing.html) 即可。但是，你也应当适当考虑 React Router [documentation](https://github.com/reactjs/react-router/blob/latest/docs/Introduction.md) 所强调的风格、约定与惯例。
+当你在 Meteor 应用中使用 React Router 时，你可以像使用 Flow Router 一样大致遵守[简单的规则](routing.html)即可。但是，你也应当适当参考 React Router [文档](https://github.com/reactjs/react-router/blob/latest/docs/Introduction.md)所强调的风格、约定与惯例。
 
 其中有一些应当注意的不同点，例如：
  - React Router 鼓励你在路由定义中耦合你的URL设计与布局层次。而 Flow Router 则更加灵活，虽然这样可能会导致更多的样板代码。
- - React Router 拥抱 React 特有的功能，例如 [context](https://facebook.github.io/react/docs/context.html) 的使用。虽然你也快可以显式地将你的 Flow Router 实例当作 context 传入（事实上，这可能是最佳实践）。
+ - React Router 拥抱 React 独有的特性，例如将 router 实例通过 React [context](https://facebook.github.io/react/docs/context.html) 进行传递。虽然，Flow Router 并没有默认这样做，但你也同样可以显式地将你的 Flow Router 实例作为 context 进行传递（事实上，这很可能正是最佳实践）。
  
 <h2 id="meteor-and-react">Meteor 和 React</h2>
 
@@ -348,4 +350,4 @@ Meteor.startup(() => {
 
 正确的做法是，你应当要求你的用户在应用中自行安装正确的 npm 包。这就能保证客户端中仅有一个 React 副本，因此也就不存在版本冲突问题。
 
-为了检查用户是否已经安装正确版本的 npm 包，你可以使用 [`tmeasday:check-npm-versions`](https://atmospherejs.com/tmeasday/check-npm-versions) 包以在运行时检查所有依赖的版本。
+为了检查用户是否已经安装正确版本的 npm 包，你可以使用 [`tmeasday:check-npm-versions`](https://atmospherejs.com/tmeasday/check-npm-versions) 包，以在运行时检查所有依赖的版本。
