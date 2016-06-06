@@ -12,6 +12,8 @@
 
 ### 翻译规范
 
+翻译术语时请参照[术语表](https://github.com/ourmeteor/guide-zh/wiki/%E6%9C%AF%E8%AF%AD%E8%A1%A8)。可以按照语境有所调整。
+
 #### 中西混排
 
 * 保留原文时，保留对应的单复数形式，但不保留语态，如：「We linted our code. Publications worked.」应译为「我们 lint 了代码。Publications 工作正常。」
