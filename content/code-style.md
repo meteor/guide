@@ -1,16 +1,16 @@
 ---
-title: Code Style
+title: 编码风格
 order: 1
-description: Suggested style guidelines for your code.
+description: 推荐的代码风格指引。
 discourseTopicId: 20189
 ---
 
-After reading this article, you'll know:
+读完这篇文章，你将学到：
 
-1. Why it's a good idea to have consistent code style
-2. Which style guide we recommend for JavaScript code
-3. How to set up ESLint to check code style automatically
-4. Style suggestions for Meteor-specific patterns, such as Methods, publications, and more
+1. 为什么有一个统一的编码风格是个好主意
+2. 我们推荐哪种 JavaScript 编码风格
+3. 怎么样设置 ESLint 来自动检查编码风格
+4. 对 Methods、publications 等 Meteor 专有形式的风格建议
 
 
 <h2 id="benefits-style">Benefits of consistent style</h2>
