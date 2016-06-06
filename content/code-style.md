@@ -39,25 +39,25 @@ if (condition) {
 secondStatement();
 ```
 
-<h3 id="automatic-error-checking">Automatic error checking</h3>
+<h3 id="automatic-error-checking">自动错误检查</h3>
 
-Having a consistent style means that it's easier to adopt standard tools for error checking. For example, if you adopt a convention that you must always use `let` or `const` instead of `var`, you can now use a tool to ensure all of your variables are scoped the way you expect. That means you can avoid bugs where variables act in unexpected ways. Also, by enforcing that all variables are declared before use, you can easily catch typos before even running any code!
+有个统一的编码风格意味着你可以使用一些标准化的错误检查工具。比如，你和团队约定使用 `let` 和 `const`，不使用 `var`，你就能用个工具来确认所有变量都被约束在你设定的范围内，避免措手不及的变量异常行为。同样地，要求所有变量必须先定义再使用，就能很方便地在运行代码前找出手抖打错的代码。
 
-<h3 id="deeper-understanding">Deeper understanding</h3>
+<h3 id="deeper-understanding">加深理解</h3>
 
-It's hard to learn everything about a programming language at once. For example, programmers new to JavaScript often struggle with the `var` keyword and function scope. Using a community-recommended coding style with automatic linting can warn you about these pitfalls proactively. This means you can jump right into coding without learning about all of the edge cases of JavaScript ahead of time.
+一次性就把一门语言完全学会是很难的。举个栗子，JavaScript 菜鸟经常搞不懂 `var` 和函数作用域。使用一种社区推荐的、有自动代码格式检查的编码风格可以让你避免踩坑。也就是说，你不必学 JavaScript 的那些极端情况就能抄起键盘写代码。
 
-As you write more code and come up against the recommended style rules, you can take that as an opportunity to learn more about your programming language and how different people prefer to use it.
+当你写了很多代码，开始撞上你写「推荐的规则」的时候，你可以将它当成是一种学习这个语言和人们使用偏好的机会。
 
-<h2 id="javascript">JavaScript style guide</h2>
+<h2 id="javascript">JavaScript 风格指南</h2>
 
-Here at Meteor, we strongly believe that JavaScript is the best language to build web applications, for a variety of reasons. JavaScript is constantly improving, and the standards around ES2015 have really brought together the JavaScript community. Here are our recommendations about how to use ES2015 JavaScript in your app today.
+在 Meteor，综合各种因素，我们坚信 JavaScript 是写 web 应用最好的语言（说的就是你，PHP）。JavaScript 在不断被完善，而 ES2015 及其相关的标准真正团结了 JavaScript 社区。这是当前我们对于在应用中使用 ES2015 JavaScript 的建议。
 
 ![](images/ben-es2015-demo.gif)
 
-> An example of refactoring from JavaScript to ES2015
+> 一个将 JavaScript 重构至 ES2015 的例子
 
-<h3 id="ecmascript">Use the `ecmascript` package</h3>
+<h3 id="ecmascript">使用 `ecmascript` 包</h3>
 
 ECMAScript, the language standard on which every browser's JavaScript implementation is based, has moved to yearly standards releases. The newest complete standard is ES2015, which includes some long-awaited and very significant improvements to the JavaScript language. Meteor's `ecmascript` package compiles this standard down to regular JavaScript that all browsers can understand using the [popular Babel compiler](https://babeljs.io/). It's fully backwards compatible to "regular" JavaScript, so you don't have to use any new features if you don't want to. We've put a lot of effort into making advanced browser features like source maps work great with this package, so that you can debug your code using your favorite developer tools without having to see any of the compiled output.
 
@@ -71,11 +71,11 @@ All of the code samples in this guide and future Meteor tutorials will use all o
 - [Set up Sublime Text for ES2015](http://info.meteor.com/blog/set-up-sublime-text-for-meteor-es6-es2015-and-jsx-syntax-and-linting)
 - [How much does ES2015 cost?](http://info.meteor.com/blog/how-much-does-es2015-cost)
 
-<h3 id="style-guide">Follow a JavaScript style guide</h3>
+<h3 id="style-guide">使用一种编码风格方案</h3>
 
 We recommend choosing and sticking to a JavaScript style guide and enforcing it with tools. A popular option that we recommend is the [Airbnb style guide](https://github.com/airbnb/javascript) with the ES6 extensions (and optionally React extensions).
 
-<h2 id="eslint">Check your code with ESLint</h2>
+<h2 id="eslint">用 ESLint 来检查代码</h2>
 
 "Code linting" is the process of automatically checking your code for common errors or style problems. For example, ESLint can determine if you have made a typo in a variable name, or some part of your code is unreachable because of a poorly written `if` condition.
 
@@ -83,7 +83,7 @@ We recommend using the [Airbnb eslint configuration](https://github.com/airbnb/j
 
 Below, you can find directions for setting up automatic linting at many different stages of development. In general, you want to run the linter as often as possible, because it's the fastest and easiest way to identify typos and small errors.
 
-<h3 id="eslint-installing">Installing and running ESLint</h3>
+<h3 id="eslint-installing">安装及运行 ESLint</h3>
 
 To setup ESLint in your application, you can install the following [npm](https://docs.npmjs.com/getting-started/what-is-npm) packages:
 
@@ -91,7 +91,8 @@ To setup ESLint in your application, you can install the following [npm](https:/
 meteor npm install --save-dev eslint-config-airbnb eslint-plugin-import eslint-plugin-meteor eslint-plugin-react eslint-plugin-jsx-a11y eslint
 ```
 
-> Meteor comes with npm bundled so that you can type meteor npm without worrying about installing it yourself. If you like, you can also use a globally installed npm command.
+> Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
+> 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。
 
 You can also add a `eslintConfig` section to your `package.json` to specify that you'd like to use the Airbnb config, and to enable [ESLint-plugin-Meteor](https://github.com/dferber90/eslint-plugin-meteor). You can also setup any extra rules you want to change, as well as adding a lint npm command:
 
@@ -155,7 +156,7 @@ then you can quiet them by adding to `rules` in `eslintConfig`, for instance:
 
 For more details, read the [Getting Started](http://eslint.org/docs/user-guide/getting-started) directions from the ESLint website.
 
-<h3 id="eslint-editor">Integrating with your editor</h3>
+<h3 id="eslint-editor">与你的编辑器集成</h3>
 
 Linting is the fastest way to find potential bugs in your code. Running a linter is usually faster than running your app or your unit tests, so it's a good idea to run it all the time. Setting up linting in your editor can seem annoying at first since it will complain often when you save poorly-formatted code, but over time you'll develop the muscle memory to just write well-formatted code in the first place. Here are some directions for setting up ESLint in different editors:
 
@@ -202,11 +203,11 @@ Using ESLint in VS Code requires installation of the 3rd party [ESLint](https://
 3. Restart VS Code
 
 
-<h2 id="meteor-features">Meteor code style</h2>
+<h2 id="meteor-features">Meteor 编码风格</h2>
 
 The section above talked about JavaScript code in general - you can easily apply it in any JavaScript application, not just with Meteor apps. However, there are some style questions that are Meteor-specific, in particular how to name and structure all of the different components of your app.
 
-<h3 id="collections">Collections</h3>
+<h3 id="collections">数据集</h3>
 
 Collections should be named as a plural noun, in [PascalCase](https://en.wikipedia.org/wiki/PascalCase). The name of the collection in the database (the first argument to the collection constructor) should be the same as the name of the JavaScript symbol.
 
@@ -225,7 +226,7 @@ Widgets.insert({
 });
 ```
 
-<h3 id="methods-and-publications">Methods and publications</h3>
+<h3 id="methods-and-publications">方法与 publications</h3>
 
 Method and publication names should be camelCased, and namespaced to the module they are in:
 
@@ -248,7 +249,7 @@ Meteor.publish('lists.public', function listsPublic() {
 });
 ```
 
-<h3 id="files-and-exports">Files, exports, and packages</h3>
+<h3 id="files-and-exports">文件、导出与包</h3>
 
 You should use the ES2015 `import` and `export` features to manage your code. This will let you better understand the dependencies between different parts of your code, and it will be easy to know where to look if you need to read the source code of a dependency.
 
@@ -278,7 +279,7 @@ import { Meteor } from 'meteor/meteor';
 import Meteor from 'meteor/meteor';
 ```
 
-<h3 id="templates-and-components">Templates and components</h3>
+<h3 id="templates-and-components">模板和组件</h3>
 
 Since Spacebars templates are always global, can't be imported and exported as modules, and need to have names that are completely unique across the whole app, we recommend naming your Blaze templates with the full path to the namespace, separated by underscores. Underscores are a great choice in this case because then you can easily type the name of the template as one symbol in JavaScript.
 
