@@ -73,15 +73,15 @@ ECMAScript，所有浏览器的 JavaScript 实现的语言标准，转移到了�
 
 <h3 id="style-guide">使用一种编码风格方案</h3>
 
-We recommend choosing and sticking to a JavaScript style guide and enforcing it with tools. A popular option that we recommend is the [Airbnb style guide](https://github.com/airbnb/javascript) with the ES6 extensions (and optionally React extensions).
+我们建议选择并坚持一种编码风格方案，并且通过工具确立、保证下来。一个我们推荐的流行选择是 [Airbnb style guide](https://github.com/airbnb/javascript) 附加 ES6 扩展（外加可选的 React 扩展）。
 
 <h2 id="eslint">用 ESLint 来检查代码</h2>
 
-"Code linting" is the process of automatically checking your code for common errors or style problems. For example, ESLint can determine if you have made a typo in a variable name, or some part of your code is unreachable because of a poorly written `if` condition.
+「代码格式检查」是自动检查常规错误或编码风格错误的过程。举个例子，ESLint 能判断你是不是打错了变量名，或者一部分代码因为错误的 `if` 条件而永远不会被执行。
 
-We recommend using the [Airbnb eslint configuration](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb) which verifies the Airbnb styleguide.
+我们建议使用 [Airbnb eslint 配置](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)，它将验证你的代码是否符合 Airbnb 编码规范。
 
-Below, you can find directions for setting up automatic linting at many different stages of development. In general, you want to run the linter as often as possible, because it's the fastest and easiest way to identify typos and small errors.
+下面，你可以看到在开发不同阶段设置代码格式检查的方法。一般来说，你会希望格式检查越多越好，因为这是最快又最好的检查错误的方法。
 
 <h3 id="eslint-installing">安装及运行 ESLint</h3>
 
@@ -158,20 +158,20 @@ meteor npm run lint
 
 <h3 id="eslint-editor">与你的编辑器集成</h3>
 
-Linting is the fastest way to find potential bugs in your code. Running a linter is usually faster than running your app or your unit tests, so it's a good idea to run it all the time. Setting up linting in your editor can seem annoying at first since it will complain often when you save poorly-formatted code, but over time you'll develop the muscle memory to just write well-formatted code in the first place. Here are some directions for setting up ESLint in different editors:
+代码格式检查是找到隐含 bug 的最快途径。检查程序往往比程序本身或者测试跑得还快，所以总是运行它是个好主意。在编辑器里设置检查程序一开始会让你觉得很烦躁，因为它总是揭你的短，但是慢慢地你就会练出肌肉记忆，写出符合规范的代码。下面是在几款编辑器中设置 ESLint 的方法：
 
 
 <h4 id="eslint-sublime">Sublime Text</h4>
 
-You can install the Sublime Text packages that integrate them into the text editor. It's generally recommended to use Package Control to add these packages. If you already have that setup, you can just add the these packages by name; if not, click the instructions links:
+你可以安装 Sublime Text 的一些包来把 ESLint 整合进来。一般来讲，推荐使用 Package Control 来添加这些包。如果你有了 Package Control，直接输入他们的名字就能安装了，不然就戳安装说明：
 
-* Babel (for syntax highlighting – [full instructions](https://github.com/babel/babel-sublime#installation))
-* SublimeLinter ([full instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html))
-* SublimeLinter-contrib-eslint ([full instructions](https://github.com/roadhump/SublimeLinter-eslint#plugin-installation))
+* Babel （语法高亮 – [完整安装说明](https://github.com/babel/babel-sublime#installation)）
+* SublimeLinter （[完整安装说明](http://sublimelinter.readthedocs.org/en/latest/installation.html)）
+* SublimeLinter-contrib-eslint （[完整安装说明](https://github.com/roadhump/SublimeLinter-eslint#plugin-installation)）
 
-To get proper syntax highlighting, go to a .js file, then select the following through the *View* dropdown menu: *Syntax* -> *Open all with current extension as...* -> *Babel* -> *JavaScript (Babel)*. If you are using React .jsx files, do the same from a .jsx file. If it's working, you will see "JavaScript (Babel)" in the lower right hand corner of the window when you are on one of these files. Refer to the [package readme](https://github.com/babel/babel-sublime) for information on compatible color schemes.
+要设置正确的代码高亮，打开一个 .js 文件，在 *View* 菜单里选择： *Syntax* -> *Open all with current extension as...* -> *Babel* -> *JavaScript (Babel)*。如果你在使用 React .jsx 文件，对一个 .jsx 文件也这样做。搞定了，编辑这些文件时你就会在右下角看到「JavaScript (Babel)」。参考[包的  README](https://github.com/babel/babel-sublime) 来了解兼容的配色方案。
 
-A side note for Emmet users: You can use *\<ctrl-e\>* to expand HTML tags in .jsx files, and it will correctly expand classes to React's "className" property. You can bind to the tab key for this, but [you may not want to](https://github.com/sergeche/emmet-sublime/issues/548).
+Emmet 用户注意下：你可以在 .jsx 文件中用 `ctrl-e` 来展开 HTML 缩写，并且它也能正确对应 React 的「className」属性。你可以把展开绑回 Tab 键上，但是[你可能不想这样做](https://github.com/sergeche/emmet-sublime/issues/548)。
 
 <h4 id="eslint-atom">Atom</h4>
 
