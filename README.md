@@ -13,6 +13,8 @@
 
 ## 如何贡献翻译
 
+首先查看[这里](https://github.com/ourmeteor/guide-zh/wiki/%E7%BF%BB%E8%AF%91%E5%AE%89%E6%8E%92)以了解翻译情况。
+
 请在 Issues 认领翻译段落，以防止同时翻译。
 
 在本地运行这个站点，请参考 http://guide-zh.ourmeteor.com/CONTRIBUTING.html 。
