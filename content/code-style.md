@@ -251,31 +251,31 @@ Meteor.publish('lists.public', function listsPublic() {
 
 <h3 id="files-and-exports">文件、导出与包</h3>
 
-You should use the ES2015 `import` and `export` features to manage your code. This will let you better understand the dependencies between different parts of your code, and it will be easy to know where to look if you need to read the source code of a dependency.
+你应当使用 ES2015 `import` 及 `export` 特性来管理代码。这会让你明晰你各部分代码间的依赖关系，阅读代码时也会容易找到所依赖的代码。
 
-Each file in your app should represent one logical module. Avoid having catch-all utility modules that export a variety of unrelated functions and symbols. Often, this can mean that it's good to have one class, UI component, or collection per file, but there are cases where it is OK to make an exception, for example if you have a UI component with a small sub-component that isn't used outside of that file.
+你应用中每一个文件应该代表一个逻辑上的模块。避免搞一个无所不包的工具模块，因为它会导出一大坨之间毫无逻辑关联的函数和符号。通常情况下，这意味着一个文件中只包含一个类、一个 UI 组件或是一个数据集，但是也可以有例外，比如说你写了一个 UI 组件，里面有一大堆在这个文件外面都不用的小组件。
 
-When a file represents a single class or UI component, the file should be named the same as the thing it defines, with the same capitalization. So if you have a file that exports a class:
+当一个文件只包含一个类或一个 UI 组件的时候，它的文件名就该是它所定义的那个东西，包括大小写拼法。所以如果你有个导出一个类的文件：
 
 ```js
 export default class ClickCounter { ... }
 ```
 
-This class should be defined inside a file called `ClickCounter.js`. When you import it, it'll look like this:
+它就该叫 `ClickCounter.js`。这样当你导入它的时候，它就会长成这样：
 
 ```js
 import ClickCounter from './ClickCounter.js';
 ```
 
-Note that imports use relative paths, and include the file extension at the end of the file name.
+注意导入时使用了相对路径，在文件名后也包含了后缀。
 
-For [Atmosphere packages](using-packages.html), as the older pre-1.3 `api.export` syntax allowed more than one export per package, you'll tend to see non-default exports used for symbols. For instance:
+对于 [Atmosphere 包](using-packages.html)，鉴于 1.3 前的旧 API `api.export` 允许多重导出，所以它们没有默认的导出，需要采用解构赋值：
 
 ```js
-// You'll need to destructure here, as Meteor could export more symbols
+// 要在这里使用解构，因为 Meteor 可能导出多个符号
 import { Meteor } from 'meteor/meteor';
 
-// This will not work
+// 这样会挂
 import Meteor from 'meteor/meteor';
 ```
 
