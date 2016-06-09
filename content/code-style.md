@@ -205,21 +205,21 @@ Using ESLint in VS Code requires installation of the 3rd party [ESLint](https://
 
 <h2 id="meteor-features">Meteor 编码风格</h2>
 
-The section above talked about JavaScript code in general - you can easily apply it in any JavaScript application, not just with Meteor apps. However, there are some style questions that are Meteor-specific, in particular how to name and structure all of the different components of your app.
+上面几节的内容适合于一般的 JavaScript 代码——你可以在任何 JavaScript 应用中使用它们，不仅仅是 Meteor 应用。然而，有很多 Meteor 限定的风格问题，特别是在不同组件的命名和构造问题上。
 
 <h3 id="collections">数据集</h3>
 
-Collections should be named as a plural noun, in [PascalCase](https://en.wikipedia.org/wiki/PascalCase). The name of the collection in the database (the first argument to the collection constructor) should be the same as the name of the JavaScript symbol.
+数据集应该用一个复数形式的名词命名，使用 [帕斯卡命名方法](https://en.wikipedia.org/wiki/PascalCase)（即每个单词首字母大写）。数据库中数据集的名字（也就是数据集构造器 `Mongo.Collection` 的第一个参数）应该和变量名一样。
 
 ```js
-// Defining a collection
+// 定义一个数据集
 Lists = new Mongo.Collection('Lists');
 ```
 
-Fields in the database should be camelCased just like your JavaScript variable names.
+数据库字段名应该要采用驼峰法命名（camelCase），就像你的变量名那样。
 
 ```js
-// Inserting a document with camelCased field names
+// 插入一个文档，其中字段名使用驼峰命名。
 Widgets.insert({
   myFieldName: 'Hello, world!',
   otherFieldName: 'Goodbye.'
@@ -228,22 +228,22 @@ Widgets.insert({
 
 <h3 id="methods-and-publications">方法与 publications</h3>
 
-Method and publication names should be camelCased, and namespaced to the module they are in:
+方法和 publication 应该要用驼峰命名，并且放在它所在的模块的命名空间里（用 `.` 隔开）。
 
 ```js
-// in imports/api/todos/methods.js
+// 在 imports/api/todos/methods.js 中
 updateText = new ValidatedMethod({
   name: 'todos.updateText',
   // ...
 });
 ```
 
-Note that this code sample uses the [ValidatedMethod package recommended in the Methods article](methods.html#validated-method). If you aren't using that package, you can use the name as the property passed to `Meteor.methods`.
+注意一下，上面这个例子用了 [在「方法」一章里推荐的 ValidatedMethod](methods.html#validated-method)。如果你没在用这个包，你可以把这个名字当成一个属性名，包在一个对象里传给 `Meteor.methods`。
 
-Here's how this naming convention looks when applied to a publication:
+这种命名方法也适用于一个 publication：
 
 ```js
-// Naming a publication
+// 命名一个 publication
 Meteor.publish('lists.public', function listsPublic() {
   // ...
 });
