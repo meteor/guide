@@ -188,19 +188,19 @@ apm install linter-eslint
 
 <h4 id="eslint-webstorm">WebStorm</h4>
 
-WebStorm provides [these instructions for using ESLint](https://www.jetbrains.com/webstorm/help/eslint.html). After you install the ESLint Node packages and set up your `package.json`, just enable ESLint and click "Apply". You can configure how WebStorm should find your `.eslintrc` file, but on my machine it worked without any changes. It also automatically suggested switching to "JSX Harmony" syntax highlighting.
+WebStorm 提供了[这些关于使用 ESLint 的指引](https://www.jetbrains.com/webstorm/help/eslint.html)。 在你装好 ESLint Node 包并配置好 `package.json`之后，直接启用 ESLint 并点击「Apply」。你可以设置 WebStorm 寻找你 `.eslintrc` 文件的位置，但在笔者的机器上它直接正常工作了。它也会自动建议切换到「JSX Harmony」代码高亮方案。
 
-![Enable ESLint here.](images/webstorm-configuration.png)
+![在这里启用 ESLint。](images/webstorm-configuration.png)
 
-Linting can be activated on WebStorm on a project-by-project basis, or you can set ESLint as a default under Editor > Inspections, choosing the Default profile, checking "ESLint", and applying.
+代码格式检查在 WebStorm 中可以针对单个项目设定，或者你可以在 Editor > Inspections 中把它设为默认，只要选中 Default 配置方案，选中「ESLint」并应用。
 
 <h4 id="eslint-vscode">Visual Studio Code</h4>
 
-Using ESLint in VS Code requires installation of the 3rd party [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension.  In order to install the extension, follow these steps:
+在 VS Code 中使用 ESLint 需要安装一个第三方扩展 [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)。按照以下的步骤安装：
 
-1. Launch VS Code and open the quick open menu by typing `Ctrl+P`
-2. Paste `ext install vscode-eslint` in the command window and press `Enter`
-3. Restart VS Code
+1. 运行 VS Code 并按 `Ctrl+P` 来打开 Quick Open 菜单
+2. 在命令窗口输入 `ext install vscode-eslint` 并按回车
+3. 重启 VS Code
 
 
 <h2 id="meteor-features">Meteor 编码风格</h2>
@@ -281,7 +281,7 @@ import Meteor from 'meteor/meteor';
 
 <h3 id="templates-and-components">模板和组件</h3>
 
-Since Spacebars templates are always global, can't be imported and exported as modules, and need to have names that are completely unique across the whole app, we recommend naming your Blaze templates with the full path to the namespace, separated by underscores. Underscores are a great choice in this case because then you can easily type the name of the template as one symbol in JavaScript.
+由于 Spacebars 模板总是全局的，不能以模块的形式导入导出，并且在整个应用中需要有独一无二的名字，我们建议 Blaze 模板用到命名空间的完整路径来命名，用下划线隔开。下划线是个好选择，因为这样，你能轻松地像键入一个 JavaScript 符号那样键入一个模板名。
 
 ```html
 <template name="Lists_show">
@@ -289,7 +289,7 @@ Since Spacebars templates are always global, can't be imported and exported as m
 </template>
 ```
 
-If this template is a "smart" component that loads server data and accesses the router, append `_page` to the name:
+如果这个模板是个「智能」组件，从服务器加载数据并且和路由搭边，在它的名字后加 `_page`：
 
 ```html
 <template name="Lists_show_page">
@@ -297,15 +297,15 @@ If this template is a "smart" component that loads server data and accesses the 
 </template>
 ```
 
-Often when you are dealing with templates or UI components, you'll have several closely coupled files to manage. They could be two or more of HTML, CSS, and JavaScript files. In this case, we recommend putting these together in the same directory with the same name:
+一般如果你开发一个 UI 组件，你会同时得到几个文件，比如两个或以上的 HTML、CSS 和 JavaScript 文件。在这种情况下，我们建议把它们丢到同一个文件夹，取一样的名字：
 
 ```
-# The Lists_show template from the Todos example app has 3 files:
+# 来自 Todos 示范应用的 Lists_show 模板有三个文件：
 show.html
 show.js
 show.less
 ```
 
-The whole directory or path should indicate that these templates are related to the `Lists` module, so it's not necessary to reproduce that information in the file name. Read more about directory structure [above](structure.html#javascript-structure).
+整个目录或路径应该能反映这是和 `Lists` 模块相关的模板，所以在文件名中不必重复这些信息了。在[这里](structure.html#javascript-structure)你可以读到有关目录结构的内容。
 
-If you are writing your UI in React, you don't need to use the underscore-split names because you can import and export your components using the JavaScript module system.
+如果你在用 React 写 UI，大可不必用这种方式来命名，因为你能直接利用模块系统导入和导出。
