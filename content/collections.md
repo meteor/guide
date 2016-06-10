@@ -23,49 +23,49 @@ discourseTopicId: 19660
 
 在本文中，我们将深入观察数据集在 Meteor 框架的不同位置上是如何工作的，及如何弄明白其中的大多数。
 
-<h3 id="server-collections">Server-side collections</h3>
+<h3 id="server-collections">服务器端数据集</h3>
 
-When you create a collection on the server:
-
-```js
-Todos = new Mongo.Collection('Todos');
-```
-
-You are creating a collection within MongoDB, and an interface to that collection to be used on the server. It's a fairly straightforward layer on top of the underlying Node MongoDB driver, but with a synchronous API:
-
-```js
-// This line won't complete until the insert is done
-Todos.insert({_id: 'my-todo'});
-// So this line will return something
-const todo = Todos.findOne({_id: 'my-todo'});
-// Look ma, no callbacks!
-console.log(todo);
-```
-
-<h3 id="client-collections">Client-side collections</h3>
-
-On the client, when you write the same line:
+当你在服务器端创建了一个数据集：
 
 ```js
 Todos = new Mongo.Collection('Todos');
 ```
 
-It does something totally different!
-
-On the client, there is no direct connection to the MongoDB database, and in fact a synchronous API to it is not possible (nor probably what you want). Instead, on the client, a collection is a client side *cache* of the database. This is achieved thanks to the [Minimongo](https://www.meteor.com/mini-databases) library---an in-memory, all JS, implementation of the MongoDB API. What this means is that on the client, when you write:
+实际上是在 MongoDB 中创建了一个数据集，和一个在服务端使用数据集的接口。这是一个相当明了的、构建在 Node MongoDB 驱动之上的层，只不过是同步 API：
 
 ```js
-// This line is changing an in-memory Minimongo data structure
+// 这行代码直到插入操作结束才会执行完成
 Todos.insert({_id: 'my-todo'});
-// And this line is querying it
+// 这一行会返回些数据
 const todo = Todos.findOne({_id: 'my-todo'});
-// So this happens right away!
+// 看，根本没有回调！
 console.log(todo);
 ```
 
-The way that you move data from the server (and MongoDB-backed) collection into the client (in-memory) collection is the subject of the [data loading article](data-loading.html). Generally speaking, you *subscribe* to a *publication*, which pushes data from the server to the client. Usually, you can assume that the client contains an up-to-date copy of some subset of the full MongoDB collection.
+<h3 id="client-collections">客户端数据集</h3>
 
-To write data back to the server, you use a *Method*, the subject of the [methods article](methods.html).
+在客户端上，用同一行代码创建一个数据集：
+
+```js
+Todos = new Mongo.Collection('Todos');
+```
+
+做的却是完全不同的一套！
+
+在客户端，并没有到 MongoDB 数据库的直接连接，事实上，做同步 API 也是不可能的（或者说，可能不是你想要的）。其实在客户端，某个数据集是数据库在某个客户端的**缓存**。做到这样的效果要感谢 [Minimongo](https://www.meteor.com/mini-databases) 库——一种在内存中存储数据，全 JS 的 MongoDB API 实现。这意味着，在客户端你写这个：
+
+```js
+// 这行改变了内存中 Minimongo 数据结构
+Todos.insert({_id: 'my-todo'});
+// 这行进行数据查询
+const todo = Todos.findOne({_id: 'my-todo'});
+// 所以这里就立刻输出了！
+console.log(todo);
+```
+
+从服务器端数据集（由 MongoDB 所支撑的）装载数据到客户端数据集（客户端内存中）的方式是文章[数据装载](data-loading.html)的主题。通常而言，从某个 **publication** 来**订阅**，将会从服务器端推送数据到客户端。通常你只要假设客户端具有完整的服务器端 MongoDB 数据集的最新片段。
+
+向服务器写回数据，一般你会使用一个 **Meteor 方法**。这也就是[方法](methods.html)这一章的主题。
 
 <h3 id="local-collections">Local collections</h3>
 
