@@ -8,7 +8,7 @@ Building an application completely from scratch is a tall order. This is one of 
 
 **With the release of version 1.3, Meteor has full support for npm. In the future, there will be a time when all packages will be migrated to npm, but currently there are benefits to both systems.**
 
-<h2 id="when-atmosphere">When to use Atmosphere packages</h2>
+<h2 id="when-atmosphere">什么时候用 Atmosphere 包</h2>
 
 Atmosphere packages are packages written specifically for Meteor and have several advantages over npm when used with Meteor. In particular, Atmosphere packages can:
 
@@ -23,7 +23,7 @@ Atmosphere packages are packages written specifically for Meteor and have severa
 
 If your package depends on an Atmosphere package (which, in Meteor 1.3, includes the Meteor core packages), or needs to take advantage of Meteor's [build system](build-tool.html), writing an Atmosphere package might be the best option for now.
 
-<h2 id="when-npm">When to use npm packages</h2>
+<h2 id="when-npm">什么时候用 npm 包</h2>
 
 npm is a repository of general JavaScript packages. These packages were originally intended solely for the Node.js server-side environment, but as the JavaScript ecosystem matured, solutions arose to enable the use of npm packages in other environments such as the browser. Today, npm is used for all types of JavaScript packages.
 
