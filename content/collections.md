@@ -1,20 +1,19 @@
 ---
-title: Collections and Schemas
+title: 数据集与数据结构
 order: 10
-description: How to define, use, and maintain MongoDB collections in Meteor.
+description: 如何在 Meteor 中定义、使用和维护 MongoDB 数据集。
 discourseTopicId: 19660
 ---
 
-After reading this guide, you'll know:
+通过阅读本章，你可以了解到：
+1. 在 Meteor 中不同类型的 MongoDB 数据集及如何使用它们。
+2. 如何为某个数据集定义数据结构以控制它的内容。
+3. 当定义你的数据结构时，应该考虑什么。
+4. 当对一个集合进行写入时，如何确保写入数据符合它的数据结构。
+5. 如何小心地改变你的数据结构。
+6. 如何应对数据记录的间的关联。
 
-1. The different types of MongoDB collections in Meteor, and how to use them.
-2. How to define a schema for a collection to control its content.
-3. What to consider when defining your collection's schema.
-4. How to enforce the schema when writing to a collection.
-5. How to carefully change the schema of your collection.
-6. How to deal with associations between records.
-
-<h2 id="mongo-collections">MongoDB collections in Meteor</h2>
+<h2 id="mongo-collections">Meteor 中的 MongoDB 数据集</h2>
 
 At its core, a web application offers its users a view into, and a way to modify, a persistent set of data. Whether managing a list of todos, or ordering a car to pick you up, you are interacting with a permanent but constantly changing data layer.
 
@@ -23,6 +22,14 @@ In Meteor, that data layer is typically stored in MongoDB. A set of related data
 However, collections are a lot more than a way to save and retrieve data. They also provide the core of the interactive, connected user experience that users expect from the best applications. Meteor makes this user experience easy to implement.
 
 In this article, we'll look closely at how collections work in various places in the framework, and how to get the most out of them.
+
+本质上讲，一个 web 应用为它的用户提供一个观察和修改一组持久化数据的能力。无论是管理你的待办事项，还是为你所挑选的车下订单，你都是在和一个固定但又持续变化的数据层在打交道。
+
+在 Meteor 中，这个数据层通常会存储在 MongoDB 中。在 MongoDB 中一组相关联的数据被称作「数据集」。在 Meteor 中，你通过数据集来存取 MongoDB 中的数据，这是应用的主要持久化机制。
+
+然而，数据集不仅仅是保存和获取数据的工具。它们也是交互的核心，与用户期待从最好的应用那里获得的那种用户体验相关。Meteor 让这种用户体验很容易就得到实现。
+
+在本文中，我们将深入观察数据集在 Meteor 框架的不同位置上是如何工作的，及如何弄明白其中的大多数。
 
 <h3 id="server-collections">Server-side collections</h3>
 
