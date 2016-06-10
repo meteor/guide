@@ -25,8 +25,6 @@ Atmosphere 包是为 Meteor 专门编写的包，相比 npm 包，在用于 Mete
 
 <h2 id="when-npm">什么时候用 npm 包</h2>
 
-npm is a repository of general JavaScript packages. These packages were originally intended solely for the Node.js server-side environment, but as the JavaScript ecosystem matured, solutions arose to enable the use of npm packages in other environments such as the browser. Today, npm is used for all types of JavaScript packages.
+npm 是通用 JavaScript 包仓库。这些包本来完全是为 Node.js 服务器端环境开发的，但是随着 JavaScript 生态系统的成熟，各种解决方案允许你在客户端等其他环境中使用 npm 包。今天，npm 上有各种各样的 JavaScript 包。
 
-If you want to distribute and reuse code that you've written for a Meteor application, then you should consider publishing that code on npm if it's general enough to be consumed by a wider JavaScript audience. It's simple to [use npm packages in Meteor applications](using-npm-packages.html#using-npm), and possible to [use npm packages within Atmosphere packages](writing-atmosphere-packages.html#npm-dependencies), so even if your main audience is Meteor developers, npm might be the best choice.
-
-> Meteor comes with npm bundled so that you can type `meteor npm` without worrying about installing it yourself. If you like, you can also use a globally installed npm to manage your packages.
+如果你想发行并重用你为 Meteor 应用写的代码，你应该考虑把它发布到 npm 上，如果它对 JavaScript 社区来讲足够通用的话。[在 Meteor 应用中使用 npm 包](using-npm-packages.html#using-npm)很简单，而且还可以[在 Atmosphere 包中使用 npm 包](writing-atmosphere-packages.html#npm-dependencies)，所以即便你的主要受众是Meteor 开发者，npm 也会是最好的选择。
