@@ -15,17 +15,9 @@ discourseTopicId: 19660
 
 <h2 id="mongo-collections">Meteor 中的 MongoDB 数据集</h2>
 
-At its core, a web application offers its users a view into, and a way to modify, a persistent set of data. Whether managing a list of todos, or ordering a car to pick you up, you are interacting with a permanent but constantly changing data layer.
-
-In Meteor, that data layer is typically stored in MongoDB. A set of related data in MongoDB is referred to as a "collection". In Meteor you access MongoDB through [collections](http://docs.meteor.com/#/full/mongo_collection), making them the primary persistence mechanism for your app data.
-
-However, collections are a lot more than a way to save and retrieve data. They also provide the core of the interactive, connected user experience that users expect from the best applications. Meteor makes this user experience easy to implement.
-
-In this article, we'll look closely at how collections work in various places in the framework, and how to get the most out of them.
-
 本质上讲，一个 web 应用为它的用户提供一个观察和修改一组持久化数据的能力。无论是管理你的待办事项，还是为你所挑选的车下订单，你都是在和一个固定但又持续变化的数据层在打交道。
 
-在 Meteor 中，这个数据层通常会存储在 MongoDB 中。在 MongoDB 中一组相关联的数据被称作「数据集」。在 Meteor 中，你通过数据集来存取 MongoDB 中的数据，这是应用的主要持久化机制。
+在 Meteor 中，这个数据层通常会存储在 MongoDB 中。在 MongoDB 中一组相关联的数据被称作「数据集」。在 Meteor 中，你通过[数据集](http://docs.meteor.com/#/full/mongo_collection)来存取 MongoDB 中的数据，这是应用的主要持久化机制。
 
 然而，数据集不仅仅是保存和获取数据的工具。它们也是交互的核心，与用户期待从最好的应用那里获得的那种用户体验相关。Meteor 让这种用户体验很容易就得到实现。
 
