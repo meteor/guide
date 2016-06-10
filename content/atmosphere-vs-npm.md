@@ -4,24 +4,24 @@ order: 27
 discourseTopicId: 20193
 ---
 
-Building an application completely from scratch is a tall order. This is one of the main reasons you might consider using Meteor in the first place - you can focus on writing the code that is specific to your app, instead of reinventing wheels like user login and data synchronization. To streamline your workflow even further, it makes sense to use community packages from [npm](https://www.npmjs.com) and [Atmosphere](https://atmospherejs.com). Many of these packages are recommended in the guide, and you can find more in the online directories.
+从零开始构建一个应用是个几乎不可能实现的任务。这也是你开始使用 Meteor 其中一个主要原因——你可以专注于编写你应用本身，而不是重新造一大堆轮子，比如用户登录系统和数据同步系统。为了提高工作效率，使用来自 [npm](https://www.npmjs.com) 和 [Atmosphere](https://atmospherejs.com) 的社区包很有必要。这些社区包中的一些在这份指南中被推荐了，你也可以在在线目录中找到更多。
 
-**With the release of version 1.3, Meteor has full support for npm. In the future, there will be a time when all packages will be migrated to npm, but currently there are benefits to both systems.**
+**从 1.3 起，Meteor 完全支持 npm。未来我们将会把所有包都移到 npm 上，现在暂时你可以同时使用两种包。**
 
 <h2 id="when-atmosphere">什么时候用 Atmosphere 包</h2>
 
-Atmosphere packages are packages written specifically for Meteor and have several advantages over npm when used with Meteor. In particular, Atmosphere packages can:
+Atmosphere 包是为 Meteor 专门编写的包，相比 npm 包，在用于 Meteor 时有一些优势。展开讲，Atmosphere 包可以：
 
-- Depend on core Meteor packages, such as `ddp` and `blaze`
-- Explicitly include non-javascript files including CSS, Less, Sass, Stylus and static assets
-- Take advantage of Meteor's [build system](build-tool.html) to be automatically transpiled from languages like CoffeeScript
-- Have a well defined way to ship different code for client and server, enabling different behavior in each context
-- Get direct access to Meteor's [package namespacing](using-atmosphere-packages.md#package-namespacing) and package global exports without having to explicitly use ES2015 `import`
-- Enforce exact version dependencies between packages using Meteor's [constraint resolver](writing-atmosphere-packages.md#version-constraints)
-- Include [build plugins](build-tool.html#compiles-with-build-plugins) for Meteor's build system
-- Include pre-built binary code for different server architectures, such as Linux or Windows
+- 依赖于 Meteor 核心包，如 `ddp` 和 `blaze`
+- 显式导入非 JavaScript 文件，包括 CSS、Less、Sass、Stylus 和其他静态资源
+- 利用 Meteor 的[构建系统](build-tool.html)自动地从其他语言（如 CoffeeScript）转译过来
+- 具有明确定义的在服务器和客户端提供不同代码的方式，使其能够在不同环境中拥有不同的行为
+- 直接访问 Meteor 的[包命名空间](using-atmosphere-packages.html#package-namespacing)和包的全局导出而不使用 ES2015 的 `import`
+- 通过 Meteor 的 [版本限制处理器（constraint resolver）](writing-atmosphere-packages.html#version-constraints)硬性确定包之间的版本依赖关系
+- 内置为 Meteor 构建系统打造的[构建插件](build-tool.html#compiles-with-build-plugins)
+- 为不同的服务器架构内置预编译的二进制代码，比如 Linux 和 Windows。
 
-If your package depends on an Atmosphere package (which, in Meteor 1.3, includes the Meteor core packages), or needs to take advantage of Meteor's [build system](build-tool.html), writing an Atmosphere package might be the best option for now.
+如果你的包依赖于一个 Atmosphere 包（在 Meteor 1.3 里也包括 Meteor 核心包），或者需要利用[构建系统](build-tool.html)，当下最好的选择是写一个 Atmosphere 包。
 
 <h2 id="when-npm">什么时候用 npm 包</h2>
 
