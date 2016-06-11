@@ -67,17 +67,16 @@ console.log(todo);
 
 向服务器写回数据，一般你会使用一个 **Meteor 方法**。这也就是[方法](methods.html)这一章的主题。
 
-<h3 id="local-collections">Local collections</h3>
+<h3 id="local-collections">本地数据集</h3>
 
-There is a third way to use a collection in Meteor. On the client or server, if you create a collection but pass `null` instead of a name:
+这里有第三种方式来使用 Meteor 中的数据集。你可以客户端或者服务端使用 `null` 作为参数创建一个数据集：
 
 ```js
 SelectedTodos = new Mongo.Collection(null);
 ```
 
-This creates a *local collection*. This is a Minimongo collection that has no database connection (ordinarily a named collection would either be directly connected to the database on the server, or via a subscription on the client).
-
-A local collection is a convenient way to use the full power of the Minimongo library for in-memory storage. For instance, you might use it instead of a simple array if you need to execute complex queries over your data. Or you may want to take advantage of its *reactivity* on the client to drive some UI in a way that feels natural in Meteor.
+此时实际上是创建了一个**本地数据集**。这是一个没有数据库连接的数据集（通常一个数据集要么是直接连接到数据库服务器上，要么通过客户端订阅）。
+本地数据集是一种便利的在内存中使用 Minimongo 库的全部功能的方法。举个例子，如果你需要针对你的数据执行复杂的查询，你可以使用本地数据集来替代一个简单的数组。又或者你会想利用它的反应性在客户端驱动一些 UI ，不过这在 Meteor 中不是事儿。
 
 <h2 id="schemas">Defining a schema</h2>
 
