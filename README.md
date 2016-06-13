@@ -2,11 +2,15 @@
 
 [![Build Status](https://travis-ci.org/ourmeteor/guide-zh.svg?branch=master)](https://travis-ci.org/ourmeteor/guide-zh)
 
-[阅读指南](http://guide-zh.ourmeteor.com/)
+[阅读指南中译官方版](http://guide.meteor.com/zh_cn)
+[阅读指南中译开发版](http://guide-zh.ourmeteor.com/)
+
+>开发版为本 repo `master` 分支最新内容，不保证正确性，请谨慎翻阅。
 
 ## 注意
 
-本 repo 将很快合并至 `meteor/guide` 中成为一个 branch，在合并完成之前，本 repo 继续有效，在线翻阅也会继续可用，也欢迎继续提交翻译。
+
+本 repo 已合并至 `meteor/guide`。由于 MDG 尚未提出有效的翻译/本地化管理方案，所有翻译请继续提交至本 repo，我们将会不定期同步至官方版。
 
 有关合并进程，请参见[这里](https://github.com/meteor/guide/pull/480)。
 
