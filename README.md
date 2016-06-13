@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/ourmeteor/guide-zh.svg?branch=master)](https://travis-ci.org/ourmeteor/guide-zh)
 
 [阅读指南中译官方版](http://guide.meteor.com/zh_cn)
+
 [阅读指南中译开发版](http://guide-zh.ourmeteor.com/)
 
 >开发版为本 repo `master` 分支最新内容，不保证正确性，请谨慎翻阅。
