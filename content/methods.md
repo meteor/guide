@@ -12,9 +12,9 @@ discourseTopicId: 19662
 3. 如何使用方法抛出和处理错误。
 4. 如何从 form 中调用方法。
 
-<h2 id="what-is-a-method">What is a Method?</h2>
+<h2 id="what-is-a-method">什么是方法？</h2>
 
-Methods are Meteor's remote procedure call (RPC) system, used to save user input events and data that come from the client. If you're familiar with REST APIs or HTTP, you can think of them like POST requests to your server, but with many nice features optimized for building a modern web application. Later on in this article, we'll go into detail about some of the benefits you get from Methods that you wouldn't get from an HTTP endpoint.
+方法是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP， you can think of them like POST requests to your server, but with many nice features optimized for building a modern web application. Later on in this article, we'll go into detail about some of the benefits you get from Methods that you wouldn't get from an HTTP endpoint.
 
 At its core, a Method is an API endpoint for your server; you can define a Method on the server and its counterpart on the client, then call it with some data, write to the database, and get the return value in a callback. Meteor Methods are also tightly integrated with the pub/sub and data loading systems of Meteor to allow for [Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - the ability to simulate server-side actions on the client to make your app feel faster than it actually is.
 
