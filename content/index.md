@@ -1,45 +1,45 @@
 ---
-title: Introduction
+title: 介绍
 order: 0
-description: This is the guide for using Meteor, a full-stack JavaScript platform for developing modern web and mobile applications.
+description: 这是使用 Meteor，一个用于开发现代网页和移动应用的全栈 JavaScript 平台。
 ---
 
 <!--  XXX: note that this content is somewhat duplicated on the docs, and should be updated in parallel -->
-<h2 id="what-is-meteor">What is Meteor?</h2>
+<h2 id="what-is-meteor">什么是 Meteor</h2>
 
-Meteor is a full-stack JavaScript platform for developing modern web and mobile applications. Meteor includes a key set of technologies for building connected-client reactive applications, a build tool, and a curated set of packages from the Node.js and general JavaScript community.
+Meteor 是一个用于开发现代网页和移动应用的全栈 JavaScript 平台。Meteor 包含了一些用来构建连接客户端的实时应用的关键技术，一个构建工具，和一套精心维护的、来自 Node.js 和广泛 JavaScript 的社区的包。
 
-- Meteor allows you to develop in **one language**, JavaScript, in all environments: application server, web browser, and mobile device.
+- Meteor 使你能使用 **一种语言** 来开发，即 JavaScript，在所有的环境中：应用服务器、网页浏览器和移动设备。
 
-- Meteor uses **data on the wire**, meaning the server sends data, not HTML, and the client renders it.
+- Meteor 在网络上传输 **数据**，而不是 HTML，并由客户端来渲染。
 
-- Meteor **embraces the ecosystem**, bringing the best parts of the extremely active JavaScript community to you in a careful and considered way.
+- Meteor **拥抱整个生态系统**，以一种谨慎的方式将相当活跃的 JavaScript 社区中最棒的部分带给你。
 
-- Meteor provides **full stack reactivity**, allowing your UI to seamlessly reflect the true state of the world with minimal development effort.
+- Meteor 提供 **全栈响应性**，使你无需耗费太大精力就能让你的 UI 无缝地反应世界的实际状态。
 
-<h2 id="quickstart">Quick start</h2>
+<h2 id="quickstart">快速上手</h2>
 
-Meteor supports [OS X, Windows, and Linux](https://www.meteor.com/install).
+Meteor 支持 [OS X、Windows 和 Linux](https://www.meteor.com/install).
 
-On Windows?  [Download the official Meteor installer here](https://install.meteor.com/windows).
+Windows？  [在这里下载官方 Meteor 安装包。](https://install.meteor.com/windows).
 
-On OS X or Linux?  Install the latest official Meteor release from your terminal:
+OS X 或 Linux？从你的终端安装最新的官方 Meteor 发行版。
 
 ```bash
 curl https://install.meteor.com/ | sh
 ```
 
-The Windows installer supports Windows 7, Windows 8.1, Windows Server
-2008, and Windows Server 2012.  The command line installer supports Mac OS X
-10.7 (Lion) and above, and Linux on x86 and x86_64 architectures.
+> 译注：若上述地址无法使用，可以尝试使用 `curl http://install-cn.ourmeteor.com/1.3.2.4 | sh`。其中 `1.3.2.4` 是版本号，我们将保持它更新到最新版。
 
-Once you've installed Meteor, create a project:
+Windows 安装包支持 Windows 7、Windows 8.1、Windows Server 2008 及 Windows Server 2012。命令行安装器支持 Mac OS X 10.7 (Lion) 或更高版本，及 x86 和 x86_64 架构的 Linux。
+
+当你安装了 Meteor 后，创建一个项目：
 
 ```bash
 meteor create myapp
 ```
 
-Run it locally:
+本地运行它：
 
 ```bash
 cd myapp
@@ -48,23 +48,24 @@ meteor
 # Meteor server running on: http://localhost:3000/
 ```
 
-> Meteor comes with npm bundled so that you can type `meteor npm` without worrying about installing it yourself. If you like, you can also use a globally installed npm to manage your packages.
+> Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
+> 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。你也许希望使用一个 npm 镜像，但是 Meteor 自带的尚不支持使用镜像。
 
-<h2 id="learning-more">Meteor resources</h2>
+<h2 id="learning-more">Meteor 资源</h2>
 
-1. The place to get started with Meteor is the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+1. 开始上手 Meteor 的地方是[官方教程](https://www.meteor.com/tutorials/blaze/creating-an-app)。
 
-2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) is the best place to ask (and answer!) technical questions. Be sure to add the meteor tag to your question.
+2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) 是问技术问题最好的地方（当然答也是）。记得加上 meteor 标签。
 
-3. Visit the [Meteor discussion forums](https://forums.meteor.com) to announce projects, get help, talk about the community, or discuss changes to core.
+3. 访问 [Meteor 论坛](https://forums.meteor.com) 来宣布项目、获得帮助、与社区讨论或讨论 Meteor 核心的改动。
 
-4. The [Meteor docs](https://docs.meteor.com) is the best place to find the core API documentation of the platform.
+4. [Meteor 文档](https://docs.meteor.com)是找到 Meteor API 文档最好的地方。
 
-5. [Atmosphere](https://atmospherejs.com) is the repository of community packages designed especially for Meteor.
+5. [Atmosphere](https://atmospherejs.com) 是社区为 Meteor 设计的包的专属仓库。
 
-6. [Awesome Meteor](https://github.com/Urigo/awesome-meteor) is a community-curated list of [packages](https://github.com/Urigo/awesome-meteor#getting-started) and [resources](https://github.com/Urigo/awesome-meteor#resources).
+6. [Awesome Meteor](https://github.com/Urigo/awesome-meteor) 是一个社区维护的[包](https://github.com/Urigo/awesome-meteor#getting-started)与[资源](https://github.com/Urigo/awesome-meteor#resources)的列表。
 
-<h2 id="what-is-it">What is the Meteor Guide?</h2>
+<h2 id="what-is-it">什么是 Meteor 指南？</h2>
 
 This is a set of articles outlining opinions on best-practice application development using the [Meteor](https://meteor.com) platform. Our aim is to cover patterns that are common to the development of all modern web and mobile applications, so many concepts documented here are not necessarily Meteor specific and could be applied to any application built with a focus on modern, interactive user interfaces.
 
@@ -72,21 +73,21 @@ Nothing in the Meteor guide is *required* to build a Meteor application---you ca
 
 The APIs of the Meteor platform are available at the [docs site](https://docs.meteor.com), and you can browse community packages on [atmosphere](https://atmospherejs.com).
 
-<h3 id="audience">Target audience</h3>
+<h3 id="audience">目标受众</h3>
 
 The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
-<h3 id="example-app">Example app</h3>
+<h3 id="example-app">示例应用</h3>
 
 Many articles reference the Todos example application. This code is being actively developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
 
-<h2 id="guide-concepts">Guide development</h2>
+<h2 id="guide-concepts">指南发展</h2>
 
-<h3 id="contributing">Contributing</h3>
+<h3 id="contributing">贡献</h3>
 
 Ongoing Meteor Guide development takes place **in the open** [on GitHub](https://github.com/meteor/guide). We encourage pull requests and issues to discuss problems with and changes that could be made to the content. We hope that keeping our process open and honest will make it clear what we plan to include in the guide and what changes will be coming in future Meteor versions.
 
-<h3 id="goals">Goals of the project</h3>
+<h3 id="goals">项目目的</h3>
 
 The decisions made and practices outlined in the guide must necessarily be **opinionated**. Certain best practices will be highlighted and other valid approaches ignored. We aim to reach community consensus around major decisions but there will always be other ways to solve problems when developing your application. We believe it's important to know what the "standard" way to solve a problem is before branching out to other options. If an alternate approach proves itself superior, then it should make its way into a future version of the guide.
 
