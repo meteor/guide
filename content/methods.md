@@ -1,16 +1,16 @@
 ---
-title: "Methods"
+title: "方法"
 order: 12
-description: How to use Methods, Meteor's remote procedure call system, to write to the database.
+description: 如何使用方法？ Meteor 通过使用方法将数据变化写入数据库
 discourseTopicId: 19662
 ---
 
-After reading this article, you'll know:
+读完全文，你应该能够了解：
 
-1. What Methods are in Meteor and how they work in detail.
-2. Best practices for defining and calling Methods.
-3. How to throw and handle errors with Methods.
-4. How to call a Method from a form.
+1. Meteor 中方法指什么，以及如何使用方法。
+2. 方法的定义及调用实践。
+3. 如何使用方法抛出和处理错误。
+4. 如何从 form 中调用方法。
 
 <h2 id="what-is-a-method">What is a Method?</h2>
 
