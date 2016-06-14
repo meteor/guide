@@ -136,13 +136,11 @@ Lists.schema.validate(list);
 什么是一个 [`ValidationError`](https://github.com/meteor/validation-error/)？ It's a special error that is used in Meteor to indicate a user-input based error in modifying a collection. Typically, the details on a `ValidationError` are used to mark up a form with information about what inputs don't match the schema. In the [methods article](methods.html#validation-error), we'll see more about how this works.
 它是一种在 Meteor 中，在修改数据集时指出用户输入的错误。通常，一个 `ValidationError` 的细节被用来标识那些不符合数据结构定义的输入。我们将在 [methods 章节](methods.html#validation-error)中了解更多关于 `ValidationError` 如何工作的细节。
 
-<h2 id="schema-design">Designing your data schema</h2>
+<h2 id="schema-design">设计你的数据结构</h2>
 
-Now that you are familiar with the basic API of Simple Schema, it's worth considering a few of the constraints of the Meteor data system that can influence the design of your data schema. Although generally speaking you can build a Meteor data schema much like any MongoDB data schema, there are some important details to keep in mind.
-
-The most important consideration is related to the way DDP, Meteor's data loading protocol, communicates documents over the wire. The key thing to realize is that DDP sends changes to documents at the level of top-level document *fields*. What this means is that if you have large and complex subfields on document that change often, DDP can send unnecessary changes over the wire.
-
-For instance, in "pure" MongoDB you might design the schema so that each list document had a field called `todos` which was an array of todo items:
+现在你已经熟悉了 Simple Schema 的基本 API，应当去考虑一些影响你设计数据结构的、关于 Meteor 系统设计方面的约束。尽管通常讲你可以建立一个与任何 MongoDB 数据结构类似的 Meteor 数据图式，但仍有一些重要的细节需要记得。
+首当其冲的是如何使用 DDP，它是 Meteor 的数据装载协议，通过网络传输文档。要记住的关键是，当在文档发生变更时，DDP 发送顶层的字段变动。这意味着如果你的文档中有大量复杂的子字段频繁的变更，DDP 会发送很多不必要的变更数据。
+例如，在「纯」MongoDB 中你需要设计视图以便每个待办列表的文档都拥有一个叫 `todos` 的字段，包含待办项目的数组：
 
 ```js
 Lists.schema = new SimpleSchema({
@@ -151,7 +149,7 @@ Lists.schema = new SimpleSchema({
 });
 ```
 
-The issue with this schema is that due to the DDP behavior just mentioned, each change to *any* todo item in a list will require sending the *entire* set of todos for that list over the network. This is because DDP has no concept of "change the `text` field of the 3rd item in the field called `todos`", simply "change the field called `todos` to a totally new array".
+这个架构的问题在于，由于刚提到过的 DDP 行为，每次对于某个列表中*任意*的待办项的变化，DDP 就会通过网络发送该列表中*整组*待办项目。这是因为 DDP 对于在 `todos` 数组第三项中的 text 字段的「变化」没有任何的概念，因此它简单地认为 `todos` 字段变成了全新的数组。
 
 <h3 id="denormalization">Denormalization and multiple collections</h3>
 
