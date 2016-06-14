@@ -78,13 +78,11 @@ SelectedTodos = new Mongo.Collection(null);
 此时实际上是创建了一个**本地数据集**。这是一个没有数据库连接的数据集（通常一个数据集要么是直接连接到数据库服务器上，要么通过客户端订阅）。
 本地数据集是一种便利的在内存中使用 Minimongo 库的全部功能的方法。举个例子，如果你需要针对你的数据执行复杂的查询，你可以使用本地数据集来替代一个简单的数组。又或者你会想利用它的反应性在客户端驱动一些 UI ，不过这在 Meteor 中不是事儿。
 
-<h2 id="schemas">Defining a schema</h2>
+<h2 id="schemas">定义一个数据结构</h2>
 
-Although MongoDB is a schema-less database, which allows maximum flexibility in data structuring, it is generally good practice to use a schema to constrain the contents of your collection to conform to a known format. If you don't, then you tend to end up needing to write defensive code to check and confirm the structure of your data as it *comes out* of the database, instead of when it *goes into* the database. As in most things, you tend to *read data more often than you write it*, and so it's usually easier, and less buggy to use a schema when writing.
-
-In Meteor, the pre-eminent schema package is [aldeed:simple-schema](http://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents.
-
-To write a schema using `simple-schema`, you can simply create a new instance of the `SimpleSchema` class:
+虽然 MongoDB 是一种无结构的数据库，赋予数据结构最大限度的灵活性，但是最好使用一个数据结构来约束集合中的内容，使其符合已知的格式。如果你不这么做的话，那么最终你需要去编写防卫性的代码来检查并确认你的数据结构，并且，你同样需要在数据从数据库*读出来的时候*确定结构以防止使用时出现问题，而不仅仅是在数据*写入*数据库的时候。大多数情况下，你会发现*读取较写入更为频繁*，所以使用数据结构写入数据通常会更简单，也很少会产生 bug。
+在 Meteor 中，aldeed:simple-schema 是一款杰出的数据结构包。它提供富有表现力且基于 MongoDB 的数据结构，用于插入和更新文档。
+使用 simple-schema 来编写一个数据结构，你可以轻松的创建一个基于 SimpleSchema 类的新实例：
 
 ```js
 Lists.schema = new SimpleSchema({
@@ -94,21 +92,21 @@ Lists.schema = new SimpleSchema({
 });
 ```
 
-This example from the Todos app defines a schema with a few simple rules:
+这个 Todos 示例应用中的例子用一些简单的规则定义了一个数据结构：
 
-2. We specify that the `name` field of a list is required and must be a string.
-3. We specify the `incompleteCount` is a number, which on insertion is set to `0` if not otherwise specified.
-4. We specify that the `userId`, which is optional, must be a string that looks like the ID of a user document.
+1. 我们指定列表中的 `name` 字段是必选项，必须是一个字符串。
+2. 我们指定 `incompleteCount` 是一个数字类型，在没有指定的情况下插入时设置为 `0`。
+3. 我们指定 `userId` 是可选项，必须是一个字符串，并且看起来像用户文档中的 ID。
 
-We attach the schema to the namespace of `Lists` directly, which allows us to check objects against this schema directly whenever we want, such as in a form or [Method](methods.html). In the [next section](#schemas-on-write) we'll see how to use this schema automatically when writing to the collection.
+我们直接在 `Lists` 命名空间上附加数据结构，允许我们随时依靠数据结构来检查对象，比如在一个表单或者 Method 中。在下一章节中，我们将了解到，当向集合中写入数据时如何自动化地使用这个数据结构。
 
-You can see that with relatively little code we've managed to restrict the format of a list significantly. You can read more about more complex things that can be done with schemas in the [Simple Schema docs](http://atmospherejs.com/aldeed/simple-schema).
+你能看到我们用相对少的代码明显地限制了列表的格式。你可以在 [Simple Schema 文档](http://atmospherejs.com/aldeed/simple-schema)中阅读更多详尽内容。
 
-<h3 id="validating-schemas">Validating against a schema</h3>
+<h3 id="validating-schemas">用数据结构来验证数据</h3>
 
-Now we have a schema, how do we use it?
+现在我们有了个数据结构，怎么用呢？
 
-It's pretty straightforward to validate a document with a schema. We can write:
+用它验证一个文档很简单，只要这样做：
 
 ```js
 const list = {
@@ -119,7 +117,7 @@ const list = {
 Lists.schema.validate(list);
 ```
 
-In this case, as the list is valid according to the schema, the `validate()` line will run without problems. If however, we wrote:
+在这个案例中，这个列表符合数据结构的定义， `validate()` 将能正常运行。但是如果：
 
 ```js
 const list = {
@@ -131,11 +129,12 @@ const list = {
 Lists.schema.validate(list);
 ```
 
-Then the `validate()` call will throw a `ValidationError` which contains details about what is wrong with the `list` document.
+`validate()` 则会甩出一个 `ValidationError`，它包含了 `list` 对象的错误原因。
 
-<h3 id="validation-error">The `ValidationError`</h3>
+<h3 id="validation-error">`ValidationError`</h3>
 
-What is a [`ValidationError`](https://github.com/meteor/validation-error/)? It's a special error that is used in Meteor to indicate a user-input based error in modifying a collection. Typically, the details on a `ValidationError` are used to mark up a form with information about what inputs don't match the schema. In the [methods article](methods.html#validation-error), we'll see more about how this works.
+什么是一个 [`ValidationError`](https://github.com/meteor/validation-error/)？ It's a special error that is used in Meteor to indicate a user-input based error in modifying a collection. Typically, the details on a `ValidationError` are used to mark up a form with information about what inputs don't match the schema. In the [methods article](methods.html#validation-error), we'll see more about how this works.
+它是一种在 Meteor 中，在修改数据集时指出用户输入的错误。通常，一个 `ValidationError` 的细节被用来标识那些不符合数据结构定义的输入。我们将在 [methods 章节](methods.html#validation-error)中了解更多关于 `ValidationError` 如何工作的细节。
 
 <h2 id="schema-design">Designing your data schema</h2>
 
