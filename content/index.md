@@ -21,7 +21,7 @@ Meteor 是一个用于开发现代网页和移动应用的全栈 JavaScript 平�
 
 Meteor 支持 [OS X、Windows 和 Linux](https://www.meteor.com/install).
 
-Windows？  [在这里下载官方 Meteor 安装包。](https://install.meteor.com/windows).
+Windows？  [在这里下载官方 Meteor 安装包](https://install.meteor.com/windows)。
 
 OS X 或 Linux？从你的终端安装最新的官方 Meteor 发行版。
 
