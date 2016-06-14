@@ -1,32 +1,33 @@
 ---
-title: "方法"
+title: "Method"
 order: 12
-description: 如何使用方法？ Meteor 通过使用方法将数据变化写入数据库
+description: 如何使用Method？ Meteor 通过使用Method将数据变化写入数据库
 discourseTopicId: 19662
 ---
 
 读完全文，你应该能够了解：
 
-1. Meteor 中方法指什么，以及如何使用方法。
-2. 方法的定义及调用实践。
-3. 如何使用方法抛出和处理错误。
-4. 如何从 form 中调用方法。
+1. Meteor 中 Method 指什么，以及如何使用 Method 。
+2. Method 的定义及调用实践。
+3. 如何使用 Method 抛出和处理错误。
+4. 如何从 form 中调用 Method 。
 
-<h2 id="what-is-a-method">什么是方法？</h2>
+<h2 id="what-is-a-method">什么是 Method ？</h2>
 
-方法是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP， you can think of them like POST requests to your server, but with many nice features optimized for building a modern web application. Later on in this article, we'll go into detail about some of the benefits you get from Methods that you wouldn't get from an HTTP endpoint.
+Method 是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP，你可以想象把request POST 到服务器，以一种界面友好，符合现代web app设计的形式。 在文章的最后，我们会谈到使用Method在哪些方面优于使用HTTP端点。
 
+Method 的核心是作为服务器的API端点，你可以在服务器定义一个Method，然后在客户端定义它的副本，然后调用Method，将数据写入数据库，并获得return value。
 At its core, a Method is an API endpoint for your server; you can define a Method on the server and its counterpart on the client, then call it with some data, write to the database, and get the return value in a callback. Meteor Methods are also tightly integrated with the pub/sub and data loading systems of Meteor to allow for [Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - the ability to simulate server-side actions on the client to make your app feel faster than it actually is.
 
-We'll be referring to Meteor Methods with a capital M to differentiate them from class methods in JavaScript.
+我们在谈到Meteor Method时会用大些字母M， 是为了区别javascript中的methods。
 
-<h2 id="defining-and-calling">Defining and calling Methods</h2>
+<h2 id="defining-and-calling">调用 Methods 的定义</h2>
 
 <h3 id="basic">Basic Method</h3>
 
 In a basic app, defining a Meteor Method is as simple as defining a function. In a complex app, you want a few extra features to make Methods more powerful and easily testable. First, we're going to go over how to define a Method using the Meteor core API, and in a later section we'll go over how to use a helpful wrapper package we've created to enable a more powerful Method workflow.
 
-<h4 id="basic-defining">Defining</h4>
+<h4 id="basic-defining">定义</h4>
 
 Here's how you can use the built-in [`Meteor.methods` API](http://docs.meteor.com/#/full/meteor_methods) to define a Method. Note that Methods should always be defined in common code loaded on the client and the server to enable Optimistic UI. If you have some secret code in your Method, consult the [Security article](security.html#secret-code) for how to hide it from the client.
 
@@ -54,7 +55,7 @@ Meteor.methods({
 });
 ```
 
-<h4 id="basic-calling">Calling</h4>
+<h4 id="basic-calling">调用</h4>
 
 This Method is callable from the client and server using [`Meteor.call`](http://docs.meteor.com/#/full/meteor_call). Note that you should only use a Method in the case where some code needs to be callable from the client; if you just want to modularize code that is only going to be called from the server, use a regular JavaScript function, not a Method.
 
@@ -75,11 +76,11 @@ Meteor.call('todos.updateText', {
 
 If the Method throws an error, you get that in the first argument of the callback. If the Method succeeds, you get the result in the second argument and the first argument `err` will be `undefined`. For more information about errors, see the section below about error handling.
 
-<h3 id="advanced-boilerplate">Advanced Method boilerplate</h3>
+<h3 id="advanced-boilerplate">高级 Method boilerplate</h3>
 
 Meteor Methods have several features which aren't immediately obvious, but every complex app will need them at some point. These features were added incrementally over several years in a backwards-compatible fashion, so unlocking the full capabilities of Methods requires a good amount of boilerplate. In this article we will first show you all of the code you need to write for each feature, then the next section will talk about a Method wrapper package we have developed to make it easier.
 
-Here's some of the functionality an ideal Method would have:
+一个好的 Method 应该具备以下功能：
 
 1. Run validation code by itself without running the Method body.
 2. Easily override the Method for testing.
