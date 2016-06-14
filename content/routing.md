@@ -1,44 +1,44 @@
 ---
-title: "URLs and Routing"
+title: "URL 和路由"
 order: 20
-description: How to drive your Meteor app's UI using URLs with FlowRouter.
+description: 如何使用 FlowRouter 通过 URL 来驱动你的 Meteor 应用的 UI。
 discourseTopicId: 19663
 ---
 
-After reading this guide, you'll know:
+读完本章，你将学到：
 
-1. The role URLs play in a client-rendered app, and how it's different from a traditional server-rendered app.
-2. How to define client and server routes for your app using Flow Router.
-3. How to have your app display different content depending on the URL.
-4. How to construct links to routes and go to routes programmatically.
+1. URL 在客户端渲染应用中扮演着怎样的角色，以及与在传统的服务端渲染应用中相比，到底有何不同。
+2. 如何使用 Flow Router 在应用的客户端和服务端定义路由。 
+3. 如何使你的应用根据 URL 的变化来展示不同的内容。
+4. 如何构建指向某个路由的链接，以及如何通过程序控制来跳转到某个路由。
 
-<h2 id="client-side">Client-side Routing</h2>
+<h2 id="client-side">客户端路由</h2>
 
-In a web application, _routing_ is the process of using URLs to drive the user interface (UI). URLs are a prominent feature in every single web browser, and have several main functions from the user's point of view:
+在网页应用中，_路由_ 是指通过 URL 来驱动用户界面（UI）的过程。URL 是每个浏览器都具有的重要特性，并且在用户看来，它具有几个重要的作用：
 
-1. **Bookmarking** - Users can bookmark URLs in their web browser to save content they want to come back to later.
-2. **Sharing** - Users can share content with others by sending a link to a certain page.
-3. **Navigation** - URLs are used to drive the web browser's back/forward functions.
+1. **书签** - 用户可以将 URL 收藏在浏览器中以保存那些他们需要回顾的内容。
+2. **分享** - 用户可以通过发送某个页面链接的方式来和他人分享内容。
+3. **导航** - URL 被用于驱动浏览器的前进和后退功能
 
-In a traditional web application stack, where the server renders HTML one page at a time, the URL is the fundamental entry point for the user to access the application. Users navigate an application by clicking through URLs, which are sent to the server via HTTP, and the server responds appropriately via a server-side router.
+在传统的网页应用架构中，服务器一次性渲染一整个 HTML 页面，这时，URL 是用户访问这个应用的基本入口。每当用户在应用中点击一个 URL 链接，浏览器就会向服务器发送一个 HTTP 请求，而服务器则会通过服务端路由器做出正确的响应（向用户返回请求的页面），于是，用户便可以通过这种方式在应用中到处跳转。
 
-In contrast, Meteor operates on the principle of _data on the wire_, where the server doesn’t think in terms of URLs or HTML pages. The client application communicates with the server over DDP. Typically as an application loads, it initializes a series of _subscriptions_ which fetch the data required to render the application. As the user interacts with the application, different subscriptions may load, but there’s no technical need for URLs to be involved in this process - you could easily have a Meteor app where the URL never changes.
+相较之下，Meteor 则是以_在连接上传递数据_的方式运作。在这种方式之下，服务器并不关心 URL 和 HTML 页面。客户端应用通过 DDP 协议与服务器进行沟通。举一个典型的例子，在应用加载时，它会初始化一系列 _subscriptions_，并通过它们获取渲染应用所需要的数据。当用户和应用进行交互时，可能会加载不同的 subscriptions，但从技术上来说，这个过程并不需要 URL 的参与 - 构建一个 URL 完全不会改变的 Meteor 应用并非难事。
 
-However, most of the user-facing features of URLs listed above are still relevant for typical Meteor applications. Since the server is not URL-driven, the URL just becomes a useful representation of the client-side state the user is currently looking at. However, unlike in a server-rendered application, it does not need to describe the entirety of the user’s current state; it simply needs to contain the parts that you want to be linkable. For example, the URL should contain any search filters applied on a page, but not necessarily the state of a dropdown menu or popup.
+然而，即使是面对 Meteor 应用，用户依然十分关注上述那些 URL 特色功能。由于服务器不再由 URL 驱动，URL 成为了用户的客户端浏览状态的重要表现形式。与传统的服务端渲染应用不同的是，URL 不再需要描述完整的当前用户状态；它只需要包含那部分你希望可以链接过去的状态即可。例如，URL 可以包含页面的搜索筛选关键字，但是却没必要包含一个下拉菜单或弹窗的状态。
 
-<h2 id="flow-router">Using Flow Router</h2>
+<h2 id="flow-router">使用 Flow Router</h2>
 
-To add routing to your app, install the [`kadira:flow-router`](https://atmospherejs.com/kadira/flow-router) package:
+安装 [`kadira:flow-router`](https://atmospherejs.com/kadira/flow-router) 包，即可向应用增加路由功能：
 
 ```
 meteor add kadira:flow-router
 ```
 
-Flow Router is a community routing package for Meteor. At the time of writing this guide, it is at version 2.x. For detailed information about all of the features Flow Router has to offer, refer to the [Kadira Meteor routing guide](https://kadira.io/academy/meteor-routing-guide).
+Flow Router 是由社区提供的 Meteor 路由包。编写这篇文章时，它的最新版本是2.X。想了解更多关于 Flow Router 的特性和功能，请参考  [Kadira Meteor routing guide](https://kadira.io/academy/meteor-routing-guide)。
 
-<h2 id="defining-routes">Defining a simple route</h2>
+<h2 id="defining-routes">定义一个简单的路由</h2>
 
-The basic purpose of a router is to match certain URLs and perform actions as a result. This all happens on the client side, in the app user's browser or mobile app container. Let's take an example from the Todos example app:
+路由器的基本作用是匹配特定的 URL 并执行相应的动作，这些都发生在客户端，包括用户的浏览器内或移动应用容器中。以 Todos 示例应用中的一段代码为例：
 
 ```js
 FlowRouter.route('/lists/:_id', {
@@ -49,26 +49,25 @@ FlowRouter.route('/lists/:_id', {
 });
 ```
 
-This route handler will run in two situations: if the page loads initially at a URL that matches the URL pattern, or if the URL changes to one that matches the pattern while the page is open. Note that, unlike in a server-side-rendered app, the URL can change without any additional requests to the server.
+这个路由动作会在两种情况下执行：页面最初就从与预设模式匹配的 URL 进行加载，或在页面打开时，URL 发生改变并与预设模式相匹配。需要注意的是，URL 可以在不向服务器发送任何其他请求的情况下发生改变，这与服务端渲染应用不同。
 
-When the route is matched, the `action` method executes, and you can perform any actions you need to. The `name` property of the route is optional, but will let us refer to this route more conveniently later on.
+当路由匹配时，`action` 方法会被执行，此时，你可以执行任何你需要的动作。路由的 `name` 属性是可选的，但它可以让我们在以后更容易地使用这个路由。
 
-<h3 id="url-pattern-matching">URL pattern matching</h3>
+<h3 id="url-pattern-matching">URL 模式匹配</h3>
 
-Consider the following URL pattern, used in the code snippet above:
+思考一下这段上述示例中使用到的 URL 模式：
 
 ```js
 '/lists/:_id'
 ```
 
-The above pattern will match certain URLs. You may notice that one segment of the URL is prefixed by `:` - this means that it is a *url parameter*, and will match any string that is present in that segment of the path. Flow Router will make that part of the URL available on the `params` property of the current route.
+这个模式会匹配特定的 URL。你可能已经注意到，这个 URL 中有一部分以 `:` 作为开头 - 这表示这个部分是一个 *url 参数*，并且会匹配一个出现在路径的相同部分的任意字符串。Flow Router 会将 URL 中的这个部分保存到当前路由的 `params` 属性中。
 
-Additionally, the URL could contain an HTTP [*query string*](https://en.wikipedia.org/wiki/Query_string) (the part after an optional `?`). If so, Flow Router will also split it up into named parameters, which it calls `queryParams`.
+除此之外，URL 可以包含一个 HTTP [*查询字符串*](https://en.wikipedia.org/wiki/Query_string) （跟在可选的 `?` 之后的部分）。如果是这样，Flow Router 会将它们拆分到一个叫做 `queryParams` 的命名参数中。
 
+这里展示了一些示例 URL 以及与它们对应的 `params` 与 `queryParams`：
 
-Here are some example URLs and the resulting `params` and `queryParams`:
-
-| URL           | matches pattern? | params          | queryParams
+| URL           | 是否匹配？ | params          | queryParams
 | ---- | ---- | ---- | ---- |
 | /             | no | | |
 | /about        | no | | |
@@ -77,36 +76,35 @@ Here are some example URLs and the resulting `params` and `queryParams`:
 | /lists/1 | yes | { _id: "1"} | { }
 | /lists/1?todoSort=top | yes | { _id: "1"} | { todoSort: "top" }
 
+请注意，`params` 和 `queryParams` 中的所有值都是字符串，因为 URL 无法编码数据类型。例如，如果你想用一个参数来表示一个数字，你可能需要在使用前通过 `parseInt(value, 10)` 将它转换为数字。
 
-Note that all of the values in `params` and `queryParams` are always strings since URLs don't have any way of encoding data types. For example, if you wanted a parameter to represent a number, you might need to use `parseInt(value, 10)` to convert it when you access it.
+<h2 id="accessing-route-info">获取路由信息</h2>
 
-<h2 id="accessing-route-info">Accessing Route information</h2>
+Flow Router 可以将 URL 中的参数作为函数参数传递给路由中的 `action` 函数，除此之外，它还在全局单例 `FlowRouter` 中以函数（或响应式函数）的形式提供了各种有用的信息。当用户在应用中到处跳转时，这些函数的返回值也会随之改变（或在一些情况下响应式地改变）。
 
-In addition to passing in the parameters as arguments to the `action` function on the route, Flow Router makes a variety of information available via (reactive and otherwise) functions on the global singleton `FlowRouter`. As the user navigates around your app, the values of these functions will change (reactively in some cases) correspondingly.
+如同应用中的其他全局单例一样（参考[「数据加载」章节](data-loading.html#stores)以了解 stores），你最好限制对 `FlowRouter` 的使用。这样，你的应用的各部分才能保持模块化与独立。对于 `FlowRouter` 来说，你最好只在应用的组件体系的最顶层使用它，包括「页面」组件或包裹它的布局组件。你可以参考  [UI article](ui-ux.html#components) 以了解更多关于获取数据的知识。
 
-Like any other global singleton in your application (see the [data loading](data-loading.html#stores) for info about stores), it's best to limit your access to `FlowRouter`. That way the parts of your app will remain modular and more independent. In the case of `FlowRouter`, it's best to access it solely from the top of your component hierarchy, either in the "page" component, or the layouts that wrap it. Read more about accessing data in the [UI article](ui-ux.html#components).
+<h3 id="current-route">当前路由</h3>
 
-<h3 id="current-route">The current route</h3>
+在你的代码中，当前路由的相关信息常常十分有用。这里列举了一些你可以使用的响应式函数：
 
-It's useful to access information about the current route in your code. Here are some reactive functions you can call:
+* `FlowRouter.getRouteName()` 获取路由名字
+* `FlowRouter.getParam(paramName)` 返回一个 URL 参数的值
+* `FlowRouter.getQueryParam(paramName)` 返回一个 URL 查询字符串的值
 
-* `FlowRouter.getRouteName()` gets the name of the route
-* `FlowRouter.getParam(paramName)` returns the value of a single URL parameter
-* `FlowRouter.getQueryParam(paramName)` returns the value of a single URL query parameter
+我们曾以 Todos 应用中的列表页作为示例，其中，我们通过 `FlowRouter.getParam('_id')` 来获取当前列表的 id （在后面，我们将看到更多信息）。
 
-In our example of the list page from the Todos app, we access the current list's id with `FlowRouter.getParam('_id')` (we'll see more on this below).
+<h3 id="active-route">突显激活的路由</h3>
 
-<h3 id="active-route">Highlighting the active route</h3>
+当你希望在组件体系里嵌套较深的组件中通过导航组件来渲染链接时，你可能的确需要使用到全局的 `FlowRouter` 单例来获取当前路由的相关信息。通常，「激活的」路由需要被以某种方式突显出来（以表示网站的这个路由或区域是用户当前正在浏览的地方）。
 
-One situation where it is sensible to access the global `FlowRouter` singleton to access the current route's information deeper in the component hierarchy is when rendering links via a navigation component. It's often required to highlight the "active" route in some way (this is the route or section of the site that the user is currently looking at).
-
-A convenient package for this is [`zimme:active-route`](https://atmospherejs.com/zimme/active-route):
+[`zimme:active-route`](https://atmospherejs.com/zimme/active-route) 包能帮助你方便地做到这件事：
 
 ```bash
 meteor add zimme:active-route
 ```
 
-In the Todos example app, we link to each list the user knows about in the `App_body` template:
+在 Todos 示例应用中，我们在 `App_body` 模板中为用户知道的每一个列表设置一个链接：
 
 ```html
 {{#each list in lists}}
@@ -118,7 +116,7 @@ In the Todos example app, we link to each list the user knows about in the `App_
 {{/each}}
 ```
 
-We can determine if the user is currently viewing the list with the `activeListClass` helper:
+对于每一个列表，我们可以通过 `activeListClass` helper 来确定用户是否正在浏览它。
 
 ```js
 Template.App_body.helpers({
@@ -131,19 +129,19 @@ Template.App_body.helpers({
 });
 ```
 
-<h2 id="rendering-routes">Rendering based on the route</h2>
+<h2 id="rendering-routes">根据路由进行渲染</h2>
 
-Now we understand how to define routes and access information about the current route, we are in a position to do what you usually want to do when a user accesses a route---render a user interface to the screen that represents it.
+现在，我们知道了如何定义路由以及获取当前路由的相关信息。当用户访问一个路由时，我们已经准备好了去做该做的事——在屏幕上渲染用户界面。
 
-*In this section, we'll discuss how to render routes using Blaze as the UI engine. If you are building your app with React or Angular, you will end up with similar concepts but the code will be a bit different.*
+*在这一节中，我们会讨论如何使用 Blaze 作为 UI 引擎来渲染路由。如果你使用 React 或 Angular 来构建应用，你将学到相似的概念，但实现代码差别很大。*
 
-When using Flow Router, the simplest way to display different views on the page for different URLs is to use the complementary Blaze Layout package. First, make sure you have the Blaze Layout package installed:
+使用 Flow Router 时，在页面上根据不同 URL 展示不同视图的最简单方法，是使用作为补充的 Blaze Layout 包。首先，你需要安装 Blaze Layout 包：
 
 ```bash
 meteor add kadira:blaze-layout
 ```
 
-To use this package, we need to define a "layout" component. In the Todos example app, that component is called `App_body`:
+为了使用这个包，我们需要定义一个「布局」组件。在 Todos 示例应用中，这个组件叫做 `App_body`：
 
 ```html
 <template name="App_body">
@@ -153,10 +151,10 @@ To use this package, we need to define a "layout" component. In the Todos exampl
 </template>
 ```
 
-(This is not the entire `App_body` component, but we highlight the most important part here).
-Here, we are using a Blaze feature called `Template.dynamic` to render a template which is attached to the `main` property of the data context. Using Blaze Layout, we can change that `main` property when a route is accessed.
+（这里展示的不是完整的 `App_body` 组件，我们仅突出了其中最重要的部分）。
+这里，我们使用了一个被称作 `Template.dynamic` 的 Blaze 功能来渲染数据环境中的 `main` 属性所指的模板。使用 Blaze Layout，我们可以在一个路由被访问时改变 `main` 属性。
 
-We do that in the `action` function of our `Lists.show` route definition:
+我们在 `Lists.show` 路由定义的 `action` 函数中做这些事：
 
 ```js
 FlowRouter.route('/lists/:_id', {
@@ -167,22 +165,24 @@ FlowRouter.route('/lists/:_id', {
 });
 ```
 
-What this means is that whenever a user visits a URL of the form `/lists/X`, the `Lists.show` route will kick in, triggering the `BlazeLayout` call to set the `main` property of the `App_body` component.
+这段代码表示，当用户访问一个形如 `/lists/x` 的 URL 时，`Lists.show` 路由将会使用 `BlazeLayout`
+来设置 `App_body` 组件的 `main` 属性。
 
-<h2 id="page-templates">Components as pages</h2>
+<h2 id="page-templates">组件即页面</h2>
 
-Notice that we called the component to be rendered `Lists_show_page` (rather than `Lists_show`). This indicates that this template is rendered directly by a Flow Router action and forms the 'top' of the rendering hierarchy for this URL.
+请注意，我们将被渲染的组件称作 `Lists_show_page` （而不是 `Lists_show`）。这表示，这个模板会直接被一个 Flow Router 动作渲染，并且会成为这个 URL 渲染体系中的「最顶层」。
 
-The `Lists_show_page` template renders *without* arguments---it is this template's responsibility to collect information from the current route, and then pass this information down into its child templates. Correspondingly the `Lists_show_page` template is very tied to the route that rendered it, and so it needs to be a smart component. See the article on [UI/UX](ui-ux.html) for more about smart and reusable components.
+`Lists_show_page` 模板*无需*参数即可渲染——模板本身需要负责从当前路由获取信息，并将其传递给自己的子模板。
+由于 `Lists_show_page` 模板同渲染它的路由绑定得十分紧密，它必然是一个智能组件。如需了解更多关于智能组件和可复用组件，请参考[「UI/UX」章节](ui-ux.html) 。
 
-It makes sense for a "page" smart component like `Lists_show_page` to:
+像 `Lists_show_page` 这样的智能「页面」组件通常需要负责：
 
-1. Collect route information,
-2. Subscribe to relevant subscriptions,
-3. Fetch the data from those subscriptions, and
-4. Pass that data into a sub-component.
+1. 收集路由信息，
+2. 订阅相关 subscriptions，
+3. 从 subscriptions 获取数据，并且
+4. 将数据传递给子组件。
 
-In this case, the HTML template for `Lists_show_page` will look very simple, with most of the logic in the JavaScript code:
+在这种情况下，`Lists_show_page` 的大部分逻辑都写在了 JavaScript 代码中，而它的 HTML 模板则显得十分简洁：
 
 ```html
 <template name="Lists_show_page">
@@ -194,13 +194,12 @@ In this case, the HTML template for `Lists_show_page` will look very simple, wit
 </template>
 ```
 
-(The `{% raw %}{{#each listId in listIdArray}}{% endraw %}}` is an animation technique for [page to page transitions](ui-ux.html#animating-page-changes)).
+（`{% raw %}{{#each listId in listIdArray}}{% endraw %}}` 是一种动画技巧，请参考[「页面过渡」章节](ui-ux.html#animating-page-changes)）
 
 ```js
 Template.Lists_show_page.helpers({
-  // We use #each on an array of one item so that the "list" template is
-  // removed and a new copy is added when changing lists, which is
-  // important for animation purposes.
+  // 我们在只有一项的数组中使用 #each，因此，当lists发生改变时，「list」模板会被删除，
+  // 而一个新的副本将被添加，这对于我们需要的动画来说非常重要。
   listIdArray() {
     const instance = Template.instance();
     const listId = instance.getListId();
@@ -210,29 +209,28 @@ Template.Lists_show_page.helpers({
     const instance = Template.instance();
     return {
       todosReady: instance.subscriptionsReady(),
-      // We pass `list` (which contains the full list, with all fields, as a function
-      // because we want to control reactivity. When you check a todo item, the
-      // `list.incompleteCount` changes. If we didn't do this the entire list would
-      // re-render whenever you checked an item. By isolating the reactiviy on the list
-      // to the area that cares about it, we stop it from happening.
+      // 为了对数据响应进行控制，我们将「list」（它包含了整个 list 以及所有的字段）作为一个函数
+      // 进行传递。当你勾选一个 todo 项时，`list.incompleteCount` 将会改变。如果我们不这样做，
+      // 无论你勾选了哪一项，整个 list 都会重新渲染。通过将 list 的数据响应隔离在关注它的区域，
+      // 我们可以阻止这样的事发生。
       list() {
         return Lists.findOne(listId);
       },
-      // By finding the list with only the `_id` field set, we don't create a dependency on the
-      // `list.incompleteCount`, and avoid re-rendering the todos when it changes
+      // 由于在查询 list 时只设置了 `_id` 字段，我们没有建立对 `list.incompleteCount` 的依赖，
+      // 因此避免了在它发生改变时重新渲染整个 todos
       todos: Lists.findOne(listId, {fields: {_id: true}}).todos()
     };
   }
 });
 ```
 
-It's the `listShow` component (a reusuable component) that actually handles the job of rendering the content of the page. As the page component is passing the arguments into the reusuable component, it is able to be quite mechanical and the concerns of talking to the router and rendering the page have been separated.
+`listShow` 组件（一个可复用组件）承担了渲染页面内容的实际工作。由于页面组件会将数据作为参数传递给可复用组件，它便可以相当无脑地进行工作，并且，同路由器进行沟通以及渲染页面的这两个关注点也得以分离。
 
-<h3 id="route-rendering-logic">Changing page when logged out</h3>
+<h3 id="route-rendering-logic">在用户退出登录时更新页面</h3>
 
-There are types of rendering logic that appear related to the route but which also seem related to user interface rendering. A classic example is authorization; for instance, you may want to render a login form for some subset of your pages if the user is not yet logged in.
+这里有一些渲染逻辑不仅和路由相关，还和用户界面的渲染相关。一个典型的例子就是授权；例如，对于部分页面，如果用户没有登录，你可能希望展示一个登录表单。
 
-It's best to keep all logic around what to render in the component hierarchy (i.e. the tree of rendered components). So this authorization should happen inside a component. Suppose we wanted to add this to the `Lists_show_page` we were looking at above. We could do something like:
+最好始终以「应该在组件体系（即渲染后的组件组成的树结构）中渲染什么」的方式来进行思考。因此，授权应该在一个组件中进行。假如我们希望在之前提到的 `Lists_show_page` 中添加这个功能。一开始我们可能会这样做：
 
 ```html
 <template name="Lists_show_page">
@@ -248,9 +246,9 @@ It's best to keep all logic around what to render in the component hierarchy (i.
 </template>
 ```
 
-Of course, we might find that we need to share this functionality between multiple pages of our app that require access control. We can easily share functionality between templates by wrapping them in a wrapper "layout" component which includes the behavior we want.
+当然，我们可能会发现我们需要在许多需要访问控制的页面共享这项功能。我们可以创造一个具有我们所需要的行为的「布局」组件，并将其他模板包裹在其中。这样，我们便可以很容易地共享功能。
 
-You can create wrapper components by using the "template as block helper" ability of Blaze (see the [Blaze Article](blaze.html#block-helpers)). Here's how we could write an authorization template:
+你可以使用 Blaze 的「模板块 helper」来创造包裹组件（参考[「Blaze」章节](blaze.html#block-helpers)）。这里演示了如何编写一个授权模板：
 
 ```html
 <template name="App_forceLoggedIn">
@@ -262,7 +260,7 @@ You can create wrapper components by using the "template as block helper" abilit
 </template>
 ```
 
-Once that template exists, we can simply wrap our `Lists_show_page`:
+当添加这个模板之后，我们便可以简单地包裹我们的 `Lists_show_page`：
 
 ```html
 <template name="Lists_show_page">
@@ -276,30 +274,28 @@ Once that template exists, we can simply wrap our `Lists_show_page`:
 </template>
 ```
 
-The main advantage of this approach is that it is immediately clear when viewing the `Lists_show_page` what behavior will occur when a user visits the page.
+使用这种方法的最大好处是，当查看 `Lists_show_page` 的代码时，你将很直观清晰地了解到，如果一个用户访问这个页面将会发生什么。
 
-Multiple behaviors of this type can be composed by wrapping a template in multiple wrappers, or creating a meta-wrapper that combines multiple wrapper templates.
+通过将一个模板包裹在多个包裹组件中，或创建一个组合了多个包裹模板的元包裹组件，你可以将多个这种类型的行为或功能组合起来。
 
-<h2 id="changing-routes">Changing Routes</h2>
+<h2 id="changing-routes">改变路由</h2>
 
-Rendering an updated UI when a user reaches a new route is not that useful without giving the user some way to reach a new route! The simplest way is with the trusty `<a>` tag and a URL. You can generate the URLs yourself using `FlowRouter.pathFor`, but it is more convenient to use the [`arillo:flow-router-helpers`](https://github.com/arillo/meteor-flow-router-helpers/) package that defines some helpers for you:
-
+如果你不能用一种方式跳转到一个新的路由，那么根据新路由来更新 UI 这件事又从何说起呢？想要跳转路由，最简单的方式是提供一个可靠的 `<a>` 标签和一个 URL。虽然，你可以使用 `FlowRouter.path` 来生成 URL，但更方便的方法是使用 [`arillo:flow-router-helpers`](https://github.com/arillo/meteor-flow-router-helpers/) 包。它定义了一些有用的 helpers：
 
 ```
 meteor add arillo:flow-router-helpers
 ```
 
-Now that you have this package, you can use helpers in your templates to display a link to a certain route. For example, in the Todos example app, our nav links look like:
-
+当你安装好了这个包，你就可以在你的模板中使用这些 helpers 来展示跳转到特定路由的链接。例如，在 Todos 示例应用中，我们的导航链接定义如下： 
 
 ```html
 <a href="{{pathFor 'Lists.show' _id=list._id}}" title="{{list.name}}"
     class="list-todo {{activeListClass list}}">
 ```
 
-<h3 id="routing-programmatically">Routing programmatically</h3>
+<h3 id="routing-programmatically">使用程序来控制路由</h3>
 
-In some cases you want to change routes based on user action outside of them clicking on a link. For instance, in the example app, when a user creates a new list, we want to route them to the list they just created. We do this by calling `FlowRouter.go()` once we know the id of the new list:
+在某些时候，你可能想通过除了点击一个链接以外的其他某种用户行为来进行路由跳转。比如说，在示例应用中，在用户创建了一个新的列表时，我们希望将用户跳转到刚刚创建的列表处。为了做到这一点，我们在获得新列表的 id 时，调用了 `FlowRouter.go()` 函数：
 
 ```js
 import { insert } from '../../api/lists/methods.js';
@@ -312,37 +308,37 @@ Template.App_body.events({
 });
 ```
 
-You can also change only part of the URL if you want to, using the `FlowRouter.setParams()` and `FlowRouter.setQueryParams()`. For instance, if we were viewing one list and wanted to go to another, we could write:
+通过使用 `FlowRouter.setParams()` 和 `FlowRouter.setQueryParams()`，你也可以只改变当前路由的某个部分。比如，当我们正在浏览某个列表时，如果我们想跳转到另一个列表，可以这样写代码：
 
 ```js
 FlowRouter.setParams({_id: newList._id});
 ```
 
-Of course, calling `FlowRouter.go()`, will always work, so unless you are trying to optimize for a specific situation it's better to use that.
+当然，无论哪种情况，调用 `FlowRouter.go()` 总是有效的，因此，除非你是在尝试为某种特定的用例进行优化，否则，最好使用 `FlowRouter.go()`。 
 
-<h3 id="storing-data-in-the-url">Storing data in the URL</h3>
+<h3 id="storing-data-in-the-url">在 URL 中保存数据</h3>
 
-As we discussed in the introduction, the URL is really just a serialization of some part of the client-side state the user is looking at. Although parameters can only be strings, it's possible to convert any type of data to a string by serializing it.
+正如我们在介绍中讨论的一样，URL 不过是当前页面的一部分客户端状态的序列化结果。虽然，URL 只能是字符串，但是任何种类的数据实际上都可以被序列化为字符串。
 
-In general if you want to store arbitrary serializable data in a URL param, you can use [`EJSON.stringify()`](http://docs.meteor.com/#/full/ejson_stringify) to turn it into a string. You'll need to URL-encode the string using [`encodeURIComponent`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) to remove any characters that have meaning in a URL:
+一般来说，如果你想将任意可序列化的数据保存在 URL 参数中，你可以使用 [`EJSON.stringify()`](http://docs.meteor.com/#/full/ejson_stringify) 来将这些数据转变为字符串。你还需要使用 [`encodeURIComponent`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) 对这个字符串进行 URL 编码以移除任何在 URL 有特殊含义的符号：
 
 ```js
 FlowRouter.setQueryParams({data: encodeURIComponent(EJSON.stringify(data))});
 ```
 
-You can then get the data back out of Flow Router using [`EJSON.parse()`](http://docs.meteor.com/#/full/ejson_parse). Note that Flow Router does the URL decoding for you automatically:
+你可以通过使用 [`EJSON.parse()`](http://docs.meteor.com/#/full/ejson_parse) 来从 Flow Router 中重新获取这些数据。请注意，Flow Router 已经自动为你对字符串进行了 URL 反编码：
 
 ```js
 const data = EJSON.parse(FlowRouter.getQueryParam('data'));
 ```
 
-<h2 id="redirecting">Redirecting</h2>
+<h2 id="redirecting">重定向</h2>
 
-Sometimes, your users will end up on a page that isn't a good place for them to be. Maybe the data they were looking for has moved, maybe they were on an admin panel page and logged out, or maybe they just created a new object and you want them to end up on the page for the thing they just created.
+有时候，用户会跳转到它们不该访问的地方。有可能是他们正在查看的数据已经移动，也可能是他们正处在管理控制台页面但是却退出了登录，还可能是他们创建了一个新东西，而你想让他们跳转到展示这个东西的页面。
 
-Usually, we can redirect in response to a user's action by calling `FlowRouter.go()` and friends, like in our list creation example above, but if a user browses directly to a URL that doesn't exist, it's useful to know how to redirect immediately.
+通常，我们可以根据用户行为进行重定向，只需要调用 `FlowRouter.go()`函数，或如同上文创建列表的例子中那样，调用其他相关函数即可。但有时，用户会直接访问到一个不存在的 URL，这时，我们需要知道如何直接进行重定向。
 
-If a URL is simply out-of-date (sometimes you might change the URL scheme of an application), you can redirect inside the `action` function of the route:
+如果一个 URL 已经过时（有时你可能改变应用的 URL 定义），你可以在这个路由的 `action` 函数中进行重定向：
 
 ```js
 FlowRouter.route('/old-list-route/:_id', {
@@ -352,9 +348,11 @@ FlowRouter.route('/old-list-route/:_id', {
 });
 ```
 
-<h3 id="redirecting-dynamically">Redirecting dynamically</h3>
+> 译者注：使用 `FlowRouter.go()` 进行重定向可能不是一个好方法，例如，如果你使用这种方式进行重定向，那么当用户将无法进行页面回退（思考一下为什么）。建议通过[在 trigger 中使用 redirect 函数](https://github.com/kadirahq/flow-router#redirecting-with-triggers)的方式进行重定向。
 
-The above approach will only work for static redirects. However, sometimes you need to load some data to figure out where to redirect to. In this case you'll need to render part of the component hierarchy to subscribe to the data you need. For example, in the Todos example app, we want to make the root (`/`) route redirect to the first known list. To achieve this, we need to render a special `App_rootRedirector` route:
+<h3 id="redirecting-dynamically">动态重定向</h3>
+
+上述方法仅适用于静态重定向。有时候，你需要加载更多数据才知道应该重定向到什么地方。这是，你需要渲染一些组件来订阅你需要的数据。例如，在 Todos 示例应用中，我们希望将根路由 (`/`) 重定向到能够被查询到的第一个列表。为了做到这一点，我们需要渲染一个特殊的 `App_rootRedirector` 组件：
 
 ```js
 FlowRouter.route('/', {
@@ -365,27 +363,26 @@ FlowRouter.route('/', {
 });
 ```
 
-The `App_rootRedirector` component is rendered inside the `App_body` layout, which takes care of subscribing to the set of lists the user knows about *before* rendering its sub-component, and we are guaranteed there is at least one such list. This means that if the `App_rootRedirector` ends up being created, there'll be a list loaded, so we can simply do:
+`App_rootRedirector` 被渲染在 `App_body` 布局中，而这个布局组件则会在渲染子组件*之前*订阅用户可以查询到的所有列表，因此，当 `App_rootRedirector` 创建时，我们可以确定这里至少有一个列表会被加载，所以我们可以这样做：
 
 ```js
 Template.App_rootRedirector.onCreated(() => {
-  // We need to set a timeout here so that we don't redirect from inside a redirection
-  //   which is a limitation of the current version of FR.
+  // 我们需要设置 timeout 函数，因为我们不能在一个重定向中进再进行重定向
+  // 这是当前版本的 Flow Router 的一个限制
   Meteor.setTimeout(() => {
     FlowRouter.go('Lists.show', Lists.findOne());
   });
 });
 ```
 
-If you need to wait on specific data that you aren't already subscribed to at creation time, you can use an `autorun` and `subscriptionsReady()` to wait on that subscription:
+如果你希望使用某些数据，而这些数据在组件创建时还没有被订阅，你可以使用 `autorun` 和 `subscriptionsReady()` 来等待订阅完成：
 
 ```js
 Template.App_rootRedirector.onCreated(() => {
-  // If we needed to open this subscription here
+  // 在这里进行订阅
   this.subscribe('lists.public');
 
-  // Now we need to wait for the above subscription. We'll need the template to
-  // render some kind of loading state while we wait, too.
+  // 现在我们需要等待上述订阅。在等待期间，我们也需要模板展示一些加载状态。
   this.autorun(() => {
     if (this.subscriptionsReady()) {
       FlowRouter.go('Lists.show', Lists.findOne());
@@ -394,11 +391,11 @@ Template.App_rootRedirector.onCreated(() => {
 });
 ```
 
-<h3 id="redirecting-after-user-action">Redirecting after a user's action</h3>
+<h3 id="redirecting-after-user-action">在用户行为之后进行重定向</h3>
 
-Often, you just want to go to a new route programmatically when a user has completed a certain action. Above we saw a case (creating a new list) when we wanted to do it *optimistically*---i.e. before we hear back from the server that the Method succeeded. We can do this because we reasonably expect that the Method will succeed in almost all cases (see the [UI/UX article](ui-ux.html#optimistic-ui) for further discussion of this).
+通常，你希望在用户完成某个动作之后，立刻通过程序控制跳转到一个新的路由。在上述创建列表的示例中，我们对它进行了*优化*——即在获得服务端关于 method 的成功响应之前就执行重定向。我们之所以能这样做，是因为我们有理由相信在绝大部分情况下，这个 method 会执行成功（参考[「UI/UX」章节](ui-ux.html#optimistic-ui)以了解更加深入的讨论）。
 
-However, if we wanted to wait for the method to return from the server, we can put the redirection in the callback of the method:
+然而，如果我们希望等待服务端对 method 的返回结果，我们可以将重定向放在 method 的回调函数中：
 
 ```js
 Template.App_body.events({
@@ -412,13 +409,13 @@ Template.App_body.events({
 });
 ```
 
-You will also want to show some kind of indication that the method is working in between their click of the button and the redirect completing.  Don't forget to provide feedback if the method is returning an error.
+你还需要展示某种指示以表明按钮已经被点击，method 正在工作，而重定向尚未完成。不要忘了，如果 method 返回了一个错误，你还需要向用户提供某种反馈。
 
-<h2 id="advanced">Advanced Routing</h2>
+<h2 id="advanced">高级路由</h2>
 
-<h3 id="404s">Missing pages</h3>
+<h3 id="404s">找不到页面</h3>
 
-If a user types an incorrect URL, chances are you want to show them some kind of amusing not-found page. There are actually two categories of not-found pages. The first is when the URL typed in doesn't match any of your route definitions. You can use `FlowRouter.notFound` to handle this:
+通常，如果用户输入了错误的 URL，你希望向他们展示某种缓和的 404 页面。这里有两种类型的 404 页面。第一种是，用户输入的 URL 无法匹配任何路由定义。你可以使用 `FlowRouter.notFound` 来处理这种情况：
 
 ```js
 // the App_notFound template is used for unknown routes and missing lists
@@ -429,7 +426,7 @@ FlowRouter.notFound = {
 };
 ```
 
-The second is when the URL is valid, but doesn't actually match any data. In this case, the URL matches a route, but once the route has successfully subscribed, it discovers there is no data. It usually makes sense in this case for the page component (which subscribes and fetches the data) to render a not-found template instead of the usual template for the page:
+第二种情况是，用户输入的 URL 是有效的，但却无法匹配任何数据。在这种情况下，URL 匹配于一个路由，但当这个路由完成数据订阅时，它发现并没有任何数据。这种情况下，最好让页面组件（负责订阅和查询数据）去渲染一个「未找到数据」的模板，而不是使用一个通用的页面模板：
 
 ```html
 <template name="Lists_show_page">
@@ -441,22 +438,22 @@ The second is when the URL is valid, but doesn't actually match any data. In thi
 <template>
 ```
 
-<h3 id="analytics">Analytics</h3>
+<h3 id="analytics">数据分析</h3>
 
-It's common to want to know which pages of your app are most commonly visited, and where users are coming from. You can read about how to set up Flow Router based analytics in the [Deployment Guide](deployment.html#analytics).
+通常，我们都想知道应用的哪些页面最常被访问，以及用户都是来自哪里。你可以在[「部署」章节](deployment.html#analytics)查看到如何设置基于 Flow Router 的数据统计。
 
-<h3 id="server-side">Server Side Routing</h3>
+<h3 id="server-side">服务端路由</h3>
 
-As we've discussed, Meteor is a framework for client rendered applications, but this doesn't always remove the requirement for server rendered routes. There are two main use cases for server-side routing.
+正如我们之前所讨论的那样，Meteor 是一个客户端渲染应用框架，但服务端渲染的需求仍然存在。这里有两种服务端路由的主要场景。
 
-<h4 id="server-side-apis">Server Routing for API access</h4>
+<h4 id="server-side-apis">用于 API 访问的服务端路由</h4>
 
-Although Meteor allows you to [write low-level connect handlers](http://docs.meteor.com/#/full/webapp) to create any kind of API you like on the server-side, if all you want to do is create a RESTful version of your Methods and Publications, you can often use the [`simple:rest`](http://atmospherejs.com/simple/rest) package to do this easily. See the [Data Loading](data-loading.html#publications-as-rest) and [Methods](methods.html) articles for more information.
+Meteor 允许你[编写底层的连接处理函数](http://docs.meteor.com/#/full/webapp)来创建任意类型的服务端 API。如果你仅仅是希望为你的 methods 和 publications 创建 RESTful 版本，你可以使用 [`simple:rest`](http://atmospherejs.com/simple/rest) 包来轻松实现。参考[「数据加载」章节](data-loading.html#publications-as-rest)和 [「Methods」章节](methods.html) 以了解更多信息。 
 
-If you need more control, you can use the comprehensive [`nimble:restivus`](https://atmospherejs.com/nimble/restivus) package to create more or less whatever you need in whatever ontology you require.
+如果你希望进行更多控制，你可以使用更复杂的 [`nimble:restivus`](https://atmospherejs.com/nimble/restivus) 包来以任何你需要的方式创建任意数量的接口。
 
-<h4 id="server-side-rendering">Server Rendering</h4>
+<h4 id="server-side-rendering">服务端渲染</h4>
 
-The Blaze UI library does not have support for server-side rendering, so it's not possible to render your pages on the server if you use Blaze. However, the React UI library does. This means it is possible to render HTML on the server if you use React as your rendering framework.
+Blaze UI 库不支持服务端渲染，因此，如果你使用 Blaze，你不能在服务端渲染页面。然而，React UI 支持服务端渲染。这意味着，如果你使用 React 框架，你可以在服务端渲染 HTML 页面。
 
-Although Flow Router can be used to render React components more or less as we've described above for Blaze, at the time of this writing Flow Router's support for SSR is [still experimental](https://kadira.io/blog/meteor/meteor-ssr-support-using-flow-router-and-react). However, it's probably the best approach right now if you want to use SSR for Meteor.
+虽然，Flow Router可以多多少少像我们关于 Blaze 描述的那样渲染 React 组件，但截止这篇文章编写时，它对 SSR（服务端渲染）的支持[仍处于实验阶段](https://kadira.io/blog/meteor/meteor-ssr-support-using-flow-router-and-react)。然而，如果你想要在 Meteor 使用 SSR，这恐怕是目前最好的方法了。
