@@ -133,8 +133,7 @@ Lists.schema.validate(list);
 
 <h3 id="validation-error">`ValidationError`</h3>
 
-什么是一个 [`ValidationError`](https://github.com/meteor/validation-error/)？ It's a special error that is used in Meteor to indicate a user-input based error in modifying a collection. Typically, the details on a `ValidationError` are used to mark up a form with information about what inputs don't match the schema. In the [methods article](methods.html#validation-error), we'll see more about how this works.
-它是一种在 Meteor 中，在修改数据集时指出用户输入的错误。通常，一个 `ValidationError` 的细节被用来标识那些不符合数据结构定义的输入。我们将在 [methods 章节](methods.html#validation-error)中了解更多关于 `ValidationError` 如何工作的细节。
+什么是一个 [`ValidationError`](https://github.com/meteor/validation-error/)？它是一种在 Meteor 中，在修改数据集时指出用户输入的错误。通常，一个 `ValidationError` 的细节被用来标识那些不符合数据结构定义的输入。我们将在 [methods 章节](methods.html#validation-error)中了解更多关于 `ValidationError` 如何工作的细节。
 
 <h2 id="schema-design">设计你的数据结构</h2>
 
