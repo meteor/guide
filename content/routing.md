@@ -131,7 +131,7 @@ Template.App_body.helpers({
 
 <h2 id="rendering-routes">根据路由进行渲染</h2>
 
-现在，我们知道了如何定义路由以及获取当前路由的相关信息。当用户访问一个路由时，我们已经准备好了去做该做的事 --- 在屏幕上渲染用户界面。
+现在，我们知道了如何定义路由以及获取当前路由的相关信息。当用户访问一个路由时，我们已经准备好了去做该做的事——在屏幕上渲染用户界面。
 
 *在这一节中，我们会讨论如何使用 Blaze 作为 UI 引擎来渲染路由。如果你使用 React 或 Angular 来构建应用，你将学到相似的概念，但实现代码差别很大。*
 
@@ -172,7 +172,7 @@ FlowRouter.route('/lists/:_id', {
 
 请注意，我们将被渲染的组件称作 `Lists_show_page` （而不是 `Lists_show`）。这表示，这个模板会直接被一个 Flow Router 动作渲染，并且会成为这个 URL 渲染体系中的「最顶层」。
 
-`Lists_show_page` 模板*无需*参数即可渲染 --- 模板本身需要负责从当前路由获取信息，并将其传递给自己的子模板。
+`Lists_show_page` 模板*无需*参数即可渲染——模板本身需要负责从当前路由获取信息，并将其传递给自己的子模板。
 由于 `Lists_show_page` 模板同渲染它的路由绑定得十分紧密，它必然是一个智能组件。如需了解更多关于智能组件和可复用组件，请参考[「UI/UX」章节](ui-ux.html) 。
 
 像 `Lists_show_page` 这样的智能「页面」组件通常需要负责：
@@ -194,7 +194,7 @@ FlowRouter.route('/lists/:_id', {
 </template>
 ```
 
-（`{% raw %}{{#each listId in listIdArray}}{% endraw %}}` 是一种动画技术，请参考[「页面过渡」章节](ui-ux.html#animating-page-changes)）
+（`{% raw %}{{#each listId in listIdArray}}{% endraw %}}` 是一种动画技巧，请参考[「页面过渡」章节](ui-ux.html#animating-page-changes)）
 
 ```js
 Template.Lists_show_page.helpers({
@@ -393,7 +393,7 @@ Template.App_rootRedirector.onCreated(() => {
 
 <h3 id="redirecting-after-user-action">在用户行为之后进行重定向</h3>
 
-通常，你希望在用户完成某个动作之后，立刻通过程序控制跳转到一个新的路由。在上述创建列表的示例中，我们对它进行了*优化* --- 即在获得服务端关于 method 的成功响应之前就执行重定向。我们之所以能这样做，是因为我们有理由相信在绝大部分情况下，这个 method 会执行成功（参考[「UI/UX」章节](ui-ux.html#optimistic-ui)以了解更加深入的讨论）。
+通常，你希望在用户完成某个动作之后，立刻通过程序控制跳转到一个新的路由。在上述创建列表的示例中，我们对它进行了*优化*——即在获得服务端关于 method 的成功响应之前就执行重定向。我们之所以能这样做，是因为我们有理由相信在绝大部分情况下，这个 method 会执行成功（参考[「UI/UX」章节](ui-ux.html#optimistic-ui)以了解更加深入的讨论）。
 
 然而，如果我们希望等待服务端对 method 的返回结果，我们可以将重定向放在 method 的回调函数中：
 
