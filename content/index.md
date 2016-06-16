@@ -67,30 +67,30 @@ meteor
 
 <h2 id="what-is-it">什么是 Meteor 指南？</h2>
 
-This is a set of articles outlining opinions on best-practice application development using the [Meteor](https://meteor.com) platform. Our aim is to cover patterns that are common to the development of all modern web and mobile applications, so many concepts documented here are not necessarily Meteor specific and could be applied to any application built with a focus on modern, interactive user interfaces.
+这是一组关于 Meteor 平台最佳实践的概要介绍，我们会覆盖到现代网站和移动应用开发中的共通部分，有许多这里提到的概念并不是 Meteor 特有的，这些概念可被应用到任何聚焦于现代的，用户界面可交互的程序中去。
 
-Nothing in the Meteor guide is *required* to build a Meteor application---you can certainly use the platform in ways that contradict the principles and patterns of the guide. However, the guide is an attempt to document best practices and community conventions, so we hope that the majority of the Meteor community will benefit from adopting the practices documented here.
+在创建 Meteor 的应用时，这些指南建议**并不是必要的**，你可以完全不遵从指南中的原则和建议。但是，这篇指南主要是试图将那些最佳实践和社区共识文档化，我们希望 Meteor 社区中的大多数人，能从这些文档化的实践中汲取到有益的东西。
 
-The APIs of the Meteor platform are available at the [docs site](https://docs.meteor.com), and you can browse community packages on [atmosphere](https://atmospherejs.com).
+Meteor 具体的 API 可以在[文档页](https://docs.meteor.com/)获取到，你也可以在 [atmosphere](https://atmospherejs.com/) 浏览到社区贡献的 Meteor 包。
 
 <h3 id="audience">目标受众</h3>
 
-The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+这篇指南面向那些有 JavaScript 或者 Meteor 或者 web 开发相关经验的中级开发者，如果你刚刚开始接触 Meteor，建议你先从[官方教程](https://www.meteor.com/tutorials/blaze/creating-an-app)开始。
 
 <h3 id="example-app">示例应用</h3>
 
-Many articles reference the Todos example application. This code is being actively developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
+许多文章都使用 Todos 作为示例应用，这个应用围绕着本指南开发，你可以在它的 [GitHub 仓库](https://github.com/meteor/todos)里获取到最新的源代码，当然你也可以通过 pull request 来提交 issues 或建议。
 
 <h2 id="guide-concepts">指南发展</h2>
 
 <h3 id="contributing">贡献</h3>
 
-Ongoing Meteor Guide development takes place **in the open** [on GitHub](https://github.com/meteor/guide). We encourage pull requests and issues to discuss problems with and changes that could be made to the content. We hope that keeping our process open and honest will make it clear what we plan to include in the guide and what changes will be coming in future Meteor versions.
+该指南的持续开发被**公开**在 [GitHub](https://github.com/meteor/guide) 上，我们鼓励 pull requests 和 issues 来讨论和修改这里面有问题的内容。我们希望保持我们在进度上的开放和真实，这样可以将该指南的计划和 Meteor 将来在版本上的更新表述的更加清晰。
 
 <h3 id="goals">项目目的</h3>
 
-The decisions made and practices outlined in the guide must necessarily be **opinionated**. Certain best practices will be highlighted and other valid approaches ignored. We aim to reach community consensus around major decisions but there will always be other ways to solve problems when developing your application. We believe it's important to know what the "standard" way to solve a problem is before branching out to other options. If an alternate approach proves itself superior, then it should make its way into a future version of the guide.
+在该指南中做出的决定或者概括的实践都必须是**明确的**。确定的最佳实践将被特别点出，而其他合理的建议则不会。我们致力于将社区的共识放到指南主要的决议中，但是编写应用程序时总能找到其他方法来解决问题。我们认为在找到其他方式之前知道「标准」的解决问题的方式是很重要的。如果证实其他方式能更好的解决问题，那它应该在下一版本的指南中被采用。
 
-An important function of the guide is to **shape future development** in the Meteor platform. By documenting best practices, the guide shines a spotlight on areas of the platform that could be better, easier, or more performant, and thus will be used to focus a lot of future platform choices.
+该指南还有一个重要的功能就是充当 Meteor 开发的风向标。通过文档化这些最佳实践，这些指南将聚焦于说明这个平台将变得更好，更简单，及更加的高性能，因此指南将更多的关注平台未来的选择。
 
-Similarly, gaps in the platform highlighted by the guide can often be plugged by **community packages**; we hope that if you see an opportunity to improve the Meteor workflow by writing a package, that you take it! If you're not sure how best to design or architect your package, reach out on the forums and start a discussion.
+同样的，除了在指南中被重点提到的解决方案，经常需要社区的包来提供插件化支持；我们希望，你如果发现可以通过编写一个包来增强 Meteor 的工作流，那就去做吧！如果你不确定怎样更好的设计或组织你的包，可到社区里去获取帮助跟讨论。
