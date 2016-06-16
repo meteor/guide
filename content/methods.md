@@ -1,11 +1,11 @@
 ---
 title: "Method"
 order: 12
-description: 如何使用Method？ Meteor 通过使用Method将数据变化写入数据库
+description: 如何使用 Method ？ Meteor 通过使用 Method 将数据变化写入数据库
 discourseTopicId: 19662
 ---
 
-读完全文，你应该能够了解：
+读完全文，你将能够：
 
 1. Meteor 中 Method 指什么，以及如何使用 Method 。
 2. Method 的定义及调用实践。
@@ -14,24 +14,23 @@ discourseTopicId: 19662
 
 <h2 id="what-is-a-method">什么是 Method ？</h2>
 
-Method 是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP，你可以想象把request POST 到服务器，以一种界面友好，符合现代web app设计的形式。 在文章的最后，我们会谈到使用Method在哪些方面优于使用HTTP端点。
+Method 是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP，你可以想象把 request POST 到服务器，以一种界面友好，符合现代 web app 设计的形式。 在文章的最后，我们会谈到使用 Method 在哪些方面优于使用HTTP端点。
 
-Method 的核心是作为服务器的API端点，你可以在服务器定义一个Method，然后在客户端定义它的副本，然后调用Method，将数据写入数据库，并获得return value。
-At its core, a Method is an API endpoint for your server; you can define a Method on the server and its counterpart on the client, then call it with some data, write to the database, and get the return value in a callback. Meteor Methods are also tightly integrated with the pub/sub and data loading systems of Meteor to allow for [Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - the ability to simulate server-side actions on the client to make your app feel faster than it actually is.
+Method 的核心是作为服务器的API端点，你可以在服务器定义一个 Method，然后在客户端定义它的副本，然后调用 Method，将数据写入数据库，并获得 return value。Meteor Methods 紧密集成 Meteor 的发布/订阅和数据装载系统，实现 Optimistic UI [Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - 在客户端模拟服务器端操作的能力，让你的 app 运行得更快。
 
 我们在谈到Meteor Method时会用大些字母M， 是为了区别javascript中的methods。
 
 <h2 id="defining-and-calling">调用 Methods 的定义</h2>
 
-<h3 id="basic">Basic Method</h3>
+<h3 id="basic">基础 Method</h3>
 
-In a basic app, defining a Meteor Method is as simple as defining a function. In a complex app, you want a few extra features to make Methods more powerful and easily testable. First, we're going to go over how to define a Method using the Meteor core API, and in a later section we'll go over how to use a helpful wrapper package we've created to enable a more powerful Method workflow.
+在一个简单的 app，定义一个 Method 是跟定义一个函数一样简单的事。在一个负责的 app ，你会需要一些额外的功能，使得 Method 更加 powerful，更加容易测试。首先，我们讲一下如何使用 Meteor 核心 API 定义 Method，在后面的章节我们会讲到如何使用自己创建的 wrapper 包建立更好的 Method 工作流。
 
 <h4 id="basic-defining">定义</h4>
 
-Here's how you can use the built-in [`Meteor.methods` API](http://docs.meteor.com/#/full/meteor_methods) to define a Method. Note that Methods should always be defined in common code loaded on the client and the server to enable Optimistic UI. If you have some secret code in your Method, consult the [Security article](security.html#secret-code) for how to hide it from the client.
+这里提供如何使用内建的[`Meteor.methods`API]（http://docs.meteor.com/#/full/meteor_methods）来定义 Method 。注意，Method 的定义应该是装载在客户端和服务器端来优化 UI 的通用代码。如果您的 Method 有一定的密码，请咨询如何从客户端隐藏[Security article](security.html#secret-code)。
 
-This example uses the `aldeed:simple-schema` package, which is recommended in several other articles, to validate the Method arguments.
+下面这个案例添加了包： `aldeed:simple-schema` ，这个包在很多文章都有提到，是用来验证 Method 参数的。
 
 ```js
 Meteor.methods({
@@ -57,9 +56,9 @@ Meteor.methods({
 
 <h4 id="basic-calling">调用</h4>
 
-This Method is callable from the client and server using [`Meteor.call`](http://docs.meteor.com/#/full/meteor_call). Note that you should only use a Method in the case where some code needs to be callable from the client; if you just want to modularize code that is only going to be called from the server, use a regular JavaScript function, not a Method.
+从客户端和服务器中使用[`Meteor.call`]（http://docs.meteor.com/#/full/meteor_call）可以调用 Method 。请注意，您应该只在一些代码需要从客户端调用的情况下使用 Method ;如果你只是想在服务器端实现代码模块化，应该使用常规的JavaScript函数，而不是 Method 。
 
-Here's how you can call this Method from the client:
+我们如何从客户端调用 Method:
 
 ```js
 Meteor.call('todos.updateText', {
@@ -74,11 +73,11 @@ Meteor.call('todos.updateText', {
 });
 ```
 
-If the Method throws an error, you get that in the first argument of the callback. If the Method succeeds, you get the result in the second argument and the first argument `err` will be `undefined`. For more information about errors, see the section below about error handling.
+如果 Method 抛出一个错误，你会得到 callback 的第一个参数。如果没有抛出错误，第二个参数会返回结果，第一个参数 "err" 会被设置为 "undefined"。有关错误的详细信息，请参阅以下有关错误处理的部分。
 
 <h3 id="advanced-boilerplate">高级 Method boilerplate</h3>
 
-Meteor Methods have several features which aren't immediately obvious, but every complex app will need them at some point. These features were added incrementally over several years in a backwards-compatible fashion, so unlocking the full capabilities of Methods requires a good amount of boilerplate. In this article we will first show you all of the code you need to write for each feature, then the next section will talk about a Method wrapper package we have developed to make it easier.
+Meteor Method 有几个特点并非立竿见影，但是每一个复杂的应用程序都会或多或少使用到 Method 。这些功能是以向后兼容的方式逐年递增的，所以解锁 Method 的全部功能，需要大量的 boilerplate 。在这篇文章中，我们首先会告诉你所有的代码，你需要写每一个功能，那么下一节我们将谈论 Method wrapper package，使得 Method 的使用更加方便。
 
 一个好的 Method 应该具备以下功能：
 
@@ -168,12 +167,11 @@ updateText.run.call({ userId: 'abcd' }, {
   newText: 'This is a todo item.'
 });
 ```
+正如你所看到的，这种 Method 调用方式可以有一个更好的开发流程 - 你可以更容易地分开处理的 Method 的不同部位，更容易测试你的代码，而不必深挖 Meteor 内部工作原理。但这种 Method 调用方式需要你在定义 Method 的时候写了很多 boilerplate 。
 
-As you can see, this approach to calling Methods results in a better development workflow - you can more easily deal with the different parts of the Method separately and test your code more easily without having to deal with Meteor internals. But this approach requires you to write a lot of boilerplate on the Method definition side.
+<h3 id="validated-method">高级 Methods 使用包 mdg:validated-method</h3>
 
-<h3 id="validated-method">Advanced Methods with mdg:validated-method</h3>
-
-To alleviate some of the boilerplate that's involved in correct Method definitions, we've published a wrapper package called `mdg:validated-method` that does most of this for you. Here's the same Method as above, but defined with the package:
+为了帮助你在在定义 Method 的时候写正确的 boilerplate，我们已经发布了一个包：`mdg:validated-method`，可以帮你省下很多工作量。下面是与上述相同的 Method ，在包中定义：
 
 ```js
 export const updateText = new ValidatedMethod({
