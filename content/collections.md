@@ -1,92 +1,88 @@
 ---
-title: Collections and Schemas
+title: 数据集与数据结构
 order: 10
-description: How to define, use, and maintain MongoDB collections in Meteor.
+description: 如何在 Meteor 中定义、使用和维护 MongoDB 数据集。
 discourseTopicId: 19660
 ---
 
-After reading this guide, you'll know:
+通过阅读本章，你可以了解到：
+1. 在 Meteor 中不同类型的 MongoDB 数据集及如何使用它们。
+2. 如何为某个数据集定义数据结构以控制它的内容。
+3. 当定义你的数据结构时，应该考虑什么。
+4. 当对一个集合进行写入时，如何确保写入数据符合它的数据结构。
+5. 如何小心地改变你的数据结构。
+6. 如何应对数据记录的间的关联。
 
-1. The different types of MongoDB collections in Meteor, and how to use them.
-2. How to define a schema for a collection to control its content.
-3. What to consider when defining your collection's schema.
-4. How to enforce the schema when writing to a collection.
-5. How to carefully change the schema of your collection.
-6. How to deal with associations between records.
+<h2 id="mongo-collections">Meteor 中的 MongoDB 数据集</h2>
 
-<h2 id="mongo-collections">MongoDB collections in Meteor</h2>
+本质上讲，一个 web 应用为它的用户提供一个观察和修改一组持久化数据的能力。无论是管理你的待办事项，还是为你所挑选的车下订单，你都是在和一个固定但又持续变化的数据层在打交道。
 
-At its core, a web application offers its users a view into, and a way to modify, a persistent set of data. Whether managing a list of todos, or ordering a car to pick you up, you are interacting with a permanent but constantly changing data layer.
+在 Meteor 中，这个数据层通常会存储在 MongoDB 中。在 MongoDB 中一组相关联的数据被称作「数据集」。在 Meteor 中，你通过[数据集](http://docs.meteor.com/#/full/mongo_collection)来存取 MongoDB 中的数据，这是应用的主要持久化机制。
 
-In Meteor, that data layer is typically stored in MongoDB. A set of related data in MongoDB is referred to as a "collection". In Meteor you access MongoDB through [collections](http://docs.meteor.com/#/full/mongo_collection), making them the primary persistence mechanism for your app data.
+然而，数据集不仅仅是保存和获取数据的工具。它们也是交互的核心，与用户期待从最好的应用那里获得的那种用户体验相关。Meteor 让这种用户体验很容易就得到实现。
 
-However, collections are a lot more than a way to save and retrieve data. They also provide the core of the interactive, connected user experience that users expect from the best applications. Meteor makes this user experience easy to implement.
+在本文中，我们将深入观察数据集在 Meteor 框架的不同位置上是如何工作的，及如何弄明白其中的大多数。
 
-In this article, we'll look closely at how collections work in various places in the framework, and how to get the most out of them.
+<h3 id="server-collections">服务器端数据集</h3>
 
-<h3 id="server-collections">Server-side collections</h3>
-
-When you create a collection on the server:
-
-```js
-Todos = new Mongo.Collection('Todos');
-```
-
-You are creating a collection within MongoDB, and an interface to that collection to be used on the server. It's a fairly straightforward layer on top of the underlying Node MongoDB driver, but with a synchronous API:
-
-```js
-// This line won't complete until the insert is done
-Todos.insert({_id: 'my-todo'});
-// So this line will return something
-const todo = Todos.findOne({_id: 'my-todo'});
-// Look ma, no callbacks!
-console.log(todo);
-```
-
-<h3 id="client-collections">Client-side collections</h3>
-
-On the client, when you write the same line:
+当你在服务器端创建了一个数据集：
 
 ```js
 Todos = new Mongo.Collection('Todos');
 ```
 
-It does something totally different!
-
-On the client, there is no direct connection to the MongoDB database, and in fact a synchronous API to it is not possible (nor probably what you want). Instead, on the client, a collection is a client side *cache* of the database. This is achieved thanks to the [Minimongo](https://www.meteor.com/mini-databases) library---an in-memory, all JS, implementation of the MongoDB API. What this means is that on the client, when you write:
+实际上是在 MongoDB 中创建了一个数据集，和一个在服务端使用数据集的接口。这是一个相当明了的、构建在 Node MongoDB 驱动之上的层，只不过是同步 API：
 
 ```js
-// This line is changing an in-memory Minimongo data structure
+// 这行代码直到插入操作结束才会执行完成
 Todos.insert({_id: 'my-todo'});
-// And this line is querying it
+// 这一行会返回些数据
 const todo = Todos.findOne({_id: 'my-todo'});
-// So this happens right away!
+// 看，根本没有回调！
 console.log(todo);
 ```
 
-The way that you move data from the server (and MongoDB-backed) collection into the client (in-memory) collection is the subject of the [data loading article](data-loading.html). Generally speaking, you *subscribe* to a *publication*, which pushes data from the server to the client. Usually, you can assume that the client contains an up-to-date copy of some subset of the full MongoDB collection.
+<h3 id="client-collections">客户端数据集</h3>
 
-To write data back to the server, you use a *Method*, the subject of the [methods article](methods.html).
+在客户端上，用同一行代码创建一个数据集：
 
-<h3 id="local-collections">Local collections</h3>
+```js
+Todos = new Mongo.Collection('Todos');
+```
 
-There is a third way to use a collection in Meteor. On the client or server, if you create a collection but pass `null` instead of a name:
+做的却是完全不同的一套！
+
+在客户端，并没有到 MongoDB 数据库的直接连接，事实上，做同步 API 也是不可能的（或者说，可能不是你想要的）。其实在客户端，某个数据集是数据库在某个客户端的**缓存**。做到这样的效果要感谢 [Minimongo](https://www.meteor.com/mini-databases) 库——一种在内存中存储数据，全 JS 的 MongoDB API 实现。这意味着，在客户端你写这个：
+
+```js
+// 这行改变了内存中 Minimongo 数据结构
+Todos.insert({_id: 'my-todo'});
+// 这行进行数据查询
+const todo = Todos.findOne({_id: 'my-todo'});
+// 所以这里就立刻输出了！
+console.log(todo);
+```
+
+从服务器端数据集（由 MongoDB 所支撑的）装载数据到客户端数据集（客户端内存中）的方式是文章[数据装载](data-loading.html)的主题。通常而言，从某个 **publication** 来**订阅**，将会从服务器端推送数据到客户端。通常你只要假设客户端具有完整的服务器端 MongoDB 数据集的最新片段。
+
+向服务器写回数据，一般你会使用一个 **Meteor 方法**。这也就是[方法](methods.html)这一章的主题。
+
+<h3 id="local-collections">本地数据集</h3>
+
+这里有第三种方式来使用 Meteor 中的数据集。你可以客户端或者服务端使用 `null` 作为参数创建一个数据集：
 
 ```js
 SelectedTodos = new Mongo.Collection(null);
 ```
 
-This creates a *local collection*. This is a Minimongo collection that has no database connection (ordinarily a named collection would either be directly connected to the database on the server, or via a subscription on the client).
+此时实际上是创建了一个**本地数据集**。这是一个没有数据库连接的数据集（通常一个数据集要么是直接连接到数据库服务器上，要么通过客户端订阅）。
+本地数据集是一种便利的在内存中使用 Minimongo 库的全部功能的方法。举个例子，如果你需要针对你的数据执行复杂的查询，你可以使用本地数据集来替代一个简单的数组。又或者你会想利用它的反应性在客户端驱动一些 UI ，不过这在 Meteor 中不是事儿。
 
-A local collection is a convenient way to use the full power of the Minimongo library for in-memory storage. For instance, you might use it instead of a simple array if you need to execute complex queries over your data. Or you may want to take advantage of its *reactivity* on the client to drive some UI in a way that feels natural in Meteor.
+<h2 id="schemas">定义一个数据结构</h2>
 
-<h2 id="schemas">Defining a schema</h2>
-
-Although MongoDB is a schema-less database, which allows maximum flexibility in data structuring, it is generally good practice to use a schema to constrain the contents of your collection to conform to a known format. If you don't, then you tend to end up needing to write defensive code to check and confirm the structure of your data as it *comes out* of the database, instead of when it *goes into* the database. As in most things, you tend to *read data more often than you write it*, and so it's usually easier, and less buggy to use a schema when writing.
-
-In Meteor, the pre-eminent schema package is [aldeed:simple-schema](http://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents.
-
-To write a schema using `simple-schema`, you can simply create a new instance of the `SimpleSchema` class:
+虽然 MongoDB 是一种无结构的数据库，赋予数据结构最大限度的灵活性，但是最好使用一个数据结构来约束集合中的内容，使其符合已知的格式。如果你不这么做的话，那么最终你需要去编写防卫性的代码来检查并确认你的数据结构，并且，你同样需要在数据从数据库*读出来的时候*确定结构以防止使用时出现问题，而不仅仅是在数据*写入*数据库的时候。大多数情况下，你会发现*读取较写入更为频繁*，所以使用数据结构写入数据通常会更简单，也很少会产生 bug。
+在 Meteor 中，aldeed:simple-schema 是一款杰出的数据结构包。它提供富有表现力且基于 MongoDB 的数据结构，用于插入和更新文档。
+使用 simple-schema 来编写一个数据结构，你可以轻松的创建一个基于 SimpleSchema 类的新实例：
 
 ```js
 Lists.schema = new SimpleSchema({
@@ -96,21 +92,21 @@ Lists.schema = new SimpleSchema({
 });
 ```
 
-This example from the Todos app defines a schema with a few simple rules:
+这个 Todos 示例应用中的例子用一些简单的规则定义了一个数据结构：
 
-2. We specify that the `name` field of a list is required and must be a string.
-3. We specify the `incompleteCount` is a number, which on insertion is set to `0` if not otherwise specified.
-4. We specify that the `userId`, which is optional, must be a string that looks like the ID of a user document.
+1. 我们指定列表中的 `name` 字段是必选项，必须是一个字符串。
+2. 我们指定 `incompleteCount` 是一个数字类型，在没有指定的情况下插入时设置为 `0`。
+3. 我们指定 `userId` 是可选项，必须是一个字符串，并且看起来像用户文档中的 ID。
 
-We attach the schema to the namespace of `Lists` directly, which allows us to check objects against this schema directly whenever we want, such as in a form or [Method](methods.html). In the [next section](#schemas-on-write) we'll see how to use this schema automatically when writing to the collection.
+我们直接在 `Lists` 命名空间上附加数据结构，允许我们随时依靠数据结构来检查对象，比如在一个表单或者 Method 中。在下一章节中，我们将了解到，当向集合中写入数据时如何自动化地使用这个数据结构。
 
-You can see that with relatively little code we've managed to restrict the format of a list significantly. You can read more about more complex things that can be done with schemas in the [Simple Schema docs](http://atmospherejs.com/aldeed/simple-schema).
+你能看到我们用相对少的代码明显地限制了列表的格式。你可以在 [Simple Schema 文档](http://atmospherejs.com/aldeed/simple-schema)中阅读更多详尽内容。
 
-<h3 id="validating-schemas">Validating against a schema</h3>
+<h3 id="validating-schemas">用数据结构来验证数据</h3>
 
-Now we have a schema, how do we use it?
+现在我们有了个数据结构，怎么用呢？
 
-It's pretty straightforward to validate a document with a schema. We can write:
+用它验证一个文档很简单，只要这样做：
 
 ```js
 const list = {
@@ -121,7 +117,7 @@ const list = {
 Lists.schema.validate(list);
 ```
 
-In this case, as the list is valid according to the schema, the `validate()` line will run without problems. If however, we wrote:
+在这个案例中，这个列表符合数据结构的定义， `validate()` 将能正常运行。但是如果：
 
 ```js
 const list = {
@@ -133,19 +129,17 @@ const list = {
 Lists.schema.validate(list);
 ```
 
-Then the `validate()` call will throw a `ValidationError` which contains details about what is wrong with the `list` document.
+`validate()` 则会甩出一个 `ValidationError`，它包含了 `list` 对象的错误原因。
 
-<h3 id="validation-error">The `ValidationError`</h3>
+<h3 id="validation-error">`ValidationError`</h3>
 
-What is a [`ValidationError`](https://github.com/meteor/validation-error/)? It's a special error that is used in Meteor to indicate a user-input based error in modifying a collection. Typically, the details on a `ValidationError` are used to mark up a form with information about what inputs don't match the schema. In the [methods article](methods.html#validation-error), we'll see more about how this works.
+什么是一个 [`ValidationError`](https://github.com/meteor/validation-error/)？它是一种在 Meteor 中，在修改数据集时指出用户输入的错误。通常，一个 `ValidationError` 的细节被用来标识那些不符合数据结构定义的输入。我们将在 [methods 章节](methods.html#validation-error)中了解更多关于 `ValidationError` 如何工作的细节。
 
-<h2 id="schema-design">Designing your data schema</h2>
+<h2 id="schema-design">设计你的数据结构</h2>
 
-Now that you are familiar with the basic API of Simple Schema, it's worth considering a few of the constraints of the Meteor data system that can influence the design of your data schema. Although generally speaking you can build a Meteor data schema much like any MongoDB data schema, there are some important details to keep in mind.
-
-The most important consideration is related to the way DDP, Meteor's data loading protocol, communicates documents over the wire. The key thing to realize is that DDP sends changes to documents at the level of top-level document *fields*. What this means is that if you have large and complex subfields on document that change often, DDP can send unnecessary changes over the wire.
-
-For instance, in "pure" MongoDB you might design the schema so that each list document had a field called `todos` which was an array of todo items:
+现在你已经熟悉了 Simple Schema 的基本 API，应当去考虑一些影响你设计数据结构的、关于 Meteor 系统设计方面的约束。尽管通常讲你可以建立一个与任何 MongoDB 数据结构类似的 Meteor 数据图式，但仍有一些重要的细节需要记得。
+首当其冲的是如何使用 DDP，它是 Meteor 的数据装载协议，通过网络传输文档。要记住的关键是，当在文档发生变更时，DDP 发送顶层的字段变动。这意味着如果你的文档中有大量复杂的子字段频繁的变更，DDP 会发送很多不必要的变更数据。
+例如，在「纯」MongoDB 中你需要设计视图以便每个待办列表的文档都拥有一个叫 `todos` 的字段，包含待办项目的数组：
 
 ```js
 Lists.schema = new SimpleSchema({
@@ -154,7 +148,7 @@ Lists.schema = new SimpleSchema({
 });
 ```
 
-The issue with this schema is that due to the DDP behavior just mentioned, each change to *any* todo item in a list will require sending the *entire* set of todos for that list over the network. This is because DDP has no concept of "change the `text` field of the 3rd item in the field called `todos`", simply "change the field called `todos` to a totally new array".
+这个架构的问题在于，由于刚提到过的 DDP 行为，每次对于某个列表中*任意*的待办项的变化，DDP 就会通过网络发送该列表中*整组*待办项目。这是因为 DDP 对于在 `todos` 数组第三项中的 text 字段的「变化」没有任何的概念，因此它简单地认为 `todos` 字段变成了全新的数组。
 
 <h3 id="denormalization">Denormalization and multiple collections</h3>
 
