@@ -4,17 +4,17 @@ order: 0
 description: Ésta es la guía para usar Meteor, una plataforma full-stack de JavaScript para desarrollar aplicaciones web y móviles modernas. Meteor incluye un conjunto clave de tecnologías para construir aplicaciones reactivas, una herramienta de construcción, y un conjunto seleccionado de paquetes de Node.js y la comunidad general de JavaScript.
 ---
 
-<h2 id="what-is-meteor">What is Meteor?</h2>
+<h2 id="what-is-meteor">¿Qué es Meteor?</h2>
 
-Meteor is a full-stack JavaScript platform for developing modern web and mobile applications. Meteor includes a key set of technologies for building connected-client reactive applications, a build tool, and a curated set of packages from the Node.js and general JavaScript community.
+Meteor es una plataforma full-stack de JavaScript para desarrollar aplicaciones web y móviles modernas. Meteor incluye un conjunto clave de tecnologías para construir aplicaciones reactivas, una herramienta de construcción, y un conjunto seleccionado de paquetes de Node.js y la comunidad JavaScript general.
 
-- Meteor allows you to develop in **one language**, JavaScript, in all environments: application server, web browser, and mobile device.
+- Meteor te permite desarrollar en **un solo lenguaje**, JavaScript, en todos los entornos: aplicación de servidor, navegador web, y dispositivos móviles.
 
-- Meteor uses **data on the wire**, meaning the server sends data, not HTML, and the client renders it.
+- Meteor utiliza **data on the wire**, que quiere decir que el servidor envía datos, no HTML, y el cliente lo renderiza.
 
-- Meteor **embraces the ecosystem**, bringing the best parts of the extremely active JavaScript community to you in a careful and considered way.
+- Meteor **acepta al ecosistema**, entregándote las mejores partes de la comunidad extremadamente activa de JavaScript de una forma cuidadosa y considerada.
 
-- Meteor provides **full stack reactivity**, allowing your UI to seamlessly reflect the true state of the world with minimal development effort.
+- Meteor provee **reactividad full stack**, permitiendo a la interfáz gráfica reflejar sin problemas el verdadero estado del mundo con mínimo esfuerzo de desarrollo.
 
 <h2 id="what-is-it">What is the Meteor Guide?</h2>
 
