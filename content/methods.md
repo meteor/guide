@@ -14,9 +14,9 @@ discourseTopicId: 19662
 
 <h2 id="what-is-a-method">什么是 Method？</h2>
 
-Method 是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP，你可以想象把 request POST 到服务器，以一种界面友好，符合现代 web 应用设计的形式。 在文章的最后，我们会谈到使用 Method 在哪些方面优于使用HTTP端点。
+Method 是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP，你可以把它想象为 POST 请求到服务器，但是它是在一种针对现代 web 应用设计的形式中。 在文章的最后，我们会谈到使用 Method 在哪些方面优于使用 HTTP 端点。
 
-Method 的核心是作为服务器的API端点，你可以在服务器定义一个 Method，然后在客户端定义它的副本，然后调用 Method，将数据写入数据库，并获得 返回值。Meteor Methods 紧密集成 Meteor 的发布/订阅和数据装载系统，实现 Optimistic UI [Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - 在客户端模拟服务器端操作的能力，让你的应用运行得更快。
+Method 的核心是作为服务器的 API 端点，你可以在服务器定义一个 Method，然后在客户端定义它的副本，然后调用 Method，将数据写入数据库，并获得 返回值。Meteor Methods 紧密集成 Meteor 的发布/订阅和数据装载系统，实现 Optimistic UI (http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - 在客户端模拟服务器端操作的能力，让你的应用运行得更快。
 
 我们在谈到 Meteor Method 时会用大些字母 M， 是为了区别 JavaScript 中的 methods。
 
@@ -24,11 +24,11 @@ Method 的核心是作为服务器的API端点，你可以在服务器定义一�
 
 <h3 id="basic">基础 Method</h3>
 
-在一个简单的应用，定义一个 Method 是跟定义一个函数一样简单的事。在一个复杂的应用，你会需要一些额外的功能，使得 Method 更加 powerful，更加容易测试。首先，我们讲一下如何使用 Meteor 核心 API 定义 Method，在后面的章节我们会讲到如何使用自己创建的 wrapper 包建立更好的 Method 工作流。
+在一个简单的应用，定义一个 Method 是跟定义一个函数一样简单的事。在一个复杂的应用，你会需要一些额外的功能，使得 Method 更强大，更加容易测试。首先，我们讲一下如何使用 Meteor 核心 API 定义 Method，在后面的章节我们会讲到如何使用自己创建的封装包建立更好的 Method 工作流。
 
 <h4 id="basic-defining">定义</h4>
 
-这里提供如何使用内建的[`Meteor.methods`API]（http://docs.meteor.com/#/full/meteor_methods）来定义 Method。注意，Method 的定义应该是装载在客户端和服务器端来优化 UI 的通用代码。如果您的 Method 有一定的密码，请参考如何从客户端隐藏密码 [Security article](security.html#secret-code)。
+这里提供如何使用内建的[`Meteor.methods`API] (http://docs.meteor.com/#/full/meteor_methods) 来定义 Method。注意，Method 的定义应该是装载在客户端和服务器端来优化 UI 的通用代码。如果您的 Method 有秘密的程序代码，请参考[安全相关章节](security.html#secret-code)来了解如何从客户端隐藏秘密的程序代码。
 
 下面这个案例添加了包： `aldeed:simple-schema`，这个包在很多文章都有提到，是用来验证 Method 参数的。
 
@@ -56,7 +56,7 @@ Meteor.methods({
 
 <h4 id="basic-calling">调用</h4>
 
-从客户端和服务器中使用[`Meteor.call`]（http://docs.meteor.com/#/full/meteor_call）可以调用 Method。请注意，您应该只在一些代码需要从客户端调用的情况下使用 Method; 如果你只是想在服务器端实现代码模块化，应该使用常规的 JavaScript 函数，而不是 Method。
+从客户端和服务器中使用[`Meteor.call`] (http://docs.meteor.com/#/full/meteor_call) 可以调用 Method。请注意，您应该只在一些代码需要从客户端调用的情况下使用 Method; 如果你只是想在服务器端实现代码模块化，应该使用常规的 JavaScript 函数，而不是 Method。
 
 我们如何从客户端调用 Method:
 
@@ -73,20 +73,20 @@ Meteor.call('todos.updateText', {
 });
 ```
 
-如果 Method 抛出一个错误，你会得到回调的第一个参数。如果没有抛出错误，第二个参数会返回结果，第一个参数 "err" 会被设置为 "undefined"。有关错误的详细信息，请参阅以下有关错误处理的部分。
+如果 Method 抛出一个错误，你会得到回调的第一个参数。如果没有抛出错误，第二个参数会返回结果，第一个参数 `err` 会被设置为 `undefined`。有关错误的详细信息，请参阅以下有关错误处理的部分。
 
 <h3 id="advanced-boilerplate">高级 Method boilerplate</h3>
 
-Meteor Method 有几个特点并非立竿见影，但是每一个复杂的应用程序都会或多或少使用到 Method。这些功能是以向后兼容的方式逐年递增的，所以解锁 Method 的全部功能，需要大量的 boilerplate。在这篇文章中，我们首先会告诉你所有的代码，你需要写每一个功能，那么下一节我们将谈论 Method wrapper package，使得 Method 的使用更加方便。
+Meteor Method 有几个特点并非立竿见影，但是每一个复杂的应用程序都会或多或少使用到 Method。这些功能是以向后兼容的方式逐年递增的，所以解锁 Method 的全部功能，需要大量的 boilerplate。在这篇文章中，我们首先会告诉你所有的代码，你需要写每一个功能，那么下一节我们将谈论 Method 封装包，使得 Method 的使用更加方便。
 
 一个好的 Method 应该具备以下功能：
 
-1. Method 本身应该能够运行验证代码。
-2. 较容易重写 Method 用于测试。
-3. 较容易通过 custom user ID 调用方法，特别是在测试的时候(推荐文章 [Discover Meteor two-tiered methods pattern](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/))。
+1. 在运行 Method 本体前能自身验证数据
+2. 较容易覆盖 Method 用于测试。
+3. 较容易通过自定义的用户 ID 调用方法，特别是在测试的时候（推荐文章 [Discover Meteor two-tiered methods pattern](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/)）。
 4. 通过 JS 函数模块调用方法，而非通过字符串。
-5. 通过 Method 模拟返回值来获得所插入文件的 ID.
-6. 如果服务器端验证失败也避免调用服务器端的 Method, 不至于占用服务器资源。
+5. 通过 Method 模拟返回值来获得所插入文档的 ID.
+6. 如果客户端验证失败也避免调用服务器端的 Method, 不至于占用服务器资源。
 
 <h4 id="advanced-boilerplate-defining">定义</h4>
 
@@ -94,7 +94,7 @@ Meteor Method 有几个特点并非立竿见影，但是每一个复杂的应用
 export default updateText = {
   name: 'todos.updateText',
 
-  // Factor out validation so that it can be run independently (1)
+  // 将有效性分离，这样可以独立运行（1）
   validate(args) {
     new SimpleSchema({
       todoId: { type: String },
@@ -102,7 +102,7 @@ export default updateText = {
     }).validate(args)
   },
 
-  // Factor out Method body so that it can be called independently (3)
+  // 将方法本体分离，这样可以单独调用（3）
   run({ todoId, newText }) {
     const todo = Todos.findOne(todoId);
 
@@ -116,10 +116,8 @@ export default updateText = {
     });
   },
 
-  // Call Method by referencing the JS object (4)
-  // Also, this lets us specify Meteor.apply options once in
-  // the Method implementation, rather than requiring the caller
-  // to specify it at the call site.
+  // 通过引用 JS 对象来调用方法（4）
+  // 我们可以在实现 Method 的时候指定 Meteor.apply 选项，而不是要求调用者指定。
   call(args, callback) {
     const options = {
       returnStubValue: true,     // (5)
@@ -130,7 +128,7 @@ export default updateText = {
   }
 };
 
-// Actually register the method with Meteor's DDP system
+// 实际上通过 Meteor 的 DDP 系统注册 Method
 Meteor.methods({
   [updateText.name]: function (args) {
     updateText.validate.call(this, args);
@@ -139,14 +137,14 @@ Meteor.methods({
 })
 ```
 
-<h4 id="advanced-boilerplate-calling">Calling</h4>
+<h4 id="advanced-boilerplate-calling">调用</h4>
 
-Now calling the Method is as simple as calling a JavaScript function:
+现在调用 Method 就跟调用一个 JavaScript 函数一样简单了：
 
 ```js
 import { updateText } from './path/to/methods.js';
 
-// Call the Method
+// 首先调用 Method
 updateText.call({
   todoId: '12345',
   newText: 'This is a todo item.'
@@ -154,14 +152,14 @@ updateText.call({
   if (err) {
     alert(err);
   } else {
-    // success!
+    // 成功！
   }
 });
 
-// Call the validation only
+// 调用有效性
 updateText.validate({ wrong: 'args'});
 
-// Call the Method with custom userId in a test
+// 在测试中通过自定义的客户 ID 调用方法
 updateText.run.call({ userId: 'abcd' }, {
   todoId: '12345',
   newText: 'This is a todo item.'
@@ -194,22 +192,22 @@ export const updateText = new ValidatedMethod({
   }
 });
 ```
-在这里 Method 的调用跟前面的一样，但在这里 Method 的定义是非常简单的。我们相信，这种定义方法可以让你清楚地看到定义 Method 的重点，通过Method 的名称，预期参数的格式，以及 JavaScript 命名空间可以调用该方法。
+在这里 Method 的调用跟前面的一样，但在这里 Method 的定义是非常简单的。我们相信，这种定义方法可以让你清楚地看到定义 Method 的重点，通过 Method 的名称，预期参数的格式，以及 JavaScript 命名空间可以调用该方法。
 
 <h2 id="errors">错误处理</h2>
 
-常规的 JavaScript 函数，我们以抛出`Error`对象的形式来发现错误。Meteor Method 也是以这种形式抛出错误，但也会出现复杂的情形，比如`Error`对象会 websocket 被送回到客户端。 引发错误工作几乎相同的方式，但复杂的位是由以下事实：在某些情况下，误差的对象将超过的WebSocket发送回客户端引入。
-In regular JavaScript functions, you indicate errors by throwing an `Error` object. Throwing errors from Meteor Methods works almost the same way, but a bit of complexity is introduced by the fact that in some cases the error object will be sent over a websocket back to the client.
+常规的 JavaScript 函数，我们以抛出`Error`对象的形式来发现错误。Meteor Method 也是以这种形式抛出错误，但也会出现复杂的情形，比如`Error`对象会 websocket 被送回到客户端。 引发错误工作几乎相同的方式，但复杂的位是由以下事实：在某些情况下，误差的对象将超过的 WebSocket 发送回客户端引入。
 
 <h3 id="throwing-errors">从 Method 抛出错误</h3>
 
-Meteor introduces two new types of JavaScript errors: [`Meteor.Error`](http://docs.meteor.com/#/full/meteor_error) and [`ValidationError`](https://atmospherejs.com/mdg/validation-error). These and the regular JavaScript `Error` type should be used in different situations:
+Meteor 介绍了两种 JavaScript 错误：[`Meteor.Error`](http://docs.meteor.com/#/full/meteor_error) 以及 [`ValidationError`](https://atmospherejs.com/mdg/validation-error). 这两种错误应该和常见的 JavaScript 错误区分开来。
 
-<h4 id="internal-server-errors">Regular `Error` for internal server errors</h4>
+<h4 id="internal-server-errors">内部服务器错误引发的常见错误</h4>
 
+当服务器内部有错误，不需要报告给客户端时，抛出一个常规的 JavaScript 错误对象。客户端将会接收到一个没有细节的完全不透明的内部服务器错误报告。
 When you have an error that doesn't need to be reported to the client, but is internal to the server, throw a regular JavaScript error object. This will be reported to the client as a totally opaque internal server error with no details.
 
-<h4 id="meteor-error">Meteor.Error for general runtime errors</h4>
+<h4 id="meteor-error">一般运行时错误下的 Meteor 错误</h4>
 
 When the server was not able to complete the user's desired action because of a known condition, you should throw a descriptive `Meteor.Error` object to the client. In the Todos example app, we use these to report situations where the current user is not authorized to complete a certain action, or where the action is not allowed within the app - for example, deleting the last public list.
 
