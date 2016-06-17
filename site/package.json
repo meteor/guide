@@ -19,5 +19,14 @@
     "hexo-renderer-marked": "^0.2.4",
     "hexo-renderer-stylus": "^0.3.0",
     "hexo-server": "^0.1.2"
+<<<<<<< HEAD
+=======
+  },
+  "scripts": {
+    "deploy": "hexo-s3-deploy"
+  },
+  "devDependencies": {
+    "hexo-s3-deploy": "^1.1.1"
+>>>>>>> a01962bd50a96c5f0d2973d8fe7a4bff3858d7cf
   }
 }

@@ -4,7 +4,16 @@
 
 [阅读指南](http://guide-zh.ourmeteor.com/)
 
+## 注意
+
+本 repo 将很快合并至 `meteor/guide` 中成为一个 branch，在合并完成之前，本 repo 继续有效，在线翻阅也会继续可用，也欢迎继续提交翻译。
+
+有关合并进程，请参见[这里](https://github.com/meteor/guide/pull/480)。
+
+
 ## 如何贡献翻译
+
+首先查看[这里](https://github.com/ourmeteor/guide-zh/wiki/%E7%BF%BB%E8%AF%91%E5%AE%89%E6%8E%92)以了解翻译情况。
 
 请在 Issues 认领翻译段落，以防止同时翻译。
 

@@ -243,7 +243,7 @@ export default ListContainer = createContainer(({ params }) => {
 
 <h3 id="preventing-rerenders">防止重新渲染</h3>
 
-有时候，一些数据变化会导致数据的重新运算，但是你很清楚这些变化不会影响到你的UI。虽然通常来说，React 在防止无用的重新渲染方面足够有效，但如果你确实需要控制重新渲染，上述模式让你可以很容易地在 presentational 组件上使用 React 的 [`shouldComponentUpdate`](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) 函数来避免重新渲染。
+有时候，一些数据变化会导致数据的重新运算，但是你很清楚这些变化不会影响到你的UI。虽然通常来说，React 在防止无用的重新渲染方面做得足够有效，但如果你确实需要进行更精确的控制，上述模式让你可以很容易地在表现型组件上使用 React 的 [`shouldComponentUpdate`](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) 函数来避免重新渲染。
 
 <h2 id="routing">路由</h2>
 

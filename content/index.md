@@ -65,7 +65,7 @@ meteor
 
 6. [Awesome Meteor](https://github.com/Urigo/awesome-meteor) 是一个社区维护的[包](https://github.com/Urigo/awesome-meteor#getting-started)与[资源](https://github.com/Urigo/awesome-meteor#resources)的列表。
 
-<h2 id="what-is-it">What is the Meteor Guide?</h2>
+<h2 id="what-is-it">什么是 Meteor 指南？</h2>
 
 This is a set of articles outlining opinions on best-practice application development using the [Meteor](https://meteor.com) platform. Our aim is to cover patterns that are common to the development of all modern web and mobile applications, so many concepts documented here are not necessarily Meteor specific and could be applied to any application built with a focus on modern, interactive user interfaces.
 
@@ -73,21 +73,21 @@ Nothing in the Meteor guide is *required* to build a Meteor application---you ca
 
 The APIs of the Meteor platform are available at the [docs site](https://docs.meteor.com), and you can browse community packages on [atmosphere](https://atmospherejs.com).
 
-<h3 id="audience">Target audience</h3>
+<h3 id="audience">目标受众</h3>
 
 The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
-<h3 id="example-app">Example app</h3>
+<h3 id="example-app">示例应用</h3>
 
 Many articles reference the Todos example application. This code is being actively developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
 
-<h2 id="guide-concepts">Guide development</h2>
+<h2 id="guide-concepts">指南发展</h2>
 
-<h3 id="contributing">Contributing</h3>
+<h3 id="contributing">贡献</h3>
 
 Ongoing Meteor Guide development takes place **in the open** [on GitHub](https://github.com/meteor/guide). We encourage pull requests and issues to discuss problems with and changes that could be made to the content. We hope that keeping our process open and honest will make it clear what we plan to include in the guide and what changes will be coming in future Meteor versions.
 
-<h3 id="goals">Goals of the project</h3>
+<h3 id="goals">项目目的</h3>
 
 The decisions made and practices outlined in the guide must necessarily be **opinionated**. Certain best practices will be highlighted and other valid approaches ignored. We aim to reach community consensus around major decisions but there will always be other ways to solve problems when developing your application. We believe it's important to know what the "standard" way to solve a problem is before branching out to other options. If an alternate approach proves itself superior, then it should make its way into a future version of the guide.
 

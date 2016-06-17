@@ -188,38 +188,38 @@ apm install linter-eslint
 
 <h4 id="eslint-webstorm">WebStorm</h4>
 
-WebStorm provides [these instructions for using ESLint](https://www.jetbrains.com/webstorm/help/eslint.html). After you install the ESLint Node packages and set up your `package.json`, just enable ESLint and click "Apply". You can configure how WebStorm should find your `.eslintrc` file, but on my machine it worked without any changes. It also automatically suggested switching to "JSX Harmony" syntax highlighting.
+WebStorm 提供了[这些关于使用 ESLint 的指引](https://www.jetbrains.com/webstorm/help/eslint.html)。 在你装好 ESLint Node 包并配置好 `package.json`之后，直接启用 ESLint 并点击「Apply」。你可以设置 WebStorm 寻找你 `.eslintrc` 文件的位置，但在笔者的机器上它直接正常工作了。它也会自动建议切换到「JSX Harmony」代码高亮方案。
 
-![Enable ESLint here.](images/webstorm-configuration.png)
+![在这里启用 ESLint。](images/webstorm-configuration.png)
 
-Linting can be activated on WebStorm on a project-by-project basis, or you can set ESLint as a default under Editor > Inspections, choosing the Default profile, checking "ESLint", and applying.
+代码格式检查在 WebStorm 中可以针对单个项目设定，或者你可以在 Editor > Inspections 中把它设为默认，只要选中 Default 配置方案，选中「ESLint」并应用。
 
 <h4 id="eslint-vscode">Visual Studio Code</h4>
 
-Using ESLint in VS Code requires installation of the 3rd party [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension.  In order to install the extension, follow these steps:
+在 VS Code 中使用 ESLint 需要安装一个第三方扩展 [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)。按照以下的步骤安装：
 
-1. Launch VS Code and open the quick open menu by typing `Ctrl+P`
-2. Paste `ext install vscode-eslint` in the command window and press `Enter`
-3. Restart VS Code
+1. 运行 VS Code 并按 `Ctrl+P` 来打开 Quick Open 菜单
+2. 在命令窗口输入 `ext install vscode-eslint` 并按回车
+3. 重启 VS Code
 
 
 <h2 id="meteor-features">Meteor 编码风格</h2>
 
-The section above talked about JavaScript code in general - you can easily apply it in any JavaScript application, not just with Meteor apps. However, there are some style questions that are Meteor-specific, in particular how to name and structure all of the different components of your app.
+上面几节的内容适合于一般的 JavaScript 代码——你可以在任何 JavaScript 应用中使用它们，不仅仅是 Meteor 应用。然而，有很多 Meteor 限定的风格问题，特别是在不同组件的命名和构造问题上。
 
 <h3 id="collections">数据集</h3>
 
-Collections should be named as a plural noun, in [PascalCase](https://en.wikipedia.org/wiki/PascalCase). The name of the collection in the database (the first argument to the collection constructor) should be the same as the name of the JavaScript symbol.
+数据集应该用一个复数形式的名词命名，使用 [帕斯卡命名方法](https://en.wikipedia.org/wiki/PascalCase)（即每个单词首字母大写）。数据库中数据集的名字（也就是数据集构造器 `Mongo.Collection` 的第一个参数）应该和变量名一样。
 
 ```js
-// Defining a collection
+// 定义一个数据集
 Lists = new Mongo.Collection('Lists');
 ```
 
-Fields in the database should be camelCased just like your JavaScript variable names.
+数据库字段名应该要采用驼峰法命名（camelCase），就像你的变量名那样。
 
 ```js
-// Inserting a document with camelCased field names
+// 插入一个文档，其中字段名使用驼峰命名。
 Widgets.insert({
   myFieldName: 'Hello, world!',
   otherFieldName: 'Goodbye.'
@@ -228,22 +228,22 @@ Widgets.insert({
 
 <h3 id="methods-and-publications">方法与 publications</h3>
 
-Method and publication names should be camelCased, and namespaced to the module they are in:
+方法和 publication 应该要用驼峰命名，并且放在它所在的模块的命名空间里（用 `.` 隔开）。
 
 ```js
-// in imports/api/todos/methods.js
+// 在 imports/api/todos/methods.js 中
 updateText = new ValidatedMethod({
   name: 'todos.updateText',
   // ...
 });
 ```
 
-Note that this code sample uses the [ValidatedMethod package recommended in the Methods article](methods.html#validated-method). If you aren't using that package, you can use the name as the property passed to `Meteor.methods`.
+注意一下，上面这个例子用了 [在「方法」一章里推荐的 ValidatedMethod](methods.html#validated-method)。如果你没在用这个包，你可以把这个名字当成一个属性名，包在一个对象里传给 `Meteor.methods`。
 
-Here's how this naming convention looks when applied to a publication:
+这种命名方法也适用于一个 publication：
 
 ```js
-// Naming a publication
+// 命名一个 publication
 Meteor.publish('lists.public', function listsPublic() {
   // ...
 });
@@ -251,37 +251,37 @@ Meteor.publish('lists.public', function listsPublic() {
 
 <h3 id="files-and-exports">文件、导出与包</h3>
 
-You should use the ES2015 `import` and `export` features to manage your code. This will let you better understand the dependencies between different parts of your code, and it will be easy to know where to look if you need to read the source code of a dependency.
+你应当使用 ES2015 `import` 及 `export` 特性来管理代码。这会让你明晰你各部分代码间的依赖关系，阅读代码时也会容易找到所依赖的代码。
 
-Each file in your app should represent one logical module. Avoid having catch-all utility modules that export a variety of unrelated functions and symbols. Often, this can mean that it's good to have one class, UI component, or collection per file, but there are cases where it is OK to make an exception, for example if you have a UI component with a small sub-component that isn't used outside of that file.
+你应用中每一个文件应该代表一个逻辑上的模块。避免搞一个无所不包的工具模块，因为它会导出一大坨之间毫无逻辑关联的函数和符号。通常情况下，这意味着一个文件中只包含一个类、一个 UI 组件或是一个数据集，但是也可以有例外，比如说你写了一个 UI 组件，里面有一大堆在这个文件外面都不用的小组件。
 
-When a file represents a single class or UI component, the file should be named the same as the thing it defines, with the same capitalization. So if you have a file that exports a class:
+当一个文件只包含一个类或一个 UI 组件的时候，它的文件名就该是它所定义的那个东西，包括大小写拼法。所以如果你有个导出一个类的文件：
 
 ```js
 export default class ClickCounter { ... }
 ```
 
-This class should be defined inside a file called `ClickCounter.js`. When you import it, it'll look like this:
+它就该叫 `ClickCounter.js`。这样当你导入它的时候，它就会长成这样：
 
 ```js
 import ClickCounter from './ClickCounter.js';
 ```
 
-Note that imports use relative paths, and include the file extension at the end of the file name.
+注意导入时使用了相对路径，在文件名后也包含了后缀。
 
-For [Atmosphere packages](using-packages.html), as the older pre-1.3 `api.export` syntax allowed more than one export per package, you'll tend to see non-default exports used for symbols. For instance:
+对于 [Atmosphere 包](using-packages.html)，鉴于 1.3 前的旧 API `api.export` 允许多重导出，所以它们没有默认的导出，需要采用解构赋值：
 
 ```js
-// You'll need to destructure here, as Meteor could export more symbols
+// 要在这里使用解构，因为 Meteor 可能导出多个符号
 import { Meteor } from 'meteor/meteor';
 
-// This will not work
+// 这样会挂
 import Meteor from 'meteor/meteor';
 ```
 
 <h3 id="templates-and-components">模板和组件</h3>
 
-Since Spacebars templates are always global, can't be imported and exported as modules, and need to have names that are completely unique across the whole app, we recommend naming your Blaze templates with the full path to the namespace, separated by underscores. Underscores are a great choice in this case because then you can easily type the name of the template as one symbol in JavaScript.
+由于 Spacebars 模板总是全局的，不能以模块的形式导入导出，并且在整个应用中需要有独一无二的名字，我们建议 Blaze 模板用到命名空间的完整路径来命名，用下划线隔开。下划线是个好选择，因为这样，你能轻松地像键入一个 JavaScript 符号那样键入一个模板名。
 
 ```html
 <template name="Lists_show">
@@ -289,7 +289,7 @@ Since Spacebars templates are always global, can't be imported and exported as m
 </template>
 ```
 
-If this template is a "smart" component that loads server data and accesses the router, append `_page` to the name:
+如果这个模板是个「智能」组件，从服务器加载数据并且和路由搭边，在它的名字后加 `_page`：
 
 ```html
 <template name="Lists_show_page">
@@ -297,15 +297,15 @@ If this template is a "smart" component that loads server data and accesses the 
 </template>
 ```
 
-Often when you are dealing with templates or UI components, you'll have several closely coupled files to manage. They could be two or more of HTML, CSS, and JavaScript files. In this case, we recommend putting these together in the same directory with the same name:
+一般如果你开发一个 UI 组件，你会同时得到几个文件，比如两个或以上的 HTML、CSS 和 JavaScript 文件。在这种情况下，我们建议把它们丢到同一个文件夹，取一样的名字：
 
 ```
-# The Lists_show template from the Todos example app has 3 files:
+# 来自 Todos 示范应用的 Lists_show 模板有三个文件：
 show.html
 show.js
 show.less
 ```
 
-The whole directory or path should indicate that these templates are related to the `Lists` module, so it's not necessary to reproduce that information in the file name. Read more about directory structure [above](structure.html#javascript-structure).
+整个目录或路径应该能反映这是和 `Lists` 模块相关的模板，所以在文件名中不必重复这些信息了。在[这里](structure.html#javascript-structure)你可以读到有关目录结构的内容。
 
-If you are writing your UI in React, you don't need to use the underscore-split names because you can import and export your components using the JavaScript module system.
+如果你在用 React 写 UI，大可不必用这种方式来命名，因为你能直接利用模块系统导入和导出。
