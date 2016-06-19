@@ -16,7 +16,7 @@ discourseTopicId: 19662
 
 Method 是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP，你可以把它想象为 POST 请求到服务器，但是它是在一种针对现代 web 应用设计的形式中。 在文章的最后，我们会谈到使用 Method 在哪些方面优于使用 HTTP 端点。
 
-Method 的核心是作为服务器的 API 端点，你可以在服务器定义一个 Method，然后在客户端定义它的副本，然后调用 Method，将数据写入数据库，并获得 返回值。Meteor Methods 紧密集成 Meteor 的发布/订阅和数据装载系统，实现 Optimistic UI (http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - 在客户端模拟服务器端操作的能力，让你的应用运行得更快。
+Method 的核心是作为服务器的 API 端点，你可以在服务器定义一个 Method，然后在客户端定义它的副本，然后调用 Method，将数据写入数据库，并获得 返回值。Meteor Methods 紧密集成 Meteor 的发布/订阅和数据装载系统，实现 UI 优化[Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) —— 在客户端模拟服务器端操作的能力，让你的应用运行得更快。
 
 我们在谈到 Meteor Method 时会用大些字母 M， 是为了区别 JavaScript 中的 methods。
 
@@ -28,7 +28,7 @@ Method 的核心是作为服务器的 API 端点，你可以在服务器定义�
 
 <h4 id="basic-defining">定义</h4>
 
-这里提供如何使用内建的[`Meteor.methods`API] (http://docs.meteor.com/#/full/meteor_methods) 来定义 Method。注意，Method 的定义应该是装载在客户端和服务器端来优化 UI 的通用代码。如果您的 Method 有秘密的程序代码，请参考[安全相关章节](security.html#secret-code)来了解如何从客户端隐藏秘密的程序代码。
+这里提供如何使用内建的[`Meteor.methods`API](http://docs.meteor.com/#/full/meteor_methods) 来定义 Method。注意，Method 的定义应该是装载在客户端和服务器端来优化 UI 的通用代码。如果您的 Method 有秘密的程序代码，请参考[安全相关章节](security.html#secret-code)来了解如何从客户端隐藏秘密的程序代码。
 
 下面这个案例添加了包： `aldeed:simple-schema`，这个包在很多文章都有提到，是用来验证 Method 参数的。
 
@@ -56,7 +56,7 @@ Meteor.methods({
 
 <h4 id="basic-calling">调用</h4>
 
-从客户端和服务器中使用[`Meteor.call`] (http://docs.meteor.com/#/full/meteor_call) 可以调用 Method。请注意，您应该只在一些代码需要从客户端调用的情况下使用 Method; 如果你只是想在服务器端实现代码模块化，应该使用常规的 JavaScript 函数，而不是 Method。
+从客户端和服务器中使用[`Meteor.call`](http://docs.meteor.com/#/full/meteor_call) 可以调用 Method。请注意，您应该只在一些代码需要从客户端调用的情况下使用 Method; 如果你只是想在服务器端实现代码模块化，应该使用常规的 JavaScript 函数，而不是 Method。
 
 我们如何从客户端调用 Method:
 
@@ -205,55 +205,51 @@ Meteor 介绍了两种 JavaScript 错误：[`Meteor.Error`](http://docs.meteor.c
 <h4 id="internal-server-errors">内部服务器错误引发的常见错误</h4>
 
 当服务器内部有错误，不需要报告给客户端时，抛出一个常规的 JavaScript 错误对象。客户端将会接收到一个没有细节的完全不透明的内部服务器错误报告。
-When you have an error that doesn't need to be reported to the client, but is internal to the server, throw a regular JavaScript error object. This will be reported to the client as a totally opaque internal server error with no details.
 
 <h4 id="meteor-error">一般运行时错误下的 Meteor 错误</h4>
 
-When the server was not able to complete the user's desired action because of a known condition, you should throw a descriptive `Meteor.Error` object to the client. In the Todos example app, we use these to report situations where the current user is not authorized to complete a certain action, or where the action is not allowed within the app - for example, deleting the last public list.
+当服务器在已知条件下不能够完成用户所需的操作，应该抛出一个描述性的 `Meteor.Error` 对象给客户端。在 Todos 应用程序中，我们使用这种方法报告当前用户无权完成某个操作，或该操作不被应用允许——例如，删除最后一个 public list。
 
-`Meteor.Error` takes three arguments: `error`, `reason`, and `details`.
+`Meteor.Error` 有三个参数： `error`, `reason`, 和 `details`.
 
-1. `error` should be a short, unique, machine-readable error code string that the client can interpret to understand what happened. It's good to prefix this with the name of the Method for easy internationalization, for example: `'todos.updateText.unauthorized'`.
-2. `reason` should be a short description of the error for the developer. It should give your coworker enough information to be able to debug the error. The `reason` parameter should not be printed to the end user directly, since this means you now have to do internationalization on the server before sending the error message, and the UI developer has to worry about the Method implementation when thinking about what will be displayed in the UI.
-3. `details` is optional, and can be used where extra data will help the client understand what is wrong. In particular, it can be combined with the `error` field to print a more helpful error message to the end user.
+1. `error` 应该是简短，唯一，机器可读的错误代码串，客户端可以翻译它并了解发生了什么。最好是在 `error` 加上 Method 的名称作为前缀，例如：`'todos.updateText.unauthorized'`。
+2. `reason` 是为开发者简短描述发生的错误。它应该能够提供足够的信息用于调试错误。`reason` 参数不应该直接对终端用户可见，这意味着需要在发送错误信息前在服务器端实现 internationalization，UI 开发者在考虑 UI 展示时也应该思考 Method 的实现
+3. `details` 不是必需的，可以用于提供额外的信息帮助客户端发现哪里出错。另外，它还可以结合 `error` 参数给终端用户提供更有用的错误信息。
 
-<h4 id="validation-error">ValidationError for argument validation errors</h4>
+<h4 id="validation-error">参数验证错误下的 ValidationError</h4>
 
-When a Method call fails because the arguments are of the wrong type, it's good to throw a `ValidationError`. This works just like `Meteor.Error`, but is a custom constructor that enforces a standard error format that can be read by different form and validation libraries. In particular, if you are calling this Method from a form, throwing a `ValidationError` will make it easy to display nice error messages next to particular fields in the form.
+因为参数类型错误而导致调用方法失败，最好抛出一个 `ValidationError`，原理跟 `Meteor.Error` 一样，但它有一个产生标准错误格式的定制构造器 可以被不同的表单和验证库读取。如果你从表单中调用 Method，抛出一个 `ValidationError`会使得错误信息在表单中某一位置展示更加简单。
 
-When you use `mdg:validated-method` with `aldeed:simple-schema` as demonstrated above, this type of error is thrown for you.
+当你使用 `mdg:validated-method` 和 `aldeed:simple-schema`, 就会抛出这种错误。
 
-Read more about the error format in the [`mdg:validation-error` docs](https://atmospherejs.com/mdg/validation-error).
+查看此文了解更多错误格式 [`mdg:validation-error` docs](https://atmospherejs.com/mdg/validation-error).
 
-<h3 id="handling-errors">Handling errors</h3>
+<h3 id="handling-errors">处理错误</h3>
 
-When you call a Method, any errors thrown by it will be returned in the callback. At this point, you should identify which error type it is and display the appropriate message to the user. In this case, it is unlikely that the Method will throw a `ValidationError` or an internal server error, so we will only handle the unauthorized error:
+当调用一个 Method 的时候，任何抛出的错误都会在回调中返回。这个时候要识别错误类型并将信息传递给用户。在这个例子中，Method 几乎不会抛出 `ValidationError` 或者内部服务器错误，所以我们只会处理未经授权错误：
 
 ```js
-// Call the Method
+// 调用方法
 updateText.call({
   todoId: '12345',
   newText: 'This is a todo item.'
 }, (err, res) => {
   if (err) {
     if (err.error === 'todos.updateText.unauthorized') {
-      // Displaying an alert is probably not what you would do in
-      // a real app; you should have some nice UI to display this
-      // error, and probably use an i18n library to generate the
-      // message from the error code.
+      // 在一个真实的应用中你可能不需要展示警报；你会有一个好看的 UI 界面去展示这些错误，还可以用 i18n 库从错误代码中自动产生信息。
       alert('You aren\'t allowed to edit this todo item');
     } else {
-      // Unexpected error, handle it in the UI somehow
+      // 未知错误，在 UI 端处理
     }
   } else {
-    // success!
+    // 成功！
   }
 });
 ```
 
-We'll talk about how to handle the `ValidationError` in the section on forms below.
+在下面章节我们将讨论如何处理 `ValidationError`。
 
-<h3 id="throw-stub-exceptions">Errors in Method simulation</h3>
+<h3 id="throw-stub-exceptions">Method 运行时的错误</h3>
 
 When a Method is called, it usually runs twice---once on the client to simulate the result for Optimistic UI, and again on the server to make the actual change to the database. This means that if your Method throws an error, it will likely fail on the client _and_ the server. For this reason, `ValidatedMethod` turns on undocumented option in Meteor to avoid calling the server-side implementation if the simulation throws an error.
 
