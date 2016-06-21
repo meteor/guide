@@ -94,7 +94,7 @@ Meteor Method 有几个特点并非立竿见影，但是每一个复杂的应用
 export default updateText = {
   name: 'todos.updateText',
 
-  // 将有效性分离，这样可以独立运行（1）
+  // 将有效性验证分离，这样可以独立运行（1）
   validate(args) {
     new SimpleSchema({
       todoId: { type: String },
@@ -192,11 +192,13 @@ export const updateText = new ValidatedMethod({
   }
 });
 ```
+
 在这里 Method 的调用跟前面的一样，但在这里 Method 的定义是非常简单的。我们相信，这种定义方法可以让你清楚地看到定义 Method 的重点，通过 Method 的名称，预期参数的格式，以及 JavaScript 命名空间可以调用该方法。
 
 <h2 id="errors">错误处理</h2>
 
-常规的 JavaScript 函数，我们以抛出`Error`对象的形式来发现错误。Meteor Method 也是以这种形式抛出错误，但也会出现复杂的情形，比如`Error`对象会 websocket 被送回到客户端。 引发错误工作几乎相同的方式，但复杂的位是由以下事实：在某些情况下，误差的对象将超过的 WebSocket 发送回客户端引入。
+常规的 JavaScript 函数，我们以抛出`Error`对象的形式来发现错误。Meteor Method 也是以这种形式抛出错误，但也会出现复杂的情形，比如 `Error` 对象会通过 WebSocket 被发往客户端。引发错误工作几乎相同的方式，微复杂之处在于，某些情况下这个错误对象会通过 WebSocket 被发往客户端。
+译注：事实上，作为 DDP 消息的一种，错误对象并不总是通过 WebSocket 传送。当 WebSocket 因为某些原因不可用的时候，Meteor 会尝试使用轮询的方式建立 DDP 连接来传送 DDP 消息。
 
 <h3 id="throwing-errors">从 Method 抛出错误</h3>
 
@@ -206,37 +208,40 @@ Meteor 介绍了两种 JavaScript 错误：[`Meteor.Error`](http://docs.meteor.c
 
 当服务器内部有错误，不需要报告给客户端时，抛出一个常规的 JavaScript 错误对象。客户端将会接收到一个没有细节的完全不透明的内部服务器错误报告。
 
-<h4 id="meteor-error">一般运行时错误下的 Meteor 错误</h4>
+<h4 id="meteor-error">一般运行时错误下的 Meteor.Error</h4>
 
-当服务器在已知条件下不能够完成用户所需的操作，应该抛出一个描述性的 `Meteor.Error` 对象给客户端。在 Todos 应用程序中，我们使用这种方法报告当前用户无权完成某个操作，或该操作不被应用允许——例如，删除最后一个 public list。
+当服务器在已知条件下不能够完成用户所需的操作，应该抛出一个描述性的 `Meteor.Error` 对象给客户端。在 Todos 应用程序中，我们使用这种方法报告当前用户无权完成某个操作，或该操作不被应用允许——例如，删除最后一个公开的 Todo 列表。
 
 `Meteor.Error` 有三个参数： `error`, `reason`, 和 `details`.
 
 1. `error` 应该是简短，唯一，机器可读的错误代码串，客户端可以翻译它并了解发生了什么。最好是在 `error` 加上 Method 的名称作为前缀，例如：`'todos.updateText.unauthorized'`。
-2. `reason` 是为开发者简短描述发生的错误。它应该能够提供足够的信息用于调试错误。`reason` 参数不应该直接对终端用户可见，这意味着需要在发送错误信息前在服务器端实现 internationalization，UI 开发者在考虑 UI 展示时也应该思考 Method 的实现
+2. `reason` 是为开发者简短描述发生的错误。它应该能够提供足够的信息用于调试错误。`reason` 参数不应该直接对终端用户可见，这意味着需要在发送错误信息前在服务器端实现国际化，UI 开发者在考虑 UI 展示时也应该思考 Method 的实现
 3. `details` 不是必需的，可以用于提供额外的信息帮助客户端发现哪里出错。另外，它还可以结合 `error` 参数给终端用户提供更有用的错误信息。
+译注：
+1. 在一些应用中你会看到 error 参数是一个 HTTP 响应码，如 404。我们不建议在这里使用响应码，因为它不容易被理解，尤其是使用不常用响应码的时候。
+2. 在不需要国际化的情况下，常用 reason 参数直接作为显示的信息。尽管如此，按照这份指南来做总不会吃亏的。
 
 <h4 id="validation-error">参数验证错误下的 ValidationError</h4>
 
-因为参数类型错误而导致调用方法失败，最好抛出一个 `ValidationError`，原理跟 `Meteor.Error` 一样，但它有一个产生标准错误格式的定制构造器 可以被不同的表单和验证库读取。如果你从表单中调用 Method，抛出一个 `ValidationError`会使得错误信息在表单中某一位置展示更加简单。
+因为参数类型错误而导致调用方法失败，最好抛出一个 `ValidationError`，原理跟 `Meteor.Error` 一样，但它有一个产生标准错误格式的定制构造器，可以被不同的表单和验证库读取。如果你从表单中调用 Method，抛出一个 `ValidationError`会使得错误信息在表单中某一位置展示更加简单。
 
-当你使用 `mdg:validated-method` 和 `aldeed:simple-schema`, 就会抛出这种错误。
+像上面那样，当你使用 `mdg:validated-method` 和 `aldeed:simple-schema`, 就会抛出这种错误。
 
-查看此文了解更多错误格式 [`mdg:validation-error` docs](https://atmospherejs.com/mdg/validation-error).
+查看此文了解更多错误格式 [`mdg:validation-error` 文档](https://atmospherejs.com/mdg/validation-error).
 
 <h3 id="handling-errors">处理错误</h3>
 
 当调用一个 Method 的时候，任何抛出的错误都会在回调中返回。这个时候要识别错误类型并将信息传递给用户。在这个例子中，Method 几乎不会抛出 `ValidationError` 或者内部服务器错误，所以我们只会处理未经授权错误：
 
 ```js
-// 调用方法
+// 调用 Method
 updateText.call({
   todoId: '12345',
   newText: 'This is a todo item.'
 }, (err, res) => {
   if (err) {
     if (err.error === 'todos.updateText.unauthorized') {
-      // 在一个真实的应用中你可能不需要展示警报；你会有一个好看的 UI 界面去展示这些错误，还可以用 i18n 库从错误代码中自动产生信息。
+      // 在一个真实的应用中你可能不需要调用 alert 展示警报；你会有一个好看的 UI 界面去展示这些错误，还可以用 i18n 库从错误代码中自动产生信息。
       alert('You aren\'t allowed to edit this todo item');
     } else {
       // 未知错误，在 UI 端处理
@@ -249,26 +254,25 @@ updateText.call({
 
 在下面章节我们将讨论如何处理 `ValidationError`。
 
-<h3 id="throw-stub-exceptions">Method 运行时的错误</h3>
+<h3 id="throw-stub-exceptions">Method 在客户端模拟运行时的错误</h3>
 
-When a Method is called, it usually runs twice---once on the client to simulate the result for Optimistic UI, and again on the server to make the actual change to the database. This means that if your Method throws an error, it will likely fail on the client _and_ the server. For this reason, `ValidatedMethod` turns on undocumented option in Meteor to avoid calling the server-side implementation if the simulation throws an error.
+当一个 Method 被调用时，它通常运行两次—— 一次在客户端上，以模拟优化 UI 的输出结果，第二次在服务器上进行数据库的实际变化操作。这意味着，如果 Method 抛出一个错误，它可能会在客户端和服务器上都出现错误。出于这个原因，`ValidatedMethod` 打开 Meteor 中的无证选项，以避免在客户端模拟抛出错误时继续调用服务器端执行。
 
-While this behavior is good for saving server resources in cases where a Method will certainly fail, it's important to make sure that the simulation doesn't throw an error in cases where the server Method would have succeeded (for example, if you didn't load some data on the client that the Method needs to do the simulation properly). In this case, you can wrap server-side-only logic in a block that checks for a method simulation:
+这种运行方式在 Method 发生错误时对节省服务器资源有帮助，但要确保的是，当 Method 在服务器端可以成功时客户端的模拟不会发生错误（例如你不用在客户端加载数据用于 Method 模拟）。在这个例子中，你可以把服务器端的代码封装成一个模块，用于检验方法模拟：
 
 ```js
 if (!this.isSimulation) {
-  // Logic that depends on server environment here
+  // 此处逻辑依赖于服务器端环境
 }
 ```
 
-<h2 id="method-form">Calling a Method from a form</h2>
+<h2 id="method-form">从表单调用 Method</h2>
 
-The main thing enabled by the `ValidationError` convention is simple integration between Methods and the forms that call them. In general, your app is likely to have a one-to-one mapping of forms in the UI to Methods. First, let's define a Method for our business logic:
+`ValidationError` 最主要的用途是在 Method 和调用它们的表单之间进行简单的集成。在一般情况下，你的应用很可能有在 UI 上的表单跟 Method 是一对一映射的。首先，为我们的业务逻辑定义一个 Method：
 
 ```js
-// This Method encodes the form validation requirements.
-// By defining them in the Method, we do client and server-side
-// validation in one place.
+// 该 Method 对表单验证需求进行编码。
+// 通过在 Method 中定义表单，我们在同一个地方进行客户端和服务器端的验证。
 export const insert = new ValidatedMethod({
   name: 'Invoices.methods.insert',
   validate: new SimpleSchema({
@@ -277,8 +281,7 @@ export const insert = new ValidatedMethod({
     amount: { type: String, regEx: /^\d*\.(\d\d)?$/ }
   }).validator(),
   run(newInvoice) {
-    // In here, we can be sure that the newInvoice argument is
-    // validated.
+    // 在这里我们可以确认参数 newInvoice 已验证。
 
     if (!this.userId) {
       throw new Meteor.Error('Invoices.methods.insert.not-logged-in',
@@ -290,7 +293,7 @@ export const insert = new ValidatedMethod({
 });
 ```
 
-Let's define a simple HTML form:
+让我们定义一个简单的 HTML 表单：
 
 ```html
 <template name="Invoices_newInvoice">
