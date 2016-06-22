@@ -319,7 +319,7 @@ export const insert = new ValidatedMethod({
 </template>
 ```
 
-Now, let's write some JavaScript to handle this form nicely:
+现在，我们将通过 JavaScript 语言来更好地处理该表单：
 
 ```js
 import { insert } from '../api/invoices/methods.js';
@@ -345,20 +345,20 @@ Template.Invoices_newInvoice.events({
     insert.call(data, (err, res) => {
       if (err) {
         if (err.error === 'validation-error') {
-          // Initialize error object
+          // 初始化错误对象
           const errors = {
             email: [],
             description: [],
             amount: []
           };
 
-          // Go through validation errors returned from Method
+          // 查看从 Method 返回的验证错误
           err.details.forEach((fieldError) => {
             // XXX i18n
             errors[fieldError.name].push(fieldError.type);
           });
 
-          // Update ReactiveDict, errors will show up in the UI
+          // 更新 ReactiveDict，错误会在 UI 显示。
           instance.errors.set(errors);
         }
       }
@@ -368,14 +368,15 @@ Template.Invoices_newInvoice.events({
 ```
 
 As you can see, there is a fair amount of boilerplate to handle errors nicely in a form, but most of it can be easily abstracted by an off-the-shelf form framework or a simple application-specific wrapper of your own design.
+正如你所看到的，表单中有大量的 boilerplate 可以用来处理错误，大部分 boilerplate 可以通过现成的表单结构或者你自己封装的简单应用程序提取出来。
 
-<h2 id="loading-data">Loading data with Methods</h2>
+<h2 id="loading-data">通过 Methods 加载数据</h2>
 
-Since Methods can work as general purpose RPCs, they can also be used to fetch data instead of publications. There are some advantages and some disadvantages to this approach compared with loading data through publications, and at the end of the day we recommend always using publications to load data.
+因为 Method 可以作为通用 RPC，所以也可以被用于获取数据而不是发布数据。对比通过发布加载数据，使用 Methods 加载数据有有点也有不足，但到目前为止，我们建议总是通过发布加载数据。
 
-Methods can be useful to fetch the result of a complex computation from the server that doesn't need to update when the server data changes. The biggest disadvantage of fetching data through Methods is that the data won't be automatically loaded into Minimongo, Meteor's client-side data cache, so you'll need to manage the lifecycle of that data manually.
+当服务器端数据变化时，服务器端一个复杂计算的结果不变，在这种情况下用 Method 获取数据非常有用，通过 Method 获取数据的最大不足就是获取的数据不会自动加载到 Minimongo，Meteor 的客户端数据缓存，所以需要你手动管理数据周期。
 
-<h4 id="local-collection">Using a local collection to store and display data fetched from a Method</h4>
+<h4 id="local-collection">使用本地存储储存和展示通过 Method 获取的数据</h4>
 
 Collections are a very convenient way of storing data on the client side. If you're fetching data using something other than subscriptions, you can put it in a collection manually. Let's look at an example where we have a complex algorithm for calculating average scores from a series of games for a number of players. We don't want to use a publication to load this data because we want to control exactly when it runs, and don't want the data to be cached automatically.
 
