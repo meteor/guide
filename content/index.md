@@ -24,13 +24,13 @@ Nada en la guía de Meteor es *necesario* para construir una aplicación con Met
 
 Las APIs de la plataforma Meteor están disponibles en el [sitio de la documentación](https://docs.meteor.com), y puedes explorar los paquetes de la comunidad en [atmosphere](https://atmospherejs.com).
 
-<h3 id="audience">Target audience</h3>
+<h3 id="audience">Audiencia objetivo</h3>
 
-The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+La guía está dirigida a desarrolladores intermedios que tienen alguna familiaridad con JavaScript, la plataforma Meteor, y desarrollo web en general. Si usted recien comenzó a usar Meteor, le recomendamos que empiece con el [tutorial oficial](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
-<h3 id="example-app">Example app</h3>
+<h3 id="example-app">Aplicación de ejemplo</h3>
 
-Many articles reference the Todos example application. This code is being actively developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
+Muchos artículos se refieren a la aplicación de ejemplo de Todos (pendientes). Éste código está siendo desarrollado activamente a la par de la guía. Usted puede ver el código fuente más reciente de la aplicación, y reportar un problema o hacer sugerencias vía pull requests en su [repositorio de GitHub](https://github.com/meteor/todos).
 
 <h2 id="guide-concepts">Guide development</h2>
 
