@@ -32,7 +32,7 @@ meteor npm install
 
 如果这只是一个开发阶段的依赖包（例如：它是用来测试，代码格式检查等等），那么你就应该是用`--save-dev`标识。那样的话，如果你用脚本构建，可以通过 `npm install --production` 命令来避免安装不需要的包。
 
-关于 `npm install`，请参考[Meteor 官方文档](https://docs.npmjs.com/getting-started/installing-npm-packages-locally)
+关于 `npm install`，请参考[ Meteor 官方文档](https://docs.npmjs.com/getting-started/installing-npm-packages-locally)
 
 > Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
 > 译注：过高版本的全局 npm 在现在可能引起一定问题。建议使用 `meteor npm`。你也许希望使用一个 npm 镜像，但是 Meteor 自带的尚不支持使用镜像。
@@ -50,7 +50,7 @@ const moment = require('moment');
 
 以上的脚本展示的是如何从包里面导入一个默认的导出量到 `moment` 变量。
 
-通过[解构赋值](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)（[destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)）的语法，你也可以导入包中某些函数。
+通过[解构赋值](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)（ destructuring assignment ）的语法，你也可以导入包中某些函数。
 
 ```js
 import { isArray } from 'lodash';
@@ -78,13 +78,13 @@ import { parse } from 'graphql/language';
 @import '../../node_modules/npm-package-name/colors.less';
 ```
 
-如果你已经安装了 `ecmascript` 包，你可以直接在JavaScript 文件中控制加载顺序并导入 CSS 文件。
+如果你已经安装了 `ecmascript` 包，你可以直接在 JavaScript 文件中控制加载顺序并导入 CSS 文件。
 
 ```js
 import 'npm-package-name/stylesheets/styles.css';
 ```
 
-> 当你从 JavaScript 文件中导入 CSS 的时候，这个 CSS 样式是没有和其他通过 Meteor Build tool 处理过的 CSS 放在一起的，而是添加在你的 app 下面的 `<head>` 标记下，`<style>...</style>` 里面，紧跟在这里面其他 CSS 后面的。
+> 当你从 JavaScript 文件中导入 CSS 的时候，这个 CSS 样式是没有和其他通过 Meteor Build tool 处理过的 CSS 放在一起的，而是添加在你的应用下面的 `<head>` 标记下，`<style>...</style>` 里面，紧跟在这里面其他 CSS 后面的。
 
 <h2 id="npm-shrinkwrap">npm Shrinkwrap</h2>
 
