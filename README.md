@@ -50,3 +50,7 @@ Render multiple items in your template with `{{#each}}`
 // good
 Render multiple items in your template with `{% raw %}{{#each}}{% endraw %}`
 ```
+
+#### Styleguide for translating to German
+
+Please stick to the styleguide in [Discover Meteor](https://github.com/DiscoverMeteor/DiscoverMeteor_De).
