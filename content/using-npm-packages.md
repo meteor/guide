@@ -10,7 +10,7 @@ discourseTopicId: 20193
 
 <h2 id="client-npm">在客户端使用 npm 包</h2>
 
-为了在客户端浏览器的环境中调用这些为服务端设计的包，开发者们设计并提供了很多工具来在客户端模拟 Node 环境，包括 [browserify](http://browserify.org) 和 [webpack](https://webpack.github.io) 等。Meteor 的 ES2015 模块系统就可以让开发这在没有任何额外配置的情况下，在客户端调用现成的 npm 包。大多数情况下，你都可以像在服务端一样从客户端文件中导入 npm 依赖。
+为了在客户端浏览器的环境中调用这些为服务端设计的包，开发者们设计并提供了很多工具来在客户端模拟 Node 环境，包括 [browserify](http://browserify.org) 和 [webpack](https://webpack.github.io) 等。Meteor 的 ES2015 模块系统就可以让开发者在没有任何额外配置的情况下，在客户端调用现成的 npm 包。大多数情况下，你都可以像在服务端一样从客户端文件中导入 npm 依赖。
 
 > 在创建一个新的应用的时候，Meteor 会安装 `meteor-node-stubs` 包来解决在客户端的浏览器兼容问题。如果你的应用要升级到Meteor 1.3，那你可能必须手动运行 `meteor npm install --save meteor-node-stubs` 命令了。
 
