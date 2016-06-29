@@ -32,11 +32,11 @@ La guía está dirigida a desarrolladores intermedios que tienen alguna familiar
 
 Muchos artículos se refieren a la aplicación de ejemplo de Todos (pendientes). Éste código está siendo desarrollado activamente a la par de la guía. Usted puede ver el código fuente más reciente de la aplicación, y reportar un problema o hacer sugerencias vía pull requests en su [repositorio de GitHub](https://github.com/meteor/todos).
 
-<h2 id="guide-concepts">Guide development</h2>
+<h2 id="guide-concepts">Desarrollo de la guía</h2>
 
-<h3 id="contributing">Contributing</h3>
+<h3 id="contributing">Contribuyendo</h3>
 
-Ongoing Meteor Guide development takes place **in the open** [on GitHub](https://github.com/meteor/guide). We encourage pull requests and issues to discuss problems with and changes that could be made to the content. We hope that keeping our process open and honest will make it clear what we plan to include in the guide and what changes will be coming in future Meteor versions.
+El desarrollo continuo de la Guía de Meteor se encuentra **abierto** [en Github](https://github.com/meteor/guide). Recomendamos pull requests e issues para discutir problemas que afecten y cambios que pudieran hacerse al contenido. Esperamos que manteniendo nuestro proceso abierto y honesto deje claro lo que planeamos incluir en la guía y qué cambios vendrán en futuras versiones de Meteor.
 
 <h3 id="goals">Goals of the project</h3>
 
