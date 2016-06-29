@@ -46,15 +46,15 @@ Una función importante de la guía es **dar forma al desarrollo futuro** de la 
 
 De forma similar, omisiones en la plataforma destacadas por la guía con frecuencia pueden ser complementadas por **paquetes de la comunidad**; esperamos que si usted ve una oportunidad para mejorar el flujo de trabajo de Meteor al escribir un paquete, ¡que usted la tome! Si no está seguro de cuál es la mejor forma de diseñar su paquete, busque ayuda en los foros y comience una discusión.
 
-<h3 id="future">Future additions</h3>
+<h3 id="future">Adiciones futuras</h3>
 
-The Meteor Guide will never be done. In particular, it will be updated with new features released in every Meteor version. The current release targets Meteor 1.2.x. There are a few more articles we will add in the coming weeks to align with the Meteor 1.3 release, which will bring ECMAScript module support, seamless NPM integration, improved integration and unit testing, and better mobile features:
+La guía de Meteor nunca estará terminada. Particularmente, será actualizada con nuevas características publicadas en cada versión de Meteor. La versión más reciente se enfoca en Meteor 1.2.x. Hay algunos artículos más que añadiremos en las semanas siguientes para coincidir con el lanzamiento de Meteor 1.3, que incluirá soporte para módulos de ECMAScript, integración directa con NPM, integración y pruebas unitarias mejoradas, y mejores características para móvil:
 
-1. Application structure
-2. Testing
-3. Code style and linting
-4. Forms and user input
-5. Mobile apps
+1. Estructura de la aplicación
+2. Pruebas
+3. Estilo de código y linting
+4. Formularios y entradas de usuario
+5. Aplicaciones móviles
 
 <h2 id="learning-more">Other Meteor resources</h2>
 
