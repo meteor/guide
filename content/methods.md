@@ -378,26 +378,27 @@ As you can see, there is a fair amount of boilerplate to handle errors nicely in
 
 <h4 id="local-collection">使用本地存储储存和展示通过 Method 获取的数据</h4>
 
-Collections are a very convenient way of storing data on the client side. If you're fetching data using something other than subscriptions, you can put it in a collection manually. Let's look at an example where we have a complex algorithm for calculating average scores from a series of games for a number of players. We don't want to use a publication to load this data because we want to control exactly when it runs, and don't want the data to be cached automatically.
+Collections 可以方便地在客户端存储数据。如果你不是通过订阅的方式获取数据，可以手动将数据添加到 collection. 下面我们来看一个例子，将复杂的算法用于计算拥有众多玩家的一系列游戏的平均得分。我们不想使用发布加载数据因为我们想要控制何时让它运行，而不想让数据自动缓存。
 
 First, you need to create a _local collection_ - this is a collection that exists only on the client side and is not tied to a database collection on the server. Read more in the [Collections article](http://guide.meteor.com/collections.html#local-collections).
+首先，你需要创建一个本地 collection, 该 collection 只存在于客户端而不跟服务器端的 collection 联系。了解更多 [Collections article](http://guide.meteor.com/collections.html#local-collections).
 
 ```js
-// In client-side code, declare a local collection
-// by passing `null` as the argument
+// 在客户端声明一个本地 collection
+// 传送一个 `null` 作为参数
 ScoreAverages = new Mongo.Collection(null);
 ```
 
-Now, if you fetch data using a Method, you can put into this collection:
+现在，如果你通过 Method 获取数据，可以放在该 collection 里面：
 
 ```js
 import { calculateAverages } from '../api/games/methods.js';
 
 function updateAverages() {
-  // Clean out result cache
+  // 清除结果缓存
   ScoreAverages.remove({});
 
-  // Call a Method that does an expensive computation
+  // 调用 Method 用于复杂计算
   calculateAverages.call((err, res) => {
     res.forEach((item) => {
       ScoreAverages.insert(item);
@@ -406,88 +407,89 @@ function updateAverages() {
 }
 ```
 
-We can now use the data from the local collection `ScoreAverages` inside a UI component exactly the same way we would use a regular MongoDB collection. Instead of it updating automatically, we'll need to call `updateAverages` every time we need new results.
+现在我们可以在一个 UI 组件中使用名为 `ScoreAverages` 的本地 collection 中的数据，跟我们使用 MongoDB collection 是完全一样的。它不会自动更新，每次计算结果的时候都需要调用 `updateAverages`.
 
-<h2 id="advanced">Advanced concepts</h2>
+<h2 id="advanced">更高级的理念</h2>
 
-While you can easily use Methods in a simple app by following the Meteor introductory tutorial, it's important to understand exactly how they work to use them effectively in a production app. One of the downsides of using a framework like Meteor that does a lot for you under the hood is that you don't always understand what is going on, so it's good to learn some of the core concepts.
+虽然根据 Meteor 的入门手册你可以很轻松地在简单应用中使用 Meteor, 但是了解 Method 是如何运作的可以帮你更好地使用它。类似 Meteor 这样的框架为你做了很多工作，缺点之一就是你不总是理解究竟是怎样运作的，所以学习一些核心概念是很重要的。
 
-<h3 id="call-lifecycle">Method call lifecycle</h3>
+<h3 id="call-lifecycle">Method 调用的生命周期</h3>
 
-Here's exactly what happens, in order, when a Method is called:
+当一个 Method 被调用时，会发生以下事件：
 
-<h4 id="lifecycle-simulation">1. Method simulation runs on the client</h4>
+<h4 id="lifecycle-simulation">1. Method 模拟在客户端上运行</h4>
 
-If we defined this Method in client and server code, as all Methods should be, a Method simulation is executed in the client that called it.
+跟所有 Method 一样，如果我们在客户端和服务器端定义该 Method, Method 模拟在调用它的客户端上运行。
 
-The client enters a special mode where it tracks all changes made to client-side collections, so that they can be rolled back later. When this step is complete, the user of your app sees their UI update instantly with the new content of the client-side database, but the server hasn't received any data yet.
+客户端进入到一种特殊模式，在该模式下可以跟踪到客户端 collections 的所有变化，将来可以回滚。该步骤结束后，应用的用户可以看到 UI 界面立即根据客户端数据库的内容进行更新，即使服务器还没有收到任何数据。
 
-If an exception is thrown from the Method simulation, then by default Meteor ignores it and continues to step (2). If you are using `ValidatedMethod` or pass a special `throwStubExceptions` option to `Meteor.apply`, then an exception thrown from the simulation will stop the server-side Method from running at all.
+如果 Method 模拟抛出一个异常，默认情况下 Meteor 会忽略它并继续步骤（2）。如果你使用 `ValidatedMethod` 或者传送一个特殊的 `throwStubExceptions` 选项到 `Meteor.apply`,那么从模拟中抛出的异常将导致服务器端的所有 Method 停止运行。
 
 The return value of the Method simulation is discarded, unless the `returnStubValue` option is passed when calling the Method, in which case it is returned to the Method caller. ValidatedMethod passes this option by default.
+除非在调用 Method 时传送 `returnStubValue` 选项，否则 Method 返回值会被抛弃，而不会返回到 Method 调用者。ValidatedMethod 在默认情况下会传送 `returnStubValue` 选项。
 
-<h4 id="lifecycle-ddp-message">2. A `method` DDP message is sent to the server</h4>
+<h4 id="lifecycle-ddp-message">2. 一个 `method` DDP 消息发送到服务器</h4>
 
 The Meteor client constructs a DDP message to send to the server. This includes the Method name, arguments, and an automatically generated Method ID that represents this particular Method invocation.
 
-<h4 id="lifecycle-server">3. Method runs on the server</h4>
+<h4 id="lifecycle-server">3. Method 在服务器上运行</h4>
 
 When the server receives the message, it executes the Method code again on the server. The client side version was a simulation that will be rolled back later, but this time it's the real version that is writing to the actual database. Running the actual Method logic on the server is crucial because the server is a trusted environment where we know that security-critical code will run the way we expect.
 
-<h4 id="lifecycle-result">4. Return value is sent to the client</h4>
+<h4 id="lifecycle-result">4. 返回值被发送到客户端</h4>
 
 Once the Method has finished running on the server, it sends a `result` message to the client with the Method ID generated in step 2, and the return value itself. The client stores this for later use, but _doesn't call the Method callback yet_. If you pass the [`onResultReceived` option to `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply), that callback is fired.
 
-<h4 id="lifecycle-publications">5. Any DDP publications affected by the Method are updated</h4>
+<h4 id="lifecycle-publications">5. DDP 发布通过 Method 实现更新</h4>
 
 If we have any publications on the page that have been affected by the database writes from this Method, the server sends the appropriate updates to the client. Note that the client data system doesn't reveal these updates to the app UI until the next step.
 
-<h4 id="lifecycle-updated">6. `updated` message sent to the client, data replaced with server result, Method callback fires</h4>
+<h4 id="lifecycle-updated">6. `updated` 发送到客户端，数据替换服务器结果，Method 回调启动</h4>
 
 After the relevant data updates have been sent to the correct client, the server sends back the last message in the Method life cycle - the DDP `updated` message with the relevant Method ID. The client rolls back any changes to client side data made in the Method simulation in step 1, and replaces them with the actual changes sent from the server in step 5.
 
 Lastly, the callback passed to `Meteor.call` actually fires with the return value from step 4. It's important that the callback waits until the client is up to date, so that your Method callback can assume that the client state reflects any changes done inside the Method.
 
-<h4 id="lifecycle-error">Error case</h4>
+<h4 id="lifecycle-error">错误情况</h4>
 
 In the list above, we didn't cover the case when the Method execution on the server throws an error. In that case, there is no return value, and the client gets an error instead. The Method callback is fired instantly with the returned error as the first argument. Read more about error handling in the section about errors below.
 
-<h3 id="methods-vs-rest">Benefits of Methods over REST</h3>
+<h3 id="methods-vs-rest">Methods over REST 的优点</h3>
 
 We believe Methods provide a much better primitive for building modern applications than REST endpoints built on HTTP. Let's go over some of the things you get for free with Methods that you would have to worry about if using HTTP. The purpose of this section is not to convince you that REST is bad - it's just to remind you that you don't need to handle these things yourself in a Meteor app.
 
-<h4 id="non-blocking">Methods use synchronous-style APIs, but are non-blocking</h4>
+<h4 id="non-blocking">Methods 使用同步，非阻塞的 APIs</h4>
 
 You may notice in the example Method above, we didn't need to write any callbacks when interacting with MongoDB, but the Method still has the non-blocking properties that people associate with Node.js and callback-style code. Meteor uses a coroutine library called [Fibers](https://github.com/laverdet/node-fibers) to enable you to write code that uses return values and throws errors, and avoid dealing with lots of nested callbacks.
 
-<h4 id="ordered">Methods always run and return in order</h4>
+<h4 id="ordered">Methods 总是按顺序运行和返回</h4>
 
 When accessing a REST API, you will sometimes run into a situation where you make two requests one after the other, but the results arrive out of order. Meteor's underlying machinery makes sure this never happens with Methods. When multiple Method calls are received _from the same client_, Meteor runs each Method to completion before starting the next one. If you need to disable this functionality for one particularly long-running Method, you can use [`this.unblock()`](http://docs.meteor.com/#/full/method_unblock) to allow the next Method to run while the current one is still in progress. Also, since Meteor is based on Websockets instead of HTTP, all Method calls and results are guaranteed to arrive in the order they are sent. You can also pass a special option `wait: true` to `Meteor.apply` to wait to send a particular Method until all others have returned, and not send any other Methods until this one returns.
 
-<h4 id="change-tracking">Change tracking for Optimistic UI</h4>
+<h4 id="change-tracking">跟踪变动，以便优化 UI</h4>
 
 When Method simulations and server-side executions run, Meteor tracks any resulting changes to the database. This is what lets the Meteor data system roll back the changes from the Method simulation and replace them with the actual writes from the server. Without this automatic database tracking, it would be very difficult to implement a correct Optimistic UI system.
 
-<h3 id="calling-method-from-method">Calling a Method from another Method</h3>
+<h3 id="calling-method-from-method">从一个 Method 中调用另一个 Method</h3>
 
 Sometimes, you'll want to call a Method from another Method. Perhaps you already have some functionality implemented and you want to add a wrapper that fills in some of the arguments automatically. This is a totally fine pattern, and Meteor does some nice things for you:
 
 1. Inside a client-side Method simulation, calling another Method doesn't fire off an extra request to the server - the assumption is that the server-side implementation of the Method will do it. However, it does run the _simulation_ of the called Method, so that the simulation on the client closely matches what will happen on the server.
 2. Inside a Method execution on the server, calling another Method runs that Method as if it were called by the same client. That means the Method runs as usual, and the context - `userId`, `connection`, etc - are taken from the original Method call.
 
-<h3 id="consistent-id-generation">Consistent ID generation and optimistic UI</h3>
+<h3 id="consistent-id-generation">一致的 ID 生成和 UI 的优化</h3>
 
 When you insert documents into Minimongo from the client-side simulation of a Method, the `_id` field of each document is a random string. When the Method call is executed on the server, the IDs are generated again before being inserted into the database. If it were implemented naively, it could mean that the IDs generated on the server are different, which would cause undesirable flickering and re-renders in the UI when the Method simulation was rolled back and replaced with the server data. But this is not the case in Meteor!
 
 Each Meteor Method invocation shares a random generator seed with the client that called the Method, so any IDs generated by the client and server Methods are guaranteed to be the same. This means you can safely use the IDs generated on the client to do things while the Method is being sent to the server, and be confident that the IDs will be the same when the Method finishes. One case where this is particularly useful is if you want to create a new document in the database, then immediately redirect to a URL that contains that new document's ID.
 
-<h3 id="retries">Method retries</h3>
+<h3 id="retries">Method 重试</h3>
 
 If you call a Method from the client, and the user's Internet connection disconnects before the result is received, Meteor assumes that the Method didn't actually run. When the connection is re-established, the Method call will be sent again. This means that, in certain situations, Methods can be sent more than once. This should only happen very rarely, but in the case where an extra Method call could have negative consequences it is worth putting in extra effort to ensure that Methods are idempotent - that is, calling them multiple times doesn't result in additional changes to the database.
 
 Many Method operations are idempotent by default. Inserts will throw an error if they happen twice because the generated ID will conflict. Removes on collections won't do anything the second time, and most update operators like `$set` will have the same result if run again. The only places you need to worry about code running twice are MongoDB update operators that stack, like `$inc` and `$push`, and calls to external APIs.
 
-<h3 id="comparison-with-allow-deny">Historical comparison with allow/deny</h3>
+<h3 id="comparison-with-allow-deny">与 allow/deny 的历史比较</h3>
 
 The Meteor core API includes an alternative to Methods for manipulating data from the client. Instead of explicitly defining Methods with specific arguments, you can instead call `insert`, `update`, and `remove` directly from the client and specify security rules with [`allow`](http://docs.meteor.com/#/full/allow) and [`deny`](http://docs.meteor.com/#/full/deny). In the Meteor Guide, we are taking a strong position that this feature should be avoided and Methods used instead. Read more about the problems with allow/deny in the [Security article](security.html#allow-deny).
 
