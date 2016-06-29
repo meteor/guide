@@ -6,7 +6,7 @@ description: Ésta es la guía para usar Meteor, una plataforma full-stack de Ja
 
 <h2 id="what-is-meteor">¿Qué es Meteor?</h2>
 
-Meteor es una plataforma full-stack de JavaScript para desarrollar aplicaciones web y móviles modernas. Meteor incluye un conjunto clave de tecnologías para construir aplicaciones reactivas, una herramienta de construcción, y un conjunto seleccionado de paquetes de Node.js y la comunidad JavaScript general.
+Meteor es una plataforma full-stack de JavaScript para desarrollar aplicaciones web y móviles modernas. Meteor incluye un conjunto clave de tecnologías para construir aplicaciones reactivas, una herramienta de construcción, y un conjunto selecto de paquetes de Node.js y la comunidad general de JavaScript.
 
 - Meteor te permite desarrollar en **un solo lenguaje**, JavaScript, en todos los entornos: aplicación de servidor, navegador web, y dispositivos móviles.
 
@@ -20,9 +20,9 @@ Meteor es una plataforma full-stack de JavaScript para desarrollar aplicaciones 
 
 Éste es un conjunto de artículos explicando de forma general opiniones de mejores prácticas para desarrollo de aplicaciones utilizando la plataforma [Meteor](https://meteor.com). Nuestro objetivo es cubrir patrones que son comunes para el desarrollo de todas las aplicaciones web y móviles modernas, así que muchos conceptos documentados aquí no son necesariamente específicos de Meteor y podrían aplicarse a cualquier aplicación construida con enfoque en interfaces de usuario modernas e interactivas.
 
-Nada en la guía de Meteor es *necesario* para construir una aplicación con Meteor---podrías utilizar la plataforma en formas que contradigan los principios y patrones de la guía. Sin embargo, esta guía es un intento por documentar las mejores prácticas y convenciones de la comunidad, así que esperamos que la mayoría de la comunidad se beneficiará de adoptar las prácticas documentadas aquí.
+Nada en la guía de Meteor es *necesario* para construir una aplicación con Meteor---usted podría utilizar la plataforma en formas que contradigan los principios y patrones de la guía. Sin embargo, esta guía es un intento por documentar las mejores prácticas y convenciones de la comunidad, así que esperamos que la mayoría de la comunidad se beneficiará de adoptar las prácticas documentadas aquí.
 
-Las APIs de la plataforma Meteor están disponibles en el [sitio de la documentación](https://docs.meteor.com), y puedes explorar los paquetes de la comunidad en [atmosphere](https://atmospherejs.com).
+Las APIs de la plataforma Meteor están disponibles en el [sitio de docs](https://docs.meteor.com), y puedes explorar los paquetes de la comunidad en la [atmosfera](https://atmospherejs.com).
 
 <h3 id="audience">Audiencia objetivo</h3>
 
@@ -36,7 +36,7 @@ Muchos artículos se refieren a la aplicación de ejemplo de Todos (pendientes).
 
 <h3 id="contributing">Contribuyendo</h3>
 
-El desarrollo continuo de la Guía de Meteor se encuentra **abierto** [en Github](https://github.com/meteor/guide). Recomendamos pull requests e issues para discutir problemas que afecten y cambios que pudieran hacerse al contenido. Esperamos que manteniendo nuestro proceso abierto y honesto deje claro lo que planeamos incluir en la guía y qué cambios vendrán en futuras versiones de Meteor.
+El desarrollo continuo de la Guía de Meteor se encuentra **abierto** [en Github](https://github.com/meteor/guide). Recomendamos el uso pull requests e issues para discutir problemas que afecten y cambios que pudieran hacerse al contenido. Esperamos que manteniendo nuestro proceso abierto y honesto deje claro lo que planeamos incluir en la guía y qué cambios vendrán en futuras versiones de Meteor.
 
 <h3 id="goals">Metas del proyecto</h3>
 
@@ -62,9 +62,9 @@ La guía de Meteor nunca estará terminada. Particularmente, será actualizada c
 
 2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) es el mejor lugar para hacer (¡y responder!) preguntas técnicas. Asegúrese de agregar la etiqueta de meteor a su pregunta.
 
-3. Visite los [foros de discussion de Meteor](https://forums.meteor.com) para anunciar proyectos, obtener ayuda, hablar sobre la comunidad, o discutir cambios al núcleo del proyecto.
+3. Visite los [foros de discusión de Meteor](https://forums.meteor.com) para anunciar proyectos, obtener ayuda, hablar sobre la comunidad, o discutir cambios al núcleo del proyecto.
 
-4. La [documentación de Meteor](https://docs.meteor.com) es el mejor lugar para encontrar la documentación de la API del núcleo de la plataforma.
+4. Los [docs de Meteor](https://docs.meteor.com) es el mejor lugar para encontrar la documentación de la API del núcleo de la plataforma.
 
 5. La [Atmosfera](https://atmospherejs.com) es el repositorio de los paquetes de la comunidad diseñado especialmente para Meteor.
 
