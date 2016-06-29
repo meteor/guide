@@ -38,13 +38,13 @@ Muchos artículos se refieren a la aplicación de ejemplo de Todos (pendientes).
 
 El desarrollo continuo de la Guía de Meteor se encuentra **abierto** [en Github](https://github.com/meteor/guide). Recomendamos pull requests e issues para discutir problemas que afecten y cambios que pudieran hacerse al contenido. Esperamos que manteniendo nuestro proceso abierto y honesto deje claro lo que planeamos incluir en la guía y qué cambios vendrán en futuras versiones de Meteor.
 
-<h3 id="goals">Goals of the project</h3>
+<h3 id="goals">Metas del proyecto</h3>
 
-The decisions made and practices outlined in the guide must necessarily be **opinionated**. Certain best practices will be highlighted and other valid approaches ignored. We aim to reach community consensus around major decisions but there will always be other ways to solve problems when developing your application. We believe it's important to know what the "standard" way to solve a problem is before branching out to other options. If an alternate approach proves itself superior, then it should make its way into a future version of the guide.
+Las decisiones tomadas y prácticas explicadas en la guía deben ser necesariamente **sesgadas**. Ciertas prácticas serán resaltadas y otros enfoques válidos ignorados. Nuestro objetivo es alcanzar un consenso en la comunidad alrededor de decisiones importantes pero siempre habrá otras formas de resolver problemas mientras usted desarrolla su aplicación. Creemos que es importante saber cuál es la forma "estándar" de resolver un problema antes de explorar otras opciones. Si un enfoque alternativo prueba ser superior, entonces debería encontrar su lugar en una futura versión de la guía.
 
-An important function of the guide is to **shape future development** in the Meteor platform. By documenting best practices, the guide shines a spotlight on areas of the platform that could be better, easier, or more performant, and thus will be used to focus a lot of future platform choices.
+Una función importante de la guía es **dar forma al desarrollo futuro** de la plataforma Meteor. Al documentar las mejores prácticas, la guía arroja a la luz áreas de la plataforma que podrían ser mejores, más fáciles o con mejor desempeño, y por lo tanto serán usadas para guiar gran parte de las decisiones futuras de la plataforma.
 
-Similarly, gaps in the platform highlighted by the guide can often be plugged by **community packages**; we hope that if you see an opportunity to improve the Meteor workflow by writing a package, that you take it! If you're not sure how best to design or architect your package, reach out on the forums and start a discussion.
+De forma similar, omisiones en la plataforma destacadas por la guía con frecuencia pueden ser complementadas por **paquetes de la comunidad**; esperamos que si usted ve una oportunidad para mejorar el flujo de trabajo de Meteor al escribir un paquete, ¡que usted la tome! Si no está seguro de cuál es la mejor forma de diseñar su paquete, busque ayuda en los foros y comience una discusión.
 
 <h3 id="future">Future additions</h3>
 
