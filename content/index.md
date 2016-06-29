@@ -56,16 +56,16 @@ La guía de Meteor nunca estará terminada. Particularmente, será actualizada c
 4. Formularios y entradas de usuario
 5. Aplicaciones móviles
 
-<h2 id="learning-more">Other Meteor resources</h2>
+<h2 id="learning-more">Otros recursos de Meteor</h2>
 
-1. The place to get started with Meteor is the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+1. El lugar para empezar con Meteor es el [tutorial official](https://www.meteor.com/tutorials/blaze/creating-an-app).
 
-2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) is the best place to ask (and answer!) technical questions. Be sure to add the meteor tag to your question.
+2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) es el mejor lugar para hacer (¡y responder!) preguntas técnicas. Asegúrese de agregar la etiqueta de meteor a su pregunta.
 
-3. Visit the [Meteor discussion forums](https://forums.meteor.com) to announce projects, get help, talk about the community, or discuss changes to core.
+3. Visite los [foros de discussion de Meteor](https://forums.meteor.com) para anunciar proyectos, obtener ayuda, hablar sobre la comunidad, o discutir cambios al núcleo del proyecto.
 
-4. The [Meteor docs](https://docs.meteor.com) is the best place to find the core API documentation of the platform.
+4. La [documentación de Meteor](https://docs.meteor.com) es el mejor lugar para encontrar la documentación de la API del núcleo de la plataforma.
 
-5. [Atmosphere](https://atmospherejs.com) is the repository of community packages designed especially for Meteor.
+5. La [Atmosfera](https://atmospherejs.com) es el repositorio de los paquetes de la comunidad diseñado especialmente para Meteor.
 
-6. The [projects](https://www.meteor.com/projects) section of the Meteor website describes the projects that make up the Meteor platform. 
+6. La sección de [proyectos](https://www.meteor.com/projects) del sitio de Meteor describe los proyectos que conforman la plataforma Meteor.
