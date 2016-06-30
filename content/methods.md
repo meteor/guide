@@ -430,49 +430,49 @@ The return value of the Method simulation is discarded, unless the `returnStubVa
 
 <h4 id="lifecycle-ddp-message">2. 一个 `method` DDP 消息发送到服务器</h4>
 
-The Meteor client constructs a DDP message to send to the server. This includes the Method name, arguments, and an automatically generated Method ID that represents this particular Method invocation.
+Meteor 客户端构建一个 DDP 消息并发送到服务器。消息包括 Method 的名称，参数，自动生成的 ID, 这些消息可以代表所调用的 Method.
 
 <h4 id="lifecycle-server">3. Method 在服务器上运行</h4>
 
-When the server receives the message, it executes the Method code again on the server. The client side version was a simulation that will be rolled back later, but this time it's the real version that is writing to the actual database. Running the actual Method logic on the server is crucial because the server is a trusted environment where we know that security-critical code will run the way we expect.
+当服务器收到消息，会在服务器上再次运行 Method 代码。客户端的版本只是一个模拟，将会被回滚，而服务器上是真实的版本，将会被写入数据库。在服务器上运行实际的 Method 代码是很重要的，因为我们知道服务器是一个值得信赖的环境，安全和关键的代码可以在上面按照我们所期望的方式运行。
 
 <h4 id="lifecycle-result">4. 返回值被发送到客户端</h4>
 
-Once the Method has finished running on the server, it sends a `result` message to the client with the Method ID generated in step 2, and the return value itself. The client stores this for later use, but _doesn't call the Method callback yet_. If you pass the [`onResultReceived` option to `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply), that callback is fired.
+Method 在服务器上结束运行后，就会把在第二步生成的 ID , `result` 消息和返回值发送到客户端。这些数据会被储存在客户端，但不会调用 Method 回调。如果你传递一个[`onResultReceived` option 到 `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply)，回调就会被启动。
 
 <h4 id="lifecycle-publications">5. DDP 发布通过 Method 实现更新</h4>
 
-If we have any publications on the page that have been affected by the database writes from this Method, the server sends the appropriate updates to the client. Note that the client data system doesn't reveal these updates to the app UI until the next step.
+如果通过 Method 写入数据库影响到某些发布，服务器会把更新的部分发送到客户端。请注意，客户端的数据系统并不会立即根据这些变化更新应用的 UI，具体的更新我们将在下一步讨论。
 
 <h4 id="lifecycle-updated">6. `updated` 发送到客户端，数据替换服务器结果，Method 回调启动</h4>
 
-After the relevant data updates have been sent to the correct client, the server sends back the last message in the Method life cycle - the DDP `updated` message with the relevant Method ID. The client rolls back any changes to client side data made in the Method simulation in step 1, and replaces them with the actual changes sent from the server in step 5.
+当相关的数据更新发送到正确的客户端后，服务器退回 Method 生命周期中的最后一条信息 —— DDP `updated` 信息和关联的 Method ID. 客户端回滚在第一步 Method 模拟中客户端数据的任何变化，并替换为第五步中服务器端发送的更新数据。
 
-Lastly, the callback passed to `Meteor.call` actually fires with the return value from step 4. It's important that the callback waits until the client is up to date, so that your Method callback can assume that the client state reflects any changes done inside the Method.
+最后，传递给 `Meteor.call` 的回调实际上跟第四步中的返回值一起启动。客户端更新后再实现回调是很重要的，所以 Method 回调可以假设客户端状态反映了 Method 所做的任何改变。
 
 <h4 id="lifecycle-error">错误情况</h4>
 
-In the list above, we didn't cover the case when the Method execution on the server throws an error. In that case, there is no return value, and the client gets an error instead. The Method callback is fired instantly with the returned error as the first argument. Read more about error handling in the section about errors below.
+在上面的步骤中，我们没有考虑 Method 在服务器端执行抛出错误的情况。在这种情况下是没有返回值的，客户端也会得到一个错误值。Method 回调在瞬间启动并返回一个错误值作为第一个参数。了解更多信息请阅读上文关于错误处理的段落。
 
 <h3 id="methods-vs-rest">Methods over REST 的优点</h3>
 
-We believe Methods provide a much better primitive for building modern applications than REST endpoints built on HTTP. Let's go over some of the things you get for free with Methods that you would have to worry about if using HTTP. The purpose of this section is not to convince you that REST is bad - it's just to remind you that you don't need to handle these things yourself in a Meteor app.
+相比在 HTTP REST 端点上建立现代应用程序，我们相信 Method 提供了一个更好的起点。我们复习一下有哪些方面是你使用 HTTP 需要担心，而 Meteor 可以帮你控制的。这部分的目的不是跟你说 REST 有多不好 —— 而是提醒你在 Meteor 应用中你不必处理这些情况。
 
 <h4 id="non-blocking">Methods 使用同步，非阻塞的 APIs</h4>
 
-You may notice in the example Method above, we didn't need to write any callbacks when interacting with MongoDB, but the Method still has the non-blocking properties that people associate with Node.js and callback-style code. Meteor uses a coroutine library called [Fibers](https://github.com/laverdet/node-fibers) to enable you to write code that uses return values and throws errors, and avoid dealing with lots of nested callbacks.
+你可能注意到上面的 Method 例子中，当和 MongoDB 交互时我们并不需要写任何回调，但 Method 仍然具有 Node.js 和 回调风格代码的无阻塞特性。Method 使用 Fibers 协同程序库 [Fibers](https://github.com/laverdet/node-fibers)，这样你可以在代码中使用返回值和抛出的错误，并且避免处理很多嵌套的回调。
 
 <h4 id="ordered">Methods 总是按顺序运行和返回</h4>
 
-When accessing a REST API, you will sometimes run into a situation where you make two requests one after the other, but the results arrive out of order. Meteor's underlying machinery makes sure this never happens with Methods. When multiple Method calls are received _from the same client_, Meteor runs each Method to completion before starting the next one. If you need to disable this functionality for one particularly long-running Method, you can use [`this.unblock()`](http://docs.meteor.com/#/full/method_unblock) to allow the next Method to run while the current one is still in progress. Also, since Meteor is based on Websockets instead of HTTP, all Method calls and results are guaranteed to arrive in the order they are sent. You can also pass a special option `wait: true` to `Meteor.apply` to wait to send a particular Method until all others have returned, and not send any other Methods until this one returns.
+访问 REST API 有时会出现会出现你按顺序提出两个请求，但结果却没有按顺序返回的情况。Meteor 的运行机制可以保证这种情况不会在 Method 中产生。当从客户端收到多个调用 Method 的请求时， Meteor 会按顺序执行完一个 Method 再执行下一个 Method. 如果在一个需要长时间运行的 Method 中你想要禁用这种方法，可以使用 `this.unblock()` [`this.unblock()`](http://docs.meteor.com/#/full/method_unblock)，这样即使 Method 在运行，下一个 Method 也可以同时进行。因为 Meteor 是基于 Websockets 而非 HTTP 的，所有的 Method 和调用和返回结果都可以保证以正确的顺序到达。你也可以把 `wait: true` 传递给 `Meteor.apply`，这样就可以实现不运行其他 Method 除非该特殊的 Method 返回结果。
 
 <h4 id="change-tracking">跟踪变动，以便优化 UI</h4>
 
-When Method simulations and server-side executions run, Meteor tracks any resulting changes to the database. This is what lets the Meteor data system roll back the changes from the Method simulation and replace them with the actual writes from the server. Without this automatic database tracking, it would be very difficult to implement a correct Optimistic UI system.
+当 Method 开始模拟，服务器开始运行， Meteor 跟踪所有数据库的变化。在这种情况下， Meteor 数据系统回滚 Meteor 模拟中出现的变化并替换服务器端的数据。如果不是这种自动的数据库跟踪，要实现正确地优化 UI 是很难的。
 
 <h3 id="calling-method-from-method">从一个 Method 中调用另一个 Method</h3>
 
-Sometimes, you'll want to call a Method from another Method. Perhaps you already have some functionality implemented and you want to add a wrapper that fills in some of the arguments automatically. This is a totally fine pattern, and Meteor does some nice things for you:
+有时候你需要从一个 Method 中调用另外一个 Method, 或许你已经实现了一些功能，但你需要可以添加一个封装包自动填充参数。这是一个完全正常模式，Method 也为之做了很多工作：
 
 1. Inside a client-side Method simulation, calling another Method doesn't fire off an extra request to the server - the assumption is that the server-side implementation of the Method will do it. However, it does run the _simulation_ of the called Method, so that the simulation on the client closely matches what will happen on the server.
 2. Inside a Method execution on the server, calling another Method runs that Method as if it were called by the same client. That means the Method runs as usual, and the context - `userId`, `connection`, etc - are taken from the original Method call.
