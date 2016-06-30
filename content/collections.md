@@ -1,7 +1,8 @@
 ---
 title: Collections and Schemas
-order: 1
+order: 10
 description: How to define, use, and maintain MongoDB collections in Meteor.
+discourseTopicId: 19660
 ---
 
 After reading this guide, you'll know:
@@ -83,7 +84,7 @@ A local collection is a convenient way to use the full power of the Minimongo li
 
 Although MongoDB is a schema-less database, which allows maximum flexibility in data structuring, it is generally good practice to use a schema to constrain the contents of your collection to conform to a known format. If you don't, then you tend to end up needing to write defensive code to check and confirm the structure of your data as it *comes out* of the database, instead of when it *goes into* the database. As in most things, you tend to *read data more often than you write it*, and so it's usually easier, and less buggy to use a schema when writing.
 
-In Meteor, the pre-eminent schema package is [aldeed:simple-schema](http://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents.
+In Meteor, the pre-eminent schema package is [aldeed:simple-schema](https://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents. Another alternative is [jagi:astronomy](https://atmospherejs.com/jagi/astronomy) which is a full Object Model (OM) layer offering schema definition, server/client side validators, object methods and event handlers.
 
 To write a schema using `simple-schema`, you can simply create a new instance of the `SimpleSchema` class:
 
@@ -215,7 +216,7 @@ class ListsCollection extends Mongo.Collection {
 
     // Call the original `insert` method, which will validate
     // against the schema
-    return super(list, callback);
+    return super.insert(list, callback);
   }
 }
 
@@ -233,7 +234,7 @@ class ListsCollection extends Mongo.Collection {
   // ...
   remove(selector, callback) {
     Package.todos.Todos.remove({listId: selector});
-    return super(selector, callback);
+    return super.remove(selector, callback);
   }
 }
 ```
@@ -293,7 +294,7 @@ We are then able to wire in the denormalizer into the mutations of the `Todos` c
 class TodosCollection extends Mongo.Collection {
   insert(doc, callback) {
     doc.createdAt = doc.createdAt || new Date();
-    const result = super(doc, callback);
+    const result = super.insert(doc, callback);
     incompleteCountDenormalizer.afterInsertTodo(doc);
     return result;
   }
@@ -350,7 +351,7 @@ Migrations.add({
   version: 1,
   up() {
     // This is how to get access to the raw MongoDB node collection that the Meteor server collection wraps
-    const batch = Lists._collection.rawCollection().initializeUnorderedBulkOp();
+    const batch = Lists.rawCollection().initializeUnorderedBulkOp();
     Lists.find({todoCount: {$exists: false}}).forEach(list => {
       const todoCount = Todos.find({listId: list._id}).count();
       // We have to use pure MongoDB syntax here, thus the `{_id: X}`

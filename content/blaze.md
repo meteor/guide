@@ -1,7 +1,8 @@
 ---
 title: Blaze
-order: 7
+order: 22
 description: How to use Blaze, Meteor's frontend rendering system, to build usable and maintainable user interfaces.
+discourseTopicId: 19666
 ---
 
 After reading this guide, you'll know:
@@ -11,9 +12,9 @@ After reading this guide, you'll know:
 3. How the Blaze rendering engine works under the hood and some advanced techniques for using it.
 4. How to test Blaze templates.
 
-Blaze is Meteor's built in reactive rendering library. Usually, templates are written in [Spacebars](https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md), a variant of [Handlebars](http://handlebarsjs.com) designed to take advantage of [Tracker](https://github.com/meteor/meteor/tree/devel/packages/tracker), Meteor's reactivity system. These templates are compiled into JavaScript UI components that are rendered by the Blaze library.
+Blaze is Meteor's built-in reactive rendering library. Usually, templates are written in [Spacebars](https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md), a variant of [Handlebars](http://handlebarsjs.com) designed to take advantage of [Tracker](https://github.com/meteor/meteor/tree/devel/packages/tracker), Meteor's reactivity system. These templates are compiled into JavaScript UI components that are rendered by the Blaze library.
 
-Blaze is not required to build applications in Meteor---you can also easily use [React](http://react-in-meteor.readthedocs.org/en/latest/) or [Angular](http://www.angular-meteor.com) to develop your UI. However, this particular article will take you through best practices in building an application in Blaze, which is used as the UI engine in all of the other articles.
+Blaze is not required to build applications in Meteor---you can also easily use [React](http://react-in-meteor.readthedocs.org/en/latest/) or [Angular](http://www.angular-meteor.com) to develop your UI ([here's a comparison](ui-ux.html#view-layers)). However, this particular article will take you through best practices in building an application in Blaze, which is used as the UI engine in all of the other articles.
 
 <h2 id="spacebars">Spacebars</h2>
 
@@ -89,7 +90,7 @@ Template.Todos_item.helpers({
     const classname = options.hash.classname || 'checked';
     if (todo.checked) {
       return classname;
-    } else if (kws.hash.noClass) {
+    } else if (options.hash.noClass) {
       return `no-${classname}`;
     }
   }
@@ -176,13 +177,15 @@ A block helper, called with `{% raw %}{{# }}{% endraw %}` is a helper that takes
 <template name="caller">
   {{#myIf condition=true}}
     <h1>I'll be rendered!</h1>
+  {{else}}
+    <h1>I won't be rendered</h1>    
   {{/myIf}}
 </template>
 ```
 
-<h3 id="builtin-block-helpers">Builtin Block Helpers</h3>
+<h3 id="builtin-block-helpers">Built-in Block Helpers</h3>
 
-There are a few builtin block helpers that are worth knowing about:
+There are a few built-in block helpers that are worth knowing about:
 
 <h4 id="if-unless">If / Unless</h4>
 
@@ -218,11 +221,11 @@ The `{% raw %}{{#let}}{% endraw %}` helper is useful to capture the output of a 
 {{/let}}
 ```
 
-Note that `name` and `color` (and `todo` above) are only added to scope in the template, they *are not* added to the data context. Specifically this means if you call a helper, they will not be on `this`. So if you need to access them in a helper, you should pass them in as an argument (like we do with `(todoArgs todo)` above).
+Note that `name` and `color` (and `todo` above) are only added to scope in the template; they *are not* added to the data context. Specifically this means that inside helpers and event handlers, you cannot access them with `this.name` or `this.color`. If you need to access them inside a helper, you should pass them in as an argument (like we do with `(todoArgs todo)` above).
 
 <h4 id="each-and-with">Each and With</h4>
 
-There are also two Spacebars built in helpers, `{% raw %}{{#each}}{% endraw %}`, and `{% raw %}{{#with}}{% endraw %}`, which we do not recommend using (see [use each-in](#use-each-in) below). These block helpers change the data context within a template, which can be difficult to reason about.
+There are also two Spacebars built-in helpers, `{% raw %}{{#each}}{% endraw %}`, and `{% raw %}{{#with}}{% endraw %}`, which we do not recommend using (see [use each-in](#use-each-in) below). These block helpers change the data context within a template, which can be difficult to reason about.
 
 Like `{% raw %}{{#each .. in}}{% endraw %}`, `{% raw %}{{#each}}{% endraw %}` iterates over an array or cursor, changing the data context within its content block to be the item in the current iteration. `{% raw %}{{#with}}{% endraw %}` simply changes the data context inside itself to the provided object. In most cases it's better to use `{% raw %}{{#each .. in}}{% endraw %}` and `{% raw %}{{#let}}{% endraw %}` instead, just like it's better to declare a variable than use the JavaScript `with` keyword.
 
@@ -232,7 +235,7 @@ Spacebars has a very strict HTML parser. For instance, you can't self-close a `d
 
 <h4 id="escaping">Escaping</h4>
 
-To insert literal curly braces: `{% raw %}{{ }}{% endraw %}` and the like, add a pipe character, `|`:
+To insert literal curly braces: `{% raw %}{{ }}{% endraw %}` and the like, add a pipe character, `|`, to the opening braces:
 
 ```
 <!-- will render as <h1>All about {{</h1> -->
@@ -244,7 +247,7 @@ To insert literal curly braces: `{% raw %}{{ }}{% endraw %}` and the like, add a
 
 <h2 id="reusable-components">Reusable components in Blaze</h2>
 
-In <a href="ui-ux">the UI/UX article</a> we discussed the merits of creating reusable components that interact with their environment in clear and minimal ways.
+In [UI/UX article](ui-ux.html#smart-components) we discussed the merits of creating reusable components that interact with their environment in clear and minimal ways.
 
 Although Blaze, which is a simple template-based rendering engine, doesn't enforce a lot of these principles (unlike other frameworks like React and Angular) you can enjoy most of the same benefits by following some conventions when writing your Blaze components. This section will outline some of these "best practices" for writing reusable Blaze components.
 
@@ -293,7 +296,15 @@ Additionally, for better clarity, always explicitly provide a data context to an
 
 For similar reasons to the above, it's better to use `{% raw %}{{#each todo in todos}}{% endraw %}` rather than the older `{% raw %}{{#each todos}}{% endraw %}`. The second sets the entire data context of its children to a single `todo` object, and makes it difficult to access any context from outside of the block.
 
-The only reason not to use `{% raw %}{{#each .. in}}{% endraw %}` would be because it makes it difficult to access the `todo` symbol inside event handlers. Typically the solution to this is simply to use a sub-component to render the inside of the loop.
+The only reason not to use `{% raw %}{{#each .. in}}{% endraw %}` would be because it makes it difficult to access the `todo` symbol inside event handlers. Typically the solution to this is to use a sub-component to render the inside of the loop:
+
+```html
+{{#each todo in todos}}
+  {{> Todos_item todo=todo}}
+{{/each}}
+```
+
+Now you can access `this.todo` inside `Todos_item` event handlers and helpers.
 
 <h3 id="pass-data-into-helpers">Pass data into helpers</h3>
 
@@ -321,7 +332,7 @@ Template.Lists_show.helpers({
 
 Template.Lists_show.events({
   'click .js-cancel'(event, instance) {
-    instance.state.set('editing', false);
+    instance.state.set('editingTodo', false);
   }
 });
 ```
@@ -347,11 +358,15 @@ Once the state dictionary has been created we can access it from helpers and mod
 If you have common functionality for a template instance that needs to be abstracted or called from multiple event handlers, it's sensible to attach it as functions directly to the template instance in the `onCreated()` callback:
 
 ```js
+import {
+  updateName,
+} from '../../api/lists/methods.js';
+
 Template.Lists_show.onCreated(function() {
   this.saveList = () => {
     this.state.set('editing', false);
 
-    Lists.methods.updateName.call({
+    updateName.call({
       listId: this.data.list._id,
       newName: this.$('[name=name]').val()
     }, (err) => {
@@ -426,7 +441,7 @@ Template.Lists_show.helpers({
 
 Template.Todos_item.events({
   'focus input[type=text]'() {
-    this.onEditing(true);
+    this.onEditingChange(true);
   }
 });
 ```
@@ -456,14 +471,14 @@ All of the suggestions about reusable components apply to smart components. In a
 
 <h3 id="subscribing">Subscribe from `onCreated`</h3>
 
-You should subscribe to publications from the server from an `onCreated` callback (within an `autorun` block if you have reactively changing arguments). In the Todos example app, in the `Lists_show_page` template we subscribe to the `Todos.inList` publication based on the current `_id` FlowRouter param:
+You should subscribe to publications from the server from an `onCreated` callback (within an `autorun` block if you have reactively changing arguments). In the Todos example app, in the `Lists_show_page` template we subscribe to the `todos.inList` publication based on the current `_id` FlowRouter param:
 
 ```js
 Template.Lists_show_page.onCreated(function() {
   this.getListId = () => FlowRouter.getParam('_id');
 
   this.autorun(() => {
-    this.subscribe('Todos.inList', this.getListId());
+    this.subscribe('todos.inList', this.getListId());
   });
 });
 ```
@@ -651,6 +666,6 @@ This means when you render a Blaze template, you are simply running a function o
 
 <h3 id="views">What is a view?</h3>
 
-One of the most core concepts in Blaze is the "view", which a building block that represents a reactively rendering area of a template. The view is the machinery that works behind the scenes to track reactivity, do lookups, and re-render appropriately when data changes. The view is the unit of re-rendering in Blaze. You can even use the view tree to walk the rendered component hierarchy, but it's better to avoid this in favor of communicating between components using callbacks, template arguments, or global data stores.
+One of the most core concepts in Blaze is the "view", which is a building block that represents a reactively rendering area of a template. The view is the machinery that works behind the scenes to track reactivity, do lookups, and re-render appropriately when data changes. The view is the unit of re-rendering in Blaze. You can even use the view tree to walk the rendered component hierarchy, but it's better to avoid this in favor of communicating between components using callbacks, template arguments, or global data stores.
 
 You can read more about views in the [Blaze docs](http://docs.meteor.com/#/full/blaze_view).
