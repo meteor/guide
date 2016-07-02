@@ -16,7 +16,7 @@ discourseTopicId: 19665
 
 <h2 id="view-layers">视图层</h2>
 
-Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)，[React](react.html) 和 [Angular](http://www.angular-meteor.com)。Blaze 是 Meteor 于 2011 年发布的时候，作为其中一个部分创造出来的。React 由 Facebook 于 2013 年创造。而 Angular 则是由 Google 于 2010 年创造。他们都已经被成功应用于大型产品级应用中。Blaze 是其中易学的，并且拥有最多的 Meteor 全栈包，但 React 和 Angular 发得更加健全，并且拥有更大的社区。
+Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)、[React](react.html) 和 [Angular](http://www.angular-meteor.com)。Blaze 是 Meteor 于 2011 年发布的时候，作为其中一个部分创造出来的。React 由 Facebook 于 2013 年创造。而 Angular 则是由 Google 于 2010 年创造。他们都已经被成功应用于大型产品级应用中。Blaze 是其中最易学的，并且拥有最多的 Meteor 全栈包，但 React 和 Angular 则发展得更加健全，并且拥有更大的社区。
 
 <h3 id="syntax">语法</h3>
 
@@ -28,8 +28,10 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
 <h3 id="community">社区</h3>
 
 - Blaze 在 Atmosphere 上拥有许多 Meteor 全栈包，例如 [`useraccounts:core`](https://atmospherejs.com/useraccounts/core) 和 [`aldeed:autoform`](https://atmospherejs.com/aldeed/autoform)。
-- React 在 Github 上有 4.2 万个星，在 npm 上有 1.3 万个包。
-- Angluar 在 Github 上有 1.2 万个星，在 npm 上有 4 千个包。
+- React 在 Github 上有 4.2 万个 stars，在 npm 上有 1.3 万个包。
+- Angluar 在 Github 上有 1.2 万个 stars，在 npm 上有 4 千个包。
+
+> 译注：在 Github 上，用户可以为不同的项目点亮 star 以表示喜欢或支持，因此，stars 数量越高，代表这个项目越受欢迎。作为对比参考，Meteor 现在有 3.4 万个 stars，而 Bootstrap 有 9.7 万个 stars。
 
 <h3 id="performance">性能</h3>
 
@@ -45,7 +47,7 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
   - Ionic 1 使用 Angular 1， 但这里同样有 [Blaze](http://meteoric-doc.com/) 和 [React](http://reactionic.github.io/) 的移植版。
   - 如果你使用 React，目前最流行的 React 移动网页框架是 [Reapp](http://reapp.io/)。
 - **原生应用**
-  - 任何原生 IOS 或 Android 应用都可以通过 [DDP](https://www.meteor.com/ddp) 和一个 Meteor 服务器进行连接。对于 IOS 应用， 你可以使用 [`meteor-ios`](https://github.com/martijnwalraven/meteor-ios) 框架。
+  - 任何原生 iOS 或 Android 应用都可以通过 [DDP](https://www.meteor.com/ddp) 和一个 Meteor 服务器进行连接。对于 iOS 应用， 你可以使用 [`meteor-ios`](https://github.com/martijnwalraven/meteor-ios) 框架。
   - 你可以使用 [React Native](https://facebook.github.io/react-native/) 来以 JavaScript 编写原生客户端应用。想了解更多关于如何在 Meteor 中使用 React Native，参考[这里](https://github.com/spencercarli/react-native-meteor-index)。
 
 <h2 id="components">UI 组件</h2>
@@ -60,11 +62,11 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
 
 一个「可复用」的组件是这样一个组件，它在渲染时不依赖任何外部环境，仅依赖直接输入（Blaze 中的*模板参数*或 React 中的 *props* ）和内部状态进行渲染。
 
-特别地，在 Meteor 应用中，这意味着一个组件不会从全局数据源中直接获取数据——例如数据集（Collections）、数据中心（Stores）、路由器（routers）、用户数据（user data）或其他类似的地方。例如，在 Todos 示例应用中，`Lists_show` 模板从参数接收要渲染的 list 和这个 list 中的 todos，而并没有直接去 `Todos` 或 `Lists` 数据集中进行查询。
+特别地，在 Meteor 应用中，这意味着一个组件不会从全局数据源中直接获取数据——例如数据集（Collections）、数据囤（Stores）、路由器（routers）、用户数据（user data）或其他类似的地方。例如，在 Todos 示例应用中，`Lists_show` 模板从参数接收要渲染的 list 和这个 list 中的 todos，而并没有直接去 `Todos` 或 `Lists` 数据集中进行查询。
 
 可复用组件用许多优势：
 
- 1. 容易理解——你不需要了解数据在全局数据中心中如何变化，只需要知道组件参数如何变化就可以了。
+ 1. 容易理解——你不需要了解数据在全局数据囤中如何变化，只需要知道组件参数如何变化就可以了。
  
  2. 容易测试——你不需要在意他们的渲染环境，只需要提供正确的参数即可。
  
@@ -74,14 +76,14 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
 
  这里还有一种更加严格的可复用组件——「纯」组件——它没有任何内部状态。例如，在 Todos 应用中，`Todos_item` 模板仅仅根据它的参数来决定如何进行渲染。纯组件比起其它可复用组件更加容易理解和测试，因此在可能的情况下，尽量使用纯组件。 
 
-<h3 id="global-stores">全局数据中心</h3>
+<h3 id="global-stores">全局数据囤</h3>
 
-那么，哪些是你应该在可复用组件中避免使用的全局数据中心呢？的确有那么一些。Meteor 是为应用开发速度进行优化的，因此，你可以全局地访问许多东西。这对于构建「智能」组件（下面会说到）是十分方便的，然而，你需要在可复用组件中避免使用这些数据源：
+那么，哪些是你应该在可复用组件中避免使用的全局数据囤呢？的确有那么一些。Meteor 是为应用开发速度进行优化的，因此，你可以全局地访问许多东西。这对于构建「智能」组件（下面会说到）是十分方便的，然而，你需要在可复用组件中避免使用这些数据源：
 
 - 你的数据集，包括 `Meteor.users`,
 - 账户信息，例如 `Meteor.user()` 和 `Meteor.loggingIn（）`
 - 当前路由信息
-- 其他类型的客户端数据中心（更多请参考[「数据加载」章节](data-loading.html#stores)）
+- 其他类型的客户端数据囤（更多请参考[「数据加载」章节](data-loading.html#stores)）
 
 <h3 id="smart-components">智能组件</h3>
 
@@ -89,7 +91,7 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
 
 1. 订阅数据
 2. 从这些 subscriptions 中获取数据
-3. 从数据中心中获取全局客户端状态——例如路由器、账户系统以及你自己的数据或状态中心
+3. 从数据囤中获取全局客户端状态——例如路由器、账户系统以及你自己的数据或状态中心
 
 理想情况下，一个智能组件一旦汇集好了所需数据，就将它们传递给可复用子组件来进行渲染。除了一个或多个可复用子组件，智能组件通常不会渲染其他东西。这使得你能够很容易地在测试中分离渲染和数据加载。
 
@@ -166,7 +168,7 @@ Chromatic 帮助我们快速构建复杂组件。通常，在一个大型应用�
 
 在构建 Meteor 应用的用户界面时，有一些模式非常有用。
 
-<h3 id="i18n">使用 tapi18n 进行国际化</h3>
+<h3 id="i18n">使用「tapi18n」进行国际化</h3>
 
 国际化（i18n）是一种构建 UI 的过程，它使你能够很容易地将应用中的所有文字替换为其他语言。在 Meteor 中，[超棒的 `tap:i18n` 包](https://atmospherejs.com/tap/i18n)提供了一系列 API 来帮助你构建各种翻译将其应用于你的组件和前端代码之中。
 
@@ -174,7 +176,7 @@ Chromatic 帮助我们快速构建复杂组件。通常，在一个大型应用�
 
 最好仔细思考一下，在你的系统中哪些地方有用户可读的字符串，并确保你是在合理地使用 i18n 来生成这些字符串。在这一节中，我们会大致看到如何在不同的地方使用 [`tap:i18n`](#tap-i18n-js) 进行具体处理。
 
-1. **HTML templates。**UI 组件中用户可见的所有内容——这是最明显的地方。
+1. **HTML 模板。**UI 组件中用户可见的所有内容——这是最明显的地方。
 2. **客户端 JavaScript 消息。**通知或其他在客户端生成并展示给用户的消息，都应当被翻译。
 3. **服务端 JavaScript 消息和电子邮件。**服务端生成的消息或错误有时经常被用户看到。显而易见之处包括电子邮件和其他服务端生成的消息，例如移动推送通知。但微妙之处在于如何对方法调用的返回值和错误消息进行处理。错误通常都以一种更加通用的形式在连接上传递，并在到达客户端后才被翻译。
 4. **数据库中的数据。**另一个你可能想进行翻译的地方是数据库中那些用户实际产生的数据。例如，如果你在运行一个 wiki 应用，你可能想有一种机制让 wiki 页面能够被翻译成各种语言。如果实现这一点得根据你应用的具体情况来确定。
@@ -241,7 +243,7 @@ export const displayError = (error) =>  {
 你可以调用 `TAPi18n.setLanguage(fn)` 来改变语言。 `fn` 是一个（可能是响应式的）函数，它返回当前语言。例如，你可以这样写
 
 ```js
-// 一个用于表示当前语言的数据中心
+// 一个用于表示当前语言的数据囤
 export const CurrentLanguage = new ReactiveVar('en');
 
 
@@ -262,7 +264,7 @@ TAPi18n.setLanguage(() => {
 通常，用户行为会或多或少导致数据库中的数据产生变化。然而，你千万不能过于频繁地造成数据变化。例如，如果你想在用户输入文字时立刻保存这些文字，你应当确保每次方法调用之间至少间隔几百毫秒。
 
 如果你不这样做，你将遭遇全面的性能崩溃：用户的网络连接中将泛滥着海量的微小数据变动信息，你的 UI 会在你每一次敲击键盘时进行更新，这不仅可能会导致客户端性能下降，还会使你的数据库承受过多的写操作。
-> 译者注：对于大部分数据库来说，写操作相对于读操作来说都更加复杂，且性能开销更大。如果数据库承受了过多的写操作，可能影响整个数据库的性能，进而导致该应用上的所有用户体验下降，甚者无法响应。
+> 译注：对于大部分数据库来说，写操作相对于读操作来说都更加复杂，且性能开销更大。如果数据库承受了过多的写操作，可能影响整个数据库的性能，进而导致该应用上的所有用户体验下降，甚者无法响应。
 
 为了限制写操作，一个常用的方式是使用 underscore 的 [`.throttle()`](http://underscorejs.org/#throttle) 或 [`.debounce()`](http://underscorejs.org/#debounce) 函数。例如，在 Todos 示例应用中，我们将用户输入产生写操作的频率限制在每次间隔 300ms：
 
@@ -292,7 +294,7 @@ Template.Todos_item.events({
 
 <h4 id="limiting-re-rendering">限制重新渲染</h4>
 
-用户每一次输入时，即使你不打算向数据库保存一次数据，有时你仍然希望在内存数据中心里更新一下数据。如果更新这个数据中心会造成很多 UI 改变，当你过于频繁地更新它时，你会感受到糟糕的体验并丢失输入。在这种情况下，你可以像我们上面限制方法调用一样，通过 `.throttle` 限制 UI 重新渲染。你也可以使用 `.debounce()` 来确保当用户停止输入时才触发改变。
+用户每一次输入时，即使你不打算向数据库保存一次数据，有时你仍然希望在内存数据囤里更新一下数据。如果更新这个数据囤会造成很多 UI 改变，当你过于频繁地更新它时，你会感受到糟糕的体验并丢失输入。在这种情况下，你可以像我们上面限制方法调用一样，通过 `.throttle` 限制 UI 重新渲染。你也可以使用 `.debounce()` 来确保当用户停止输入时才触发改变。
 
 <h2 id="ux-patterns">用户体验模式</h2>
 
@@ -446,13 +448,13 @@ Template.Lists_show_page.helpers({
 
 <h4 id="patterns-for-new-data">展示新数据的 UX 模式</h4>
 
-如何让用户注意到新的信息（例如列表中的数据发生变化）？这对于实时系统（例如 Meteor）的开发者来说，是一个既有趣又充满挑战的 UX 问题。正如 As [Dominic](http://blog.percolatestudio.com/design/design-for-realtime/) 指出，仅仅尽可能快地更新内容可能不是一个好办法，因为这可能让用户忽略掉内容变化，或困惑于到底发生了什么。
+如何让用户注意到新的信息（例如列表中的数据发生变化）？这对于实时系统（例如 Meteor）的开发者来说，是一个既有趣又充满挑战的 UX 问题。正如 [Dominic](http://blog.percolatestudio.com/design/design-for-realtime/) 指出，仅仅尽可能快地更新内容可能不是一个好办法，因为这可能让用户忽略掉内容变化，或困惑于到底发生了什么。
 
 一个解决方案是为列表变化添加*动画效果*（我们将在[动画章节](#animation)中看到），但在某些时候，这可能并不是最好的办法。例如，若用户正在读一系列评论，在他们读完之前，可能根本不想看到任何变化。
 
 在这种情况下，我们也可以在不更新主视 UI，仅仅告知用户这里有了新的变化。然而，在 Meteor 这样默认实时的系统里，要阻止数据变化对 UI 产生影响并不容易。
 
-感谢智能组件与可复用组件的分离，现在要做到这一点是可能的。由于可复用组件仅仅渲染它得到的数据，因此我们可以让智能组件来控制哪些数据该传递下去。我们可以使用一个 [*local collection*](collections.html#local-collections) 来保存需要现在渲染的数据（而不是客户端收到的所有可渲染数据，译者注），然后，当用户请求更新时，才将其他数据传入这个 collection：
+感谢智能组件与可复用组件的分离，现在要做到这一点是可能的。由于可复用组件仅仅渲染它得到的数据，因此我们可以让智能组件来控制哪些数据该传递下去。我们可以使用一个 [*local collection*](collections.html#local-collections) 来保存需要现在渲染的数据（而不是客户端收到的所有可渲染数据，译注），然后，当用户请求更新时，才将其他数据传入这个 collection：
 
 ```js
 Template.Lists_show_page.onCreated(function() {
@@ -584,7 +586,7 @@ Messages.methods.insert = new ValidatedMethod({
 
 <h3 id="animating-visiblity">为可见性变化添加动画效果</h3>
 
-有哪些 UI 变化需要动画效果呢？这其中最基本的恐怕要数条目的出现于消失了。在 Blaze 中，我们可以使用 [`percolate:momentum` 包](https://atmospherejs.com/percolate/momentum)来向这种状态变化添加一系列来自 [`velocity 动画库`](http://julian.com/research/velocity/)的动画效果。 
+有哪些 UI 变化需要动画效果呢？这其中最基本的恐怕要数条目的出现与消失了。在 Blaze 中，我们可以使用 [`percolate:momentum` 包](https://atmospherejs.com/percolate/momentum)来向这种状态变化添加一系列来自 [`velocity 动画库`](http://julian.com/research/velocity/)的动画效果。 
 
 在 Todos 示例应用中，list 的编辑状态变化就是一个很好的例子：
 
