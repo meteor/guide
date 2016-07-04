@@ -173,7 +173,7 @@ Then we can install any npm CSS processing packages that we'd like to use and re
 
 ```
 {
-  "devDependencies": {
+  "dependencies": {
     "autoprefixer": "^6.3.1"
   },
   "postcss": {
