@@ -352,7 +352,7 @@ Template.Invoices_newInvoice.events({
             amount: []
           };
 
-          // 查看从 Method 返回的验证错误
+          // 遍历从 Method 返回的验证错误
           err.details.forEach((fieldError) => {
             // XXX i18n
             errors[fieldError.name].push(fieldError.type);
@@ -368,28 +368,27 @@ Template.Invoices_newInvoice.events({
 ```
 
 As you can see, there is a fair amount of boilerplate to handle errors nicely in a form, but most of it can be easily abstracted by an off-the-shelf form framework or a simple application-specific wrapper of your own design.
-正如你所看到的，表单中有大量的 boilerplate 可以用来处理错误，大部分 boilerplate 可以通过现成的表单结构或者你自己封装的简单应用程序提取出来。
+正如你所看到的，表单中有大量的 boilerplate 可以用来处理错误，大部分 boilerplate 可以通过现成的表单框架或你自己封装的、基于特定应用的设计来实现。
 
 <h2 id="loading-data">通过 Methods 加载数据</h2>
 
-因为 Method 可以作为通用 RPC，所以也可以被用于获取数据而不是发布数据。对比通过发布加载数据，使用 Methods 加载数据有有点也有不足，但到目前为止，我们建议总是通过发布加载数据。
+因为 Method 可以作为通用 RPC，所以也可以被用于获取数据而不用通过 publications。对比通过 publications 加载数据，使用 Methods 加载数据有有点也有不足，但到目前为止，我们建议总是通过 publications 加载数据。
 
-当服务器端数据变化时，服务器端一个复杂计算的结果不变，在这种情况下用 Method 获取数据非常有用，通过 Method 获取数据的最大不足就是获取的数据不会自动加载到 Minimongo，Meteor 的客户端数据缓存，所以需要你手动管理数据周期。
+当服务器端数据变化时，服务器端一个复杂计算的结果不变，在这种情况下用 Method 获取数据非常有用，通过 Method 获取数据的最大不足就是获取的数据不会自动加载到 Minimongo，即 Meteor 的客户端数据缓存，所以需要你手动管理数据生命周期。
 
-<h4 id="local-collection">使用本地存储储存和展示通过 Method 获取的数据</h4>
+<h4 id="local-collection">使用一个本地数据集来存储并显示来自 Method 的数据</h4>
 
-Collections 可以方便地在客户端存储数据。如果你不是通过订阅的方式获取数据，可以手动将数据添加到 collection. 下面我们来看一个例子，将复杂的算法用于计算拥有众多玩家的一系列游戏的平均得分。我们不想使用发布加载数据因为我们想要控制何时让它运行，而不想让数据自动缓存。
+数据集可以方便地在客户端存储数据。如果你不是通过 subscriptions 的方式获取数据，可以手动将数据添加到数据集。 下面我们来看一个例子，将复杂的算法用于计算拥有众多玩家的一系列游戏的平均得分。我们不想使用 publications 加载数据因为我们想要控制何时让它运行，而不想让数据自动缓存。
 
-First, you need to create a _local collection_ - this is a collection that exists only on the client side and is not tied to a database collection on the server. Read more in the [Collections article](http://guide.meteor.com/collections.html#local-collections).
-首先，你需要创建一个本地 collection, 该 collection 只存在于客户端而不跟服务器端的 collection 联系。了解更多 [Collections article](http://guide.meteor.com/collections.html#local-collections).
+首先，你需要创建一个本地数据集， 该数据集只存在于客户端而不跟服务器端的数据集联系。在[数据集一章](http://guide.meteor.com/collections.html#local-collections)中了解更多。
 
 ```js
-// 在客户端声明一个本地 collection
+// 在客户端声明一个本地数据集
 // 传送一个 `null` 作为参数
 ScoreAverages = new Mongo.Collection(null);
 ```
 
-现在，如果你通过 Method 获取数据，可以放在该 collection 里面：
+现在，如果你通过 Method 获取数据，可以放在该数据集里面：
 
 ```js
 import { calculateAverages } from '../api/games/methods.js';
@@ -407,9 +406,9 @@ function updateAverages() {
 }
 ```
 
-现在我们可以在一个 UI 组件中使用名为 `ScoreAverages` 的本地 collection 中的数据，跟我们使用 MongoDB collection 是完全一样的。它不会自动更新，每次计算结果的时候都需要调用 `updateAverages`.
+现在我们可以在一个 UI 组件中使用名为 `ScoreAverages` 的本地数据集中的数据，跟我们使用 MongoDB 数据集 是完全一样的。它不会自动更新，每次计算结果的时候都需要调用 `updateAverages`.
 
-<h2 id="advanced">更高级的理念</h2>
+<h2 id="advanced">进阶概念</h2>
 
 虽然根据 Meteor 的入门手册你可以很轻松地在简单应用中使用 Meteor, 但是了解 Method 是如何运作的可以帮你更好地使用它。类似 Meteor 这样的框架为你做了很多工作，缺点之一就是你不总是理解究竟是怎样运作的，所以学习一些核心概念是很重要的。
 
@@ -421,24 +420,23 @@ function updateAverages() {
 
 跟所有 Method 一样，如果我们在客户端和服务器端定义该 Method, Method 模拟在调用它的客户端上运行。
 
-客户端进入到一种特殊模式，在该模式下可以跟踪到客户端 collections 的所有变化，将来可以回滚。该步骤结束后，应用的用户可以看到 UI 界面立即根据客户端数据库的内容进行更新，即使服务器还没有收到任何数据。
+客户端进入到一种特殊模式，在该模式下可以跟踪到客户端数据集的所有变化，将来可以回滚。该步骤结束后，应用的用户可以看到 UI 界面立即根据客户端数据库的内容进行更新，即使服务器还没有收到任何数据。
 
-如果 Method 模拟抛出一个异常，默认情况下 Meteor 会忽略它并继续步骤（2）。如果你使用 `ValidatedMethod` 或者传送一个特殊的 `throwStubExceptions` 选项到 `Meteor.apply`,那么从模拟中抛出的异常将导致服务器端的所有 Method 停止运行。
+如果 Method 模拟抛出一个异常，默认情况下 Meteor 会忽略它并继续步骤 (2)。如果你使用 `ValidatedMethod` 或者传送一个特殊的 `throwStubExceptions` 选项到 `Meteor.apply`,那么从模拟中抛出的异常将导致服务器端的 Method 彻底停止运行。
 
-The return value of the Method simulation is discarded, unless the `returnStubValue` option is passed when calling the Method, in which case it is returned to the Method caller. ValidatedMethod passes this option by default.
 除非在调用 Method 时传送 `returnStubValue` 选项，否则 Method 返回值会被抛弃，而不会返回到 Method 调用者。ValidatedMethod 在默认情况下会传送 `returnStubValue` 选项。
 
 <h4 id="lifecycle-ddp-message">2. 一个 `method` DDP 消息发送到服务器</h4>
 
-Meteor 客户端构建一个 DDP 消息并发送到服务器。消息包括 Method 的名称，参数，自动生成的 ID, 这些消息可以代表所调用的 Method.
+Meteor 客户端构建一个 DDP 消息并发送到服务器。消息包括 Method 的名称，参数，自动生成的代表该调用的 Method 的 ID.
 
 <h4 id="lifecycle-server">3. Method 在服务器上运行</h4>
 
-当服务器收到消息，会在服务器上再次运行 Method 代码。客户端的版本只是一个模拟，将会被回滚，而服务器上是真实的版本，将会被写入数据库。在服务器上运行实际的 Method 代码是很重要的，因为我们知道服务器是一个值得信赖的环境，安全和关键的代码可以在上面按照我们所期望的方式运行。
+当服务器收到消息，会在服务器上再次运行 Method 代码。客户端的版本只是一个模拟，将会被回滚，而服务器上是真实的版本，将会被写入数据库。在服务器上运行实际的 Method 代码是很重要的，因为我们知道服务器是一个值得信赖的环境，关键的代码可以在上面按照我们所期望的方式安全地运行。
 
 <h4 id="lifecycle-result">4. 返回值被发送到客户端</h4>
 
-Method 在服务器上结束运行后，就会把在第二步生成的 ID , `result` 消息和返回值发送到客户端。这些数据会被储存在客户端，但不会调用 Method 回调。如果你传递一个[`onResultReceived` option 到 `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply)，回调就会被启动。
+Method 在服务器上结束运行后，就会把在第二步生成的 ID , `result` 消息和返回值发送到客户端。这些数据会被储存在客户端，但不会调用 Method 回调。如果你传递一个[`onResultReceived` 选项 到 `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply)，回调就会被启动。
 
 <h4 id="lifecycle-publications">5. DDP 发布通过 Method 实现更新</h4>
 
@@ -446,17 +444,17 @@ Method 在服务器上结束运行后，就会把在第二步生成的 ID , `res
 
 <h4 id="lifecycle-updated">6. `updated` 发送到客户端，数据替换服务器结果，Method 回调启动</h4>
 
-当相关的数据更新发送到正确的客户端后，服务器退回 Method 生命周期中的最后一条信息 —— DDP `updated` 信息和关联的 Method ID. 客户端回滚在第一步 Method 模拟中客户端数据的任何变化，并替换为第五步中服务器端发送的更新数据。
+当相关的数据更新发送到正确的客户端后，服务器返回 Method 生命周期中的最后一条信息 —— DDP `updated` 信息和关联的 Method ID. 客户端回滚在第一步 Method 模拟中客户端数据的任何变化，并替换为第五步中服务器端发送的更新数据。
 
 最后，传递给 `Meteor.call` 的回调实际上跟第四步中的返回值一起启动。客户端更新后再实现回调是很重要的，所以 Method 回调可以假设客户端状态反映了 Method 所做的任何改变。
 
 <h4 id="lifecycle-error">错误情况</h4>
 
-在上面的步骤中，我们没有考虑 Method 在服务器端执行抛出错误的情况。在这种情况下是没有返回值的，客户端也会得到一个错误值。Method 回调在瞬间启动并返回一个错误值作为第一个参数。了解更多信息请阅读上文关于错误处理的段落。
+在上面的步骤中，我们没有考虑 Method 在服务器端执行抛出错误的情况。在这种情况下是没有返回值的，客户端也会得到一个错误值。Method 回调立即启动并返回一个错误值作为第一个参数。了解更多信息请阅读上文关于错误处理的段落。
 
-<h3 id="methods-vs-rest">Methods over REST 的优点</h3>
+<h3 id="methods-vs-rest">与 REST 相比之下 Method 的优点</h3>
 
-相比在 HTTP REST 端点上建立现代应用程序，我们相信 Method 提供了一个更好的起点。我们复习一下有哪些方面是你使用 HTTP 需要担心，而 Meteor 可以帮你控制的。这部分的目的不是跟你说 REST 有多不好 —— 而是提醒你在 Meteor 应用中你不必处理这些情况。
+相比在 HTTP REST 端点上建立现代应用程序，我们相信 Method 提供了一个更好的起点。我们回顾一下有哪些方面是你使用 HTTP 需要担心，而 Meteor 可以帮你控制的。这部分的目的不是跟你说 REST 有多不好 —— 而是提醒你在 Meteor 应用中你不必处理这些情况。
 
 <h4 id="non-blocking">Methods 使用同步，非阻塞的 APIs</h4>
 
@@ -464,7 +462,7 @@ Method 在服务器上结束运行后，就会把在第二步生成的 ID , `res
 
 <h4 id="ordered">Methods 总是按顺序运行和返回</h4>
 
-访问 REST API 有时会出现会出现你按顺序提出两个请求，但结果却没有按顺序返回的情况。Meteor 的运行机制可以保证这种情况不会在 Method 中产生。当从客户端收到多个调用 Method 的请求时， Meteor 会按顺序执行完一个 Method 再执行下一个 Method. 如果在一个需要长时间运行的 Method 中你想要禁用这种方法，可以使用 `this.unblock()` [`this.unblock()`](http://docs.meteor.com/#/full/method_unblock)，这样即使 Method 在运行，下一个 Method 也可以同时进行。因为 Meteor 是基于 Websockets 而非 HTTP 的，所有的 Method 和调用和返回结果都可以保证以正确的顺序到达。你也可以把 `wait: true` 传递给 `Meteor.apply`，这样就可以实现不运行其他 Method 除非该特殊的 Method 返回结果。
+访问 REST API 有时会出现会出现你按顺序提出两个请求，但结果却没有按顺序返回的情况。Meteor 的运行机制可以保证这种情况不会在 Method 中产生。当从客户端收到多个调用 Method 的请求时， Meteor 会按顺序执行完一个 Method 再执行下一个 Method. 如果在一个需要长时间运行的 Method 中你想要禁用这种方法，可以使用 `this.unblock()` [`this.unblock()`](http://docs.meteor.com/#/full/method_unblock)，这样即使 Method 在运行，下一个 Method 也可以同时进行。因为 Meteor 是基于 WebSockets 而非 HTTP 的，所有的 Method 和调用和返回结果都可以保证以正确的顺序到达。你也可以把 `wait: true` 传递给 `Meteor.apply`，这样就可以实现不运行其他 Method 除非该特殊的 Method 返回结果。
 
 <h4 id="change-tracking">跟踪变动，以便优化 UI</h4>
 
@@ -480,7 +478,7 @@ Method 在服务器上结束运行后，就会把在第二步生成的 ID , `res
 
 当从客户端 Method 模拟中往 Minimongo 插入文件时，每个文件的 `_id` 属性都是随机产生的字符串。当 Method 在服务器端执行时，在插入数据库前会重新生成 ID。如果执行不当的话，服务器端产生的 ID 可能就是不同的，在这种情况下，当 Method 模拟回滚并替换服务器的数据时，可能会出现页面闪烁和 UI 布局问题。但 Meteor 觉不会让这种情况发生！
 
-Meteor Method 和调用该 Method 的客户端共享一个随机产生的 seed，所以客户端和服务器端产生的 ID 都可以保证是相同的。这意味着当 Method 被发送到服务器时你也可以放心使用客户端产生的 ID，相信当 Method 执行结束时所产生的 ID 跟我们所使用的 ID 是一样的。一个应用场景就是用于在数据库创建文件，然后立即重定向到包含该文件 ID 的 url.
+Meteor Method 和调用该 Method 的客户端共享一个随机产生的种子，所以客户端和服务器端产生的 ID 都可以保证是相同的。这意味着当 Method 被发送到服务器时你也可以放心使用客户端产生的 ID，相信当 Method 执行结束时所产生的 ID 跟我们所使用的 ID 是一样的。一个应用场景就是用于在数据库创建文件，然后立即重定向到包含该文件 ID 的 url.
 
 <h3 id="retries">Method 重试</h3>
 
@@ -490,6 +488,6 @@ Meteor Method 和调用该 Method 的客户端共享一个随机产生的 seed�
 
 <h3 id="comparison-with-allow-deny">与 allow/deny 的比较</h3>
 
-Meteor 核心 API 有一个代替 Method 从客户端操作数据的选择。相对于明确定义 Method 和参数，你可以直接在客户端使用 `insert`, `update`, 和 `remove`，只需要安全规则 allow/deny 中说明，[`allow`](http://docs.meteor.com/#/full/allow) 和 [`deny`](http://docs.meteor.com/#/full/deny)。在 Meteor 手册中，我们强烈建议使用 Method，而不是 allow/deny. 了解更多 allow/deny 可能出现的问题请阅读文章 [Security article](security.html#allow-deny).
+Meteor 核心 API 有一个代替 Method 从客户端操作数据的选择。相对于明确定义 Method 和参数，你可以直接在客户端使用 `insert`, `update`, 和 `remove`，只需要安全规则 allow/deny 中说明，[`allow`](http://docs.meteor.com/#/full/allow) 和 [`deny`](http://docs.meteor.com/#/full/deny)。在 Meteor 手册中，我们强烈建议使用 Method，而不是 allow/deny. 了解更多 allow/deny 可能出现的问题请阅读文章 [安全性章节](security.html#allow-deny).
 
 跟 allow/deny 的特点相比，对 Meteor Method 的了解一向存在误解，包括 Method 更难实现 UI 优化。但是，客户端的 `insert`, `update`, 和 `remove` 是在 Method 的基础上执行的，所以 Method 更加强大。只需要在客户端和服务器上定义 Method 代码，就默认得到优化的 UI, 如以上方法生命周期部分所述。
