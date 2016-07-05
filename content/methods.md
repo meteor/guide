@@ -367,7 +367,6 @@ Template.Invoices_newInvoice.events({
 });
 ```
 
-As you can see, there is a fair amount of boilerplate to handle errors nicely in a form, but most of it can be easily abstracted by an off-the-shelf form framework or a simple application-specific wrapper of your own design.
 正如你所看到的，表单中有大量的 boilerplate 可以用来处理错误，大部分 boilerplate 可以通过现成的表单框架或你自己封装的、基于特定应用的设计来实现。
 
 <h2 id="loading-data">通过 Methods 加载数据</h2>
@@ -436,7 +435,7 @@ Meteor 客户端构建一个 DDP 消息并发送到服务器。消息包括 Meth
 
 <h4 id="lifecycle-result">4. 返回值被发送到客户端</h4>
 
-Method 在服务器上结束运行后，就会把在第二步生成的 ID , `result` 消息和返回值发送到客户端。这些数据会被储存在客户端，但不会调用 Method 回调。如果你传递一个[`onResultReceived` 选项 到 `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply)，回调就会被启动。
+Method 在服务器上结束运行后，就会把在第二步生成的 ID , `result` 消息和返回值发送到客户端。这些数据会被储存在客户端，但不会调用 Method 回调。如果你传递一个[`onResultReceived` 选项到 `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply)，回调就会被启动。
 
 <h4 id="lifecycle-publications">5. DDP 发布通过 Method 实现更新</h4>
 
@@ -476,7 +475,7 @@ Method 在服务器上结束运行后，就会把在第二步生成的 ID , `res
 2. 在一个服务器端的 Method 模拟中，调用并运行另外一个 Method,  跟在客户端运行一样。这说明 Method 像往常一样运行，`userId`, `connection` 等环境变量可以从原来调用的 Method 获取。
 <h3 id="consistent-id-generation">一致的 ID 生成和 UI 的优化</h3>
 
-当从客户端 Method 模拟中往 Minimongo 插入文件时，每个文件的 `_id` 属性都是随机产生的字符串。当 Method 在服务器端执行时，在插入数据库前会重新生成 ID。如果执行不当的话，服务器端产生的 ID 可能就是不同的，在这种情况下，当 Method 模拟回滚并替换服务器的数据时，可能会出现页面闪烁和 UI 布局问题。但 Meteor 觉不会让这种情况发生！
+当从客户端 Method 模拟中往 Minimongo 插入文件时，每个文件的 `_id` 属性都是随机产生的字符串。当 Method 在服务器端执行时，在插入数据库前会重新生成 ID。如果执行不当的话，服务器端产生的 ID 可能就是不同的，在这种情况下，当 Method 模拟回滚并替换服务器的数据时，可能会出现页面闪烁和 UI 布局问题。但 Meteor 绝不会让这种情况发生！
 
 Meteor Method 和调用该 Method 的客户端共享一个随机产生的种子，所以客户端和服务器端产生的 ID 都可以保证是相同的。这意味着当 Method 被发送到服务器时你也可以放心使用客户端产生的 ID，相信当 Method 执行结束时所产生的 ID 跟我们所使用的 ID 是一样的。一个应用场景就是用于在数据库创建文件，然后立即重定向到包含该文件 ID 的 url.
 
@@ -488,6 +487,6 @@ Meteor Method 和调用该 Method 的客户端共享一个随机产生的种子�
 
 <h3 id="comparison-with-allow-deny">与 allow/deny 的比较</h3>
 
-Meteor 核心 API 有一个代替 Method 从客户端操作数据的选择。相对于明确定义 Method 和参数，你可以直接在客户端使用 `insert`, `update`, 和 `remove`，只需要安全规则 allow/deny 中说明，[`allow`](http://docs.meteor.com/#/full/allow) 和 [`deny`](http://docs.meteor.com/#/full/deny)。在 Meteor 手册中，我们强烈建议使用 Method，而不是 allow/deny. 了解更多 allow/deny 可能出现的问题请阅读文章 [安全性章节](security.html#allow-deny).
+Meteor 核心 API 有一个代替 Method 从客户端操作数据的选择。相对于明确定义 Method 和参数，你可以直接在客户端使用 `insert`, `update`, 和 `remove`，只需要安全规则 allow/deny 中说明，[`allow`](http://docs.meteor.com/#/full/allow) 和 [`deny`](http://docs.meteor.com/#/full/deny)。在 Meteor 手册中，我们强烈建议使用 Method，而不是 allow/deny. 了解更多 allow/deny 可能出现的问题请阅读 [安全性章节](security.html#allow-deny).
 
 跟 allow/deny 的特点相比，对 Meteor Method 的了解一向存在误解，包括 Method 更难实现 UI 优化。但是，客户端的 `insert`, `update`, 和 `remove` 是在 Method 的基础上执行的，所以 Method 更加强大。只需要在客户端和服务器上定义 Method 代码，就默认得到优化的 UI, 如以上方法生命周期部分所述。
