@@ -487,6 +487,6 @@ Meteor Method 和调用该 Method 的客户端共享一个随机产生的种子�
 
 <h3 id="comparison-with-allow-deny">与 allow/deny 的比较</h3>
 
-Meteor 核心 API 有一个代替 Method 从客户端操作数据的选择。相对于明确定义 Method 和参数，你可以直接在客户端使用 `insert`, `update`, 和 `remove`，只需要安全规则 allow/deny 中说明，[`allow`](http://docs.meteor.com/#/full/allow) 和 [`deny`](http://docs.meteor.com/#/full/deny)。在 Meteor 手册中，我们强烈建议使用 Method，而不是 allow/deny. 了解更多 allow/deny 可能出现的问题请阅读 [安全性章节](security.html#allow-deny).
+Meteor 核心 API 有一个代替 Method 从客户端操作数据的选择。相对于明确定义 Method 和参数，你可以直接在客户端使用 `insert`, `update`, 和 `remove`，只需要安全规则 allow/deny 中说明，[`allow`](http://docs.meteor.com/#/full/allow) 和 [`deny`](http://docs.meteor.com/#/full/deny)。在 Meteor 手册中，我们强烈建议使用 Method，而不是 allow/deny. 了解更多 allow/deny 可能出现的问题请阅读[安全性章节](security.html#allow-deny).
 
 跟 allow/deny 的特点相比，对 Meteor Method 的了解一向存在误解，包括 Method 更难实现 UI 优化。但是，客户端的 `insert`, `update`, 和 `remove` 是在 Method 的基础上执行的，所以 Method 更加强大。只需要在客户端和服务器上定义 Method 代码，就默认得到优化的 UI, 如以上方法生命周期部分所述。
