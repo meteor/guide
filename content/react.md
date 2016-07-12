@@ -233,12 +233,14 @@ export default ListContainer = createContainer(({ params }) => {
 }, ListPage);
 ```
 
+It's a good habit to name your container exactly like the component that it wraps, with the word “Container” tacked onto the end. This way, when you're attempting to track down issues in your code, it makes it much easier to locate the appropriate files/classes.
+
 一旦在函数中访问过的[响应式数据源](https://atmospherejs.com/meteor/tracker)发生任何变化，这个由 `createContainer()` 创建的 container 组件就会相应地重新渲染它所包裹的组件。
 
 虽然，这个 `ListContainer` 的设计使用场景是将其放在 React Router 之中并根据路由自动传入参数，不过，如果你想手动实例化这个 container 组件，你只需要将参数作为 props 传入即可：
 
 ```jsx
-<ListContainer params={{id: '7'}}/>
+<ListPageContainer params={{id: '7'}}/>
 ```
 
 <h3 id="preventing-rerenders">防止重新渲染</h3>
@@ -341,7 +343,7 @@ Meteor.startup(() => {
 其中有一些应当注意的不同点，例如：
  - React Router 鼓励你在路由定义中耦合你的URL设计与布局层次。而 Flow Router 则更加灵活，虽然这样可能会导致更多的样板代码。
  - React Router 拥抱 React 独有的特性，例如将 router 实例通过 React [context](https://facebook.github.io/react/docs/context.html) 进行传递。虽然，Flow Router 并没有默认这样做，但你也同样可以显式地将你的 Flow Router 实例作为 context 进行传递（事实上，这很可能正是最佳实践）。
- 
+
 <h2 id="meteor-and-react">Meteor 和 React</h2>
 
 <h3 id="atmosphere-packages">在 Atmosphere 包中使用 React</h3>
