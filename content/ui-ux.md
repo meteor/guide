@@ -257,17 +257,18 @@ TAPi18n.setLanguage(() => {
 
 然后，在你的 UI 中的某个地方，当用户选择了一个语言，你可以 `CurrentLanguage.set('es')`
 
-<h4 id="universe-i18n">Using `universe:i18n` in React</h4>
+<h4 id="universe-i18n">在 React 中使用 `universe:i18n`</h4>
 
-For React-based apps, the [`universe:18n` package](https://atmospherejs.com/universe/i18n) presents an alternative solution to `tap:i18n`. `universe:i18n` adopts similar conventions to `tap:i18n`, but also includes a convenient drop-in React component and omits `tap:i18n's` dependencies on Meteor's `templating` and `jquery` packages. `universe:i18n` was intended for Meteor React applications using `ES2015` modules, but it can be used without React or modules.
+对于基于 React 的应用来说，除了 `tap:i18n`，还有另一个选择，即 [`universe:18n` 包](https://atmospherejs.com/universe/i18n)。`universe:i18n`使用了与 `tap:i18n` 类似的概念和约定，但除此之外，它还提供了一个开箱即用的 React 组件，并且去掉了 `tap:i18n` 中对于 Meteor 的 `templating` 和 `jquery` 的依赖。`universe:i18n` 为使用 `ES2015` 模块的 Meteor React 应用而生，但它完全可以被运用于没有 React 或模块的应用。
 
-<h4 id="universe-i18n-js">Using `universe:i18n` in JS</h4>
+<h4 id="universe-i18n-js">在 JS 中使用 `universe:i18n`</h4>
 
-To get started, run `meteor add universe:i18n` to add it to your app. Add an English (`en-US`) translation file in `JSON` format to your app with the name `en-us.i18n.json`. Translation files can be identified by file name or with the `{"_locale": "en-US"}` JSON property. The `YAML` file format is also supported.
+首先，运行 `meteor add universe:i18n` 以在应用中添加这个包。然后，在你的应用中添加一个 `JSON` 格式的英文（`en-US`）翻译文件，并命名为 `en-us.i18n.json`。翻译文件能够通过文件名或 `{"_locale": "en-US"}` 这个 JSON 属性而被识别。除了 JSON，这个包同样还支持 `YAML` 文件格式。
 
-If your app uses `ES2015` modules included from `client/main.js` and `server/main.js` entry points, import your JSON file(s) there. The `i18n.__()` function will now locate keys you pass.
+如果你的应用使用 `ES2015` 模块，并使用 `client/main.js` 和 `server/main.js` 来作为应用的逻辑入口，那么你可以在这里导入刚才定义的翻译文件。现在，`i18n.__()` 函数可以识别你传入的键了。
 
-Borrowing from the `tap:i18n` example [above](#tap-i18n-js), in `universe:i18n` our `displayError` function now looks like this:
+
+浏览一下[上面](#tap-i18n-js)的 `tap:i18n` 例子，使用 `universe:i18n` 之后，现在我们的 `displayError` 函数看起来大致是这样：
 
 ```js
 import i18n from 'meteor/universe:i18n';
@@ -279,11 +280,11 @@ export const displayError = (error) =>  {
 };
 ```
 
-To change the user's language, use `i18n.setLocale('en-US')`. `universe:i18n` allows retrieval of additional translations by method as well as including JSON files with a client bundle.
+可以调用 `i18n.setLocale('en-US')` 来改变用户的语言设置。除了使用随客户端应用一起打包的 JSON 翻译文件之外，`universe:i18n` 还可以通过 method 来获取更多的翻译。
 
-<h4 id="universe-i18n-react">Using `universe:i18n` in React components</h4>
+<h4 id="universe-i18n-react">在 React 组件中使用 `universe:i18n`</h4>
 
-To add reactive i18n inline in your React components, simply use the `i18n.createComponent()` function and pass it keys from your translation file. Here's an example of a simple component wrapping i18n's translation component:
+只需要简单地使用 `i18n.createComponent()` 函数创建一个组件，并将你在翻译文件中定义的键传递给它，你就可以向你的 React 组件中添加响应式的 i81n 行内元素了。这里有一个例子，展示了一个封装了 i18n 翻译的简单组件：
 
 ```js
 import React from 'react';
@@ -291,8 +292,8 @@ import i18n from 'meteor/universe:i18n';
 
 const T = i18n.createComponent();
 
-// displays 'hello world!' where our en-us.i18n.json
-// has the key/value { "hello": "hello world!" }
+// 由于我们的 en-us.i18n.json 文件中定义了键值对 { "hello": "hello world!" }
+// 这里将显示 'hello world!'
 
 const Welcome = (props) => <div>
   <T>hello</T>
@@ -301,7 +302,7 @@ const Welcome = (props) => <div>
 export default Welcome;
 ```
 
-See the documentation for [`universe:i18n`](https://atmospherejs.com/universe/i18n) for additional options and configuration.
+请参考 [`universe:i18n`](https://atmospherejs.com/universe/i18n) 的文档以了解更多配置和选项。
 
 <h3 id="event-handling">事件处理</h3>
 
