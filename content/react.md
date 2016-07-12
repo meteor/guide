@@ -233,7 +233,7 @@ export default ListContainer = createContainer(({ params }) => {
 }, ListPage);
 ```
 
-It's a good habit to name your container exactly like the component that it wraps, with the word “Container” tacked onto the end. This way, when you're attempting to track down issues in your code, it makes it much easier to locate the appropriate files/classes.
+最好给 container 和它包裹的组件起一样的名字，并在最后添加「Container」这个单词。这样一来，当你想在代码中追踪问题时，你将很容易定位到可能的文件或类。
 
 一旦在函数中访问过的[响应式数据源](https://atmospherejs.com/meteor/tracker)发生任何变化，这个由 `createContainer()` 创建的 container 组件就会相应地重新渲染它所包裹的组件。
 
