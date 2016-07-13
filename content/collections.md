@@ -150,11 +150,11 @@ Lists.schema = new SimpleSchema({
 
 这个架构的问题在于，由于刚提到过的 DDP 行为，每次对于某个列表中*任意*的待办项的变化，DDP 就会通过网络发送该列表中*整组*待办项目。这是因为 DDP 对于在 `todos` 数组第三项中的 text 字段的「变化」没有任何的概念，因此它简单地认为 `todos` 字段变成了全新的数组。
 
-<h3 id="denormalization">Denormalization and multiple collections</h3>
+<h3 id="denormalization">正常化和多个数据集</h3>
 
-The implication of the above is that we need to create more collections to contain sub-documents. In the case of the Todos application, we need both a `Lists` collection and a `Todos` collection to contain each list's todo items. Consequently we need to do some things that you'd typically associate with a SQL database, like using foreign keys (`todo.listId`) to associate one document with another.
+上面这样的问题是，我们为了子文档需要创建更多的数据集。在 Todos 应用里，我们需要 `Todos` 和 `Lists` 两个数据集来存储每个待办列表里的每一条待办事项。所以你需要做一点你通常对一个 SQL 数据库要做的事情，比如使用另一个表（数据集）中的键（`todo.listId`）将两个文档联系在一起。
 
-In Meteor, it's often less of a problem doing this than it would be in a typical MongoDB application, as it's easy to publish overlapping sets of documents (we might need one set of users to render one screen of our app, and an intersecting set for another), which may stay on the client as we move around the application. So in that scenario there is an advantage to separating the subdocuments from the parent.
+在 Meteor 中，这样做通常意味着更少的问题，尤其是在涉及有交集的文档时， (we might need one set of users to render one screen of our app, and an intersecting set for another), which may stay on the client as we move around the application. So in that scenario there is an advantage to separating the subdocuments from the parent.
 
 However, given that MongoDB prior to version 3.2 doesn't support queries over multiple collections ("joins"), we typically end up having to denormalize some data back onto the parent collection. Denormalization is the practice of storing the same piece of information in the database multiple times (as opposed to a non-redundant "normal" form). MongoDB is a database where denormalizing is encouraged, and thus optimized for this practice.
 

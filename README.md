@@ -10,11 +10,7 @@
 
 ## 注意
 
-
 本 repo 已合并至 `meteor/guide`。由于 MDG 尚未提出有效的翻译/本地化管理方案，所有翻译请继续提交至本 repo，我们将会不定期同步至官方版。
-
-有关合并进程，请参见[这里](https://github.com/meteor/guide/pull/480)。
-
 
 ## 如何贡献翻译
 

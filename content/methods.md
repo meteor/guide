@@ -1,36 +1,36 @@
 ---
-title: "Methods"
+title: "Method"
 order: 12
-description: How to use Methods, Meteor's remote procedure call system, to write to the database.
+description: 如何使用 Method, Meteor 通过使用 Method 将数据变化写入数据库
 discourseTopicId: 19662
 ---
 
-After reading this article, you'll know:
+读完全文，你将能够：
 
-1. What Methods are in Meteor and how they work in detail.
-2. Best practices for defining and calling Methods.
-3. How to throw and handle errors with Methods.
-4. How to call a Method from a form.
+1. Meteor 中 Method 指什么，以及他们是怎样工作的。
+2. Method 的定义及调用实践。
+3. 如何使用 Method 抛出和处理错误。
+4. 如何从表单中调用 Method。
 
-<h2 id="what-is-a-method">What is a Method?</h2>
+<h2 id="what-is-a-method">什么是 Method？</h2>
 
-Methods are Meteor's remote procedure call (RPC) system, used to save user input events and data that come from the client. If you're familiar with REST APIs or HTTP, you can think of them like POST requests to your server, but with many nice features optimized for building a modern web application. Later on in this article, we'll go into detail about some of the benefits you get from Methods that you wouldn't get from an HTTP endpoint.
+Method 是 Meteor 的远程程序调用系统, 用于保存用户在客户端输入的数据和事件。如果你熟悉 REST APIs 或者 HTTP，你可以把它想象为 POST 请求到服务器，但是它是在一种针对现代 web 应用设计的形式中。 在文章的最后，我们会谈到使用 Method 在哪些方面优于使用 HTTP 端点。
 
-At its core, a Method is an API endpoint for your server; you can define a Method on the server and its counterpart on the client, then call it with some data, write to the database, and get the return value in a callback. Meteor Methods are also tightly integrated with the pub/sub and data loading systems of Meteor to allow for [Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) - the ability to simulate server-side actions on the client to make your app feel faster than it actually is.
+Method 的核心是作为服务器的 API 端点，你可以在服务器定义一个 Method，然后在客户端定义它的副本，然后调用 Method，将数据写入数据库，并获得 返回值。Meteor Methods 紧密集成 Meteor 的发布/订阅和数据装载系统，实现 UI 优化[Optimistic UI](http://info.meteor.com/blog/optimistic-ui-with-meteor-latency-compensation) —— 在客户端模拟服务器端操作的能力，让你的应用运行得更快。
 
-We'll be referring to Meteor Methods with a capital M to differentiate them from class methods in JavaScript.
+我们在谈到 Meteor Method 时会用大些字母 M， 是为了区别 JavaScript 中的 methods。
 
-<h2 id="defining-and-calling">Defining and calling Methods</h2>
+<h2 id="defining-and-calling">定义和调用 Methods</h2>
 
-<h3 id="basic">Basic Method</h3>
+<h3 id="basic">基础 Method</h3>
 
-In a basic app, defining a Meteor Method is as simple as defining a function. In a complex app, you want a few extra features to make Methods more powerful and easily testable. First, we're going to go over how to define a Method using the Meteor core API, and in a later section we'll go over how to use a helpful wrapper package we've created to enable a more powerful Method workflow.
+在一个简单的应用，定义一个 Method 是跟定义一个函数一样简单的事。在一个复杂的应用，你会需要一些额外的功能，使得 Method 更强大，更加容易测试。首先，我们讲一下如何使用 Meteor 核心 API 定义 Method，在后面的章节我们会讲到如何使用自己创建的封装包建立更好的 Method 工作流。
 
-<h4 id="basic-defining">Defining</h4>
+<h4 id="basic-defining">定义</h4>
 
-Here's how you can use the built-in [`Meteor.methods` API](http://docs.meteor.com/#/full/meteor_methods) to define a Method. Note that Methods should always be defined in common code loaded on the client and the server to enable Optimistic UI. If you have some secret code in your Method, consult the [Security article](security.html#secret-code) for how to hide it from the client.
+这里提供如何使用内建的[`Meteor.methods`API](http://docs.meteor.com/#/full/meteor_methods) 来定义 Method。注意，Method 的定义应该是装载在客户端和服务器端来优化 UI 的通用代码。如果您的 Method 有秘密的程序代码，请参考[安全相关章节](security.html#secret-code)来了解如何从客户端隐藏秘密的程序代码。
 
-This example uses the `aldeed:simple-schema` package, which is recommended in several other articles, to validate the Method arguments.
+下面这个案例添加了包： `aldeed:simple-schema`，这个包在很多文章都有提到，是用来验证 Method 参数的。
 
 ```js
 Meteor.methods({
@@ -54,11 +54,11 @@ Meteor.methods({
 });
 ```
 
-<h4 id="basic-calling">Calling</h4>
+<h4 id="basic-calling">调用</h4>
 
-This Method is callable from the client and server using [`Meteor.call`](http://docs.meteor.com/#/full/meteor_call). Note that you should only use a Method in the case where some code needs to be callable from the client; if you just want to modularize code that is only going to be called from the server, use a regular JavaScript function, not a Method.
+从客户端和服务器中使用[`Meteor.call`](http://docs.meteor.com/#/full/meteor_call) 可以调用 Method。请注意，您应该只在一些代码需要从客户端调用的情况下使用 Method; 如果你只是想在服务器端实现代码模块化，应该使用常规的 JavaScript 函数，而不是 Method。
 
-Here's how you can call this Method from the client:
+我们如何从客户端调用 Method:
 
 ```js
 Meteor.call('todos.updateText', {
@@ -73,28 +73,28 @@ Meteor.call('todos.updateText', {
 });
 ```
 
-If the Method throws an error, you get that in the first argument of the callback. If the Method succeeds, you get the result in the second argument and the first argument `err` will be `undefined`. For more information about errors, see the section below about error handling.
+如果 Method 抛出一个错误，你会得到回调的第一个参数。如果没有抛出错误，第二个参数会返回结果，第一个参数 `err` 会被设置为 `undefined`。有关错误的详细信息，请参阅以下有关错误处理的部分。
 
-<h3 id="advanced-boilerplate">Advanced Method boilerplate</h3>
+<h3 id="advanced-boilerplate">高级 Method boilerplate</h3>
 
-Meteor Methods have several features which aren't immediately obvious, but every complex app will need them at some point. These features were added incrementally over several years in a backwards-compatible fashion, so unlocking the full capabilities of Methods requires a good amount of boilerplate. In this article we will first show you all of the code you need to write for each feature, then the next section will talk about a Method wrapper package we have developed to make it easier.
+Meteor Method 有几个特点并非立竿见影，但是每一个复杂的应用程序都会或多或少使用到 Method。这些功能是以向后兼容的方式逐年递增的，所以解锁 Method 的全部功能，需要大量的 boilerplate。在这篇文章中，我们首先会告诉你所有的代码，你需要写每一个功能，那么下一节我们将谈论 Method 封装包，使得 Method 的使用更加方便。
 
-Here's some of the functionality an ideal Method would have:
+一个好的 Method 应该具备以下功能：
 
-1. Run validation code by itself without running the Method body.
-2. Easily override the Method for testing.
-3. Easily call the Method with a custom user ID, especially in tests (as recommended by the [Discover Meteor two-tiered methods pattern](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/)).
-4. Refer to the Method via JS module rather than a magic string.
-5. Get the Method simulation return value to get IDs of inserted documents.
-6. Avoid calling the server-side Method if the client-side validation failed, so we don't waste server resources.
+1. 在运行 Method 本体前能自身验证数据
+2. 较容易覆盖 Method 用于测试。
+3. 较容易通过自定义的用户 ID 调用方法，特别是在测试的时候（推荐文章 [Discover Meteor two-tiered methods pattern](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/)）。
+4. 通过 JS 函数模块调用方法，而非通过字符串。
+5. 通过 Method 模拟返回值来获得所插入文档的 ID.
+6. 如果客户端验证失败也避免调用服务器端的 Method, 不至于占用服务器资源。
 
-<h4 id="advanced-boilerplate-defining">Defining</h4>
+<h4 id="advanced-boilerplate-defining">定义</h4>
 
 ```js
 export const updateText = {
   name: 'todos.updateText',
 
-  // Factor out validation so that it can be run independently (1)
+  // 将有效性验证分离，这样可以独立运行（1）
   validate(args) {
     new SimpleSchema({
       todoId: { type: String },
@@ -102,7 +102,7 @@ export const updateText = {
     }).validate(args)
   },
 
-  // Factor out Method body so that it can be called independently (3)
+  // 将方法本体分离，这样可以单独调用（3）
   run({ todoId, newText }) {
     const todo = Todos.findOne(todoId);
 
@@ -116,10 +116,8 @@ export const updateText = {
     });
   },
 
-  // Call Method by referencing the JS object (4)
-  // Also, this lets us specify Meteor.apply options once in
-  // the Method implementation, rather than requiring the caller
-  // to specify it at the call site.
+  // 通过引用 JS 对象来调用方法（4）
+  // 我们可以在实现 Method 的时候指定 Meteor.apply 选项，而不是要求调用者指定。
   call(args, callback) {
     const options = {
       returnStubValue: true,     // (5)
@@ -130,7 +128,7 @@ export const updateText = {
   }
 };
 
-// Actually register the method with Meteor's DDP system
+// 实际上通过 Meteor 的 DDP 系统注册 Method
 Meteor.methods({
   [updateText.name]: function (args) {
     updateText.validate.call(this, args);
@@ -139,14 +137,14 @@ Meteor.methods({
 })
 ```
 
-<h4 id="advanced-boilerplate-calling">Calling</h4>
+<h4 id="advanced-boilerplate-calling">调用</h4>
 
-Now calling the Method is as simple as calling a JavaScript function:
+现在调用 Method 就跟调用一个 JavaScript 函数一样简单了：
 
 ```js
 import { updateText } from './path/to/methods.js';
 
-// Call the Method
+// 首先调用 Method
 updateText.call({
   todoId: '12345',
   newText: 'This is a todo item.'
@@ -154,25 +152,24 @@ updateText.call({
   if (err) {
     alert(err);
   } else {
-    // success!
+    // 成功！
   }
 });
 
-// Call the validation only
+// 调用有效性
 updateText.validate({ wrong: 'args'});
 
-// Call the Method with custom userId in a test
+// 在测试中通过自定义的客户 ID 调用方法
 updateText.run.call({ userId: 'abcd' }, {
   todoId: '12345',
   newText: 'This is a todo item.'
 });
 ```
+正如你所看到的，这种 Method 调用方式可以有一个更好的开发流程, 你可以更容易地分开处理的 Method 的不同部位，更容易测试你的代码，而不必深挖 Meteor 内部工作原理。但这种 Method 调用方式需要你在定义 Method 的时候写了很多 boilerplate。
 
-As you can see, this approach to calling Methods results in a better development workflow - you can more easily deal with the different parts of the Method separately and test your code more easily without having to deal with Meteor internals. But this approach requires you to write a lot of boilerplate on the Method definition side.
+<h3 id="validated-method">使用包 mdg:validated-method 来实现 Method 的高级功能</h3>
 
-<h3 id="validated-method">Advanced Methods with mdg:validated-method</h3>
-
-To alleviate some of the boilerplate that's involved in correct Method definitions, we've published a wrapper package called `mdg:validated-method` that does most of this for you. Here's the same Method as above, but defined with the package:
+为了帮助你在在定义 Method 的时候写正确的 boilerplate，我们已经发布了一个包：`mdg:validated-method`，可以帮你省下很多工作量。下面是与上述相同的 Method，在包中定义：
 
 ```js
 export const updateText = new ValidatedMethod({
@@ -196,86 +193,86 @@ export const updateText = new ValidatedMethod({
 });
 ```
 
-You call it the same way you call the advanced Method above, but the Method definition is significantly simpler. We believe this style of Method lets you clearly see the important parts - the name of the Method sent over the wire, the format of the expected arguments, and the JavaScript namespace by which the Method can be referenced.
+在这里 Method 的调用跟前面的一样，但在这里 Method 的定义是非常简单的。我们相信，这种定义方法可以让你清楚地看到定义 Method 的重点，通过 Method 的名称，预期参数的格式，以及 JavaScript 命名空间可以调用该方法。
 
-<h2 id="errors">Error handling</h2>
+<h2 id="errors">错误处理</h2>
 
-In regular JavaScript functions, you indicate errors by throwing an `Error` object. Throwing errors from Meteor Methods works almost the same way, but a bit of complexity is introduced by the fact that in some cases the error object will be sent over a websocket back to the client.
+常规的 JavaScript 函数，我们以抛出`Error`对象的形式来发现错误。Meteor Method 也是以这种形式抛出错误，但也会出现复杂的情形，比如 `Error` 对象会通过 WebSocket 被发往客户端。引发错误工作几乎相同的方式，微复杂之处在于，某些情况下这个错误对象会通过 WebSocket 被发往客户端。
+译注：事实上，作为 DDP 消息的一种，错误对象并不总是通过 WebSocket 传送。当 WebSocket 因为某些原因不可用的时候，Meteor 会尝试使用轮询的方式建立 DDP 连接来传送 DDP 消息。
 
-<h3 id="throwing-errors">Throwing errors from a Method</h3>
+<h3 id="throwing-errors">从 Method 抛出错误</h3>
 
-Meteor introduces two new types of JavaScript errors: [`Meteor.Error`](http://docs.meteor.com/#/full/meteor_error) and [`ValidationError`](https://atmospherejs.com/mdg/validation-error). These and the regular JavaScript `Error` type should be used in different situations:
+Meteor 介绍了两种 JavaScript 错误：[`Meteor.Error`](http://docs.meteor.com/#/full/meteor_error) 以及 [`ValidationError`](https://atmospherejs.com/mdg/validation-error). 这两种错误应该和常见的 JavaScript 错误区分开来。
 
-<h4 id="internal-server-errors">Regular `Error` for internal server errors</h4>
+<h4 id="internal-server-errors">内部服务器错误引发的常见错误</h4>
 
-When you have an error that doesn't need to be reported to the client, but is internal to the server, throw a regular JavaScript error object. This will be reported to the client as a totally opaque internal server error with no details.
+当服务器内部有错误，不需要报告给客户端时，抛出一个常规的 JavaScript 错误对象。客户端将会接收到一个没有细节的完全不透明的内部服务器错误报告。
 
-<h4 id="meteor-error">Meteor.Error for general runtime errors</h4>
+<h4 id="meteor-error">一般运行时错误下的 Meteor.Error</h4>
 
-When the server was not able to complete the user's desired action because of a known condition, you should throw a descriptive `Meteor.Error` object to the client. In the Todos example app, we use these to report situations where the current user is not authorized to complete a certain action, or where the action is not allowed within the app - for example, deleting the last public list.
+当服务器在已知条件下不能够完成用户所需的操作，应该抛出一个描述性的 `Meteor.Error` 对象给客户端。在 Todos 应用程序中，我们使用这种方法报告当前用户无权完成某个操作，或该操作不被应用允许——例如，删除最后一个公开的 Todo 列表。
 
-`Meteor.Error` takes three arguments: `error`, `reason`, and `details`.
+`Meteor.Error` 有三个参数： `error`, `reason`, 和 `details`.
 
-1. `error` should be a short, unique, machine-readable error code string that the client can interpret to understand what happened. It's good to prefix this with the name of the Method for easy internationalization, for example: `'todos.updateText.unauthorized'`.
-2. `reason` should be a short description of the error for the developer. It should give your coworker enough information to be able to debug the error. The `reason` parameter should not be printed to the end user directly, since this means you now have to do internationalization on the server before sending the error message, and the UI developer has to worry about the Method implementation when thinking about what will be displayed in the UI.
-3. `details` is optional, and can be used where extra data will help the client understand what is wrong. In particular, it can be combined with the `error` field to print a more helpful error message to the end user.
+1. `error` 应该是简短，唯一，机器可读的错误代码串，客户端可以翻译它并了解发生了什么。最好是在 `error` 加上 Method 的名称作为前缀，例如：`'todos.updateText.unauthorized'`。
+2. `reason` 是为开发者简短描述发生的错误。它应该能够提供足够的信息用于调试错误。`reason` 参数不应该直接对终端用户可见，这意味着需要在发送错误信息前在服务器端实现国际化，UI 开发者在考虑 UI 展示时也应该思考 Method 的实现
+3. `details` 不是必需的，可以用于提供额外的信息帮助客户端发现哪里出错。另外，它还可以结合 `error` 参数给终端用户提供更有用的错误信息。
+译注：
+1. 在一些应用中你会看到 error 参数是一个 HTTP 响应码，如 404。我们不建议在这里使用响应码，因为它不容易被理解，尤其是使用不常用响应码的时候。
+2. 在不需要国际化的情况下，常用 reason 参数直接作为显示的信息。尽管如此，按照这份指南来做总不会吃亏的。
 
-<h4 id="validation-error">ValidationError for argument validation errors</h4>
+<h4 id="validation-error">参数验证错误下的 ValidationError</h4>
 
-When a Method call fails because the arguments are of the wrong type, it's good to throw a `ValidationError`. This works just like `Meteor.Error`, but is a custom constructor that enforces a standard error format that can be read by different form and validation libraries. In particular, if you are calling this Method from a form, throwing a `ValidationError` will make it easy to display nice error messages next to particular fields in the form.
+因为参数类型错误而导致调用方法失败，最好抛出一个 `ValidationError`，原理跟 `Meteor.Error` 一样，但它有一个产生标准错误格式的定制构造器，可以被不同的表单和验证库读取。如果你从表单中调用 Method，抛出一个 `ValidationError`会使得错误信息在表单中某一位置展示更加简单。
 
-When you use `mdg:validated-method` with `aldeed:simple-schema` as demonstrated above, this type of error is thrown for you.
+像上面那样，当你使用 `mdg:validated-method` 和 `aldeed:simple-schema`, 就会抛出这种错误。
 
-Read more about the error format in the [`mdg:validation-error` docs](https://atmospherejs.com/mdg/validation-error).
+查看此文了解更多错误格式 [`mdg:validation-error` 文档](https://atmospherejs.com/mdg/validation-error).
 
-<h3 id="handling-errors">Handling errors</h3>
+<h3 id="handling-errors">处理错误</h3>
 
-When you call a Method, any errors thrown by it will be returned in the callback. At this point, you should identify which error type it is and display the appropriate message to the user. In this case, it is unlikely that the Method will throw a `ValidationError` or an internal server error, so we will only handle the unauthorized error:
+当调用一个 Method 的时候，任何抛出的错误都会在回调中返回。这个时候要识别错误类型并将信息传递给用户。在这个例子中，Method 几乎不会抛出 `ValidationError` 或者内部服务器错误，所以我们只会处理未经授权错误：
 
 ```js
-// Call the Method
+// 调用 Method
 updateText.call({
   todoId: '12345',
   newText: 'This is a todo item.'
 }, (err, res) => {
   if (err) {
     if (err.error === 'todos.updateText.unauthorized') {
-      // Displaying an alert is probably not what you would do in
-      // a real app; you should have some nice UI to display this
-      // error, and probably use an i18n library to generate the
-      // message from the error code.
+      // 在一个真实的应用中你可能不需要调用 alert 展示警报；你会有一个好看的 UI 界面去展示这些错误，还可以用 i18n 库从错误代码中自动产生信息。
       alert('You aren\'t allowed to edit this todo item');
     } else {
-      // Unexpected error, handle it in the UI somehow
+      // 未知错误，在 UI 端处理
     }
   } else {
-    // success!
+    // 成功！
   }
 });
 ```
 
-We'll talk about how to handle the `ValidationError` in the section on forms below.
+在下面章节我们将讨论如何处理 `ValidationError`。
 
-<h3 id="throw-stub-exceptions">Errors in Method simulation</h3>
+<h3 id="throw-stub-exceptions">Method 在客户端模拟运行时的错误</h3>
 
-When a Method is called, it usually runs twice---once on the client to simulate the result for Optimistic UI, and again on the server to make the actual change to the database. This means that if your Method throws an error, it will likely fail on the client _and_ the server. For this reason, `ValidatedMethod` turns on undocumented option in Meteor to avoid calling the server-side implementation if the simulation throws an error.
+当一个 Method 被调用时，它通常运行两次—— 一次在客户端上，以模拟优化 UI 的输出结果，第二次在服务器上进行数据库的实际变化操作。这意味着，如果 Method 抛出一个错误，它可能会在客户端和服务器上都出现错误。出于这个原因，`ValidatedMethod` 打开 Meteor 中的无证选项，以避免在客户端模拟抛出错误时继续调用服务器端执行。
 
-While this behavior is good for saving server resources in cases where a Method will certainly fail, it's important to make sure that the simulation doesn't throw an error in cases where the server Method would have succeeded (for example, if you didn't load some data on the client that the Method needs to do the simulation properly). In this case, you can wrap server-side-only logic in a block that checks for a method simulation:
+这种运行方式在 Method 发生错误时对节省服务器资源有帮助，但要确保的是，当 Method 在服务器端可以成功时客户端的模拟不会发生错误（例如你不用在客户端加载数据用于 Method 模拟）。在这个例子中，你可以把服务器端的代码封装成一个模块，用于检验方法模拟：
 
 ```js
 if (!this.isSimulation) {
-  // Logic that depends on server environment here
+  // 此处逻辑依赖于服务器端环境
 }
 ```
 
-<h2 id="method-form">Calling a Method from a form</h2>
+<h2 id="method-form">从表单调用 Method</h2>
 
-The main thing enabled by the `ValidationError` convention is simple integration between Methods and the forms that call them. In general, your app is likely to have a one-to-one mapping of forms in the UI to Methods. First, let's define a Method for our business logic:
+`ValidationError` 最主要的用途是在 Method 和调用它们的表单之间进行简单的集成。在一般情况下，你的应用很可能有在 UI 上的表单跟 Method 是一对一映射的。首先，为我们的业务逻辑定义一个 Method：
 
 ```js
-// This Method encodes the form validation requirements.
-// By defining them in the Method, we do client and server-side
-// validation in one place.
+// 该 Method 对表单验证需求进行编码。
+// 通过在 Method 中定义表单，我们在同一个地方进行客户端和服务器端的验证。
 export const insert = new ValidatedMethod({
   name: 'Invoices.methods.insert',
   validate: new SimpleSchema({
@@ -284,8 +281,7 @@ export const insert = new ValidatedMethod({
     amount: { type: String, regEx: /^\d*\.(\d\d)?$/ }
   }).validator(),
   run(newInvoice) {
-    // In here, we can be sure that the newInvoice argument is
-    // validated.
+    // 在这里我们可以确认参数 newInvoice 已验证。
 
     if (!this.userId) {
       throw new Meteor.Error('Invoices.methods.insert.not-logged-in',
@@ -297,7 +293,7 @@ export const insert = new ValidatedMethod({
 });
 ```
 
-Let's define a simple HTML form:
+让我们定义一个简单的 HTML 表单：
 
 ```html
 <template name="Invoices_newInvoice">
@@ -323,7 +319,7 @@ Let's define a simple HTML form:
 </template>
 ```
 
-Now, let's write some JavaScript to handle this form nicely:
+现在，我们将通过 JavaScript 语言来更好地处理该表单：
 
 ```js
 import { insert } from '../api/invoices/methods.js';
@@ -349,20 +345,20 @@ Template.Invoices_newInvoice.events({
     insert.call(data, (err, res) => {
       if (err) {
         if (err.error === 'validation-error') {
-          // Initialize error object
+          // 初始化错误对象
           const errors = {
             email: [],
             description: [],
             amount: []
           };
 
-          // Go through validation errors returned from Method
+          // 遍历从 Method 返回的验证错误
           err.details.forEach((fieldError) => {
             // XXX i18n
             errors[fieldError.name].push(fieldError.type);
           });
 
-          // Update ReactiveDict, errors will show up in the UI
+          // 更新 ReactiveDict，错误会在 UI 显示。
           instance.errors.set(errors);
         }
       }
@@ -371,36 +367,36 @@ Template.Invoices_newInvoice.events({
 });
 ```
 
-As you can see, there is a fair amount of boilerplate to handle errors nicely in a form, but most of it can be easily abstracted by an off-the-shelf form framework or a simple application-specific wrapper of your own design.
+正如你所看到的，表单中有大量的 boilerplate 可以用来处理错误，大部分 boilerplate 可以通过现成的表单框架或你自己封装的、基于特定应用的设计来实现。
 
-<h2 id="loading-data">Loading data with Methods</h2>
+<h2 id="loading-data">通过 Methods 加载数据</h2>
 
-Since Methods can work as general purpose RPCs, they can also be used to fetch data instead of publications. There are some advantages and some disadvantages to this approach compared with loading data through publications, and at the end of the day we recommend always using publications to load data.
+因为 Method 可以作为通用 RPC，所以也可以被用于获取数据而不用通过 publications。对比通过 publications 加载数据，使用 Methods 加载数据有有点也有不足，但到目前为止，我们建议总是通过 publications 加载数据。
 
-Methods can be useful to fetch the result of a complex computation from the server that doesn't need to update when the server data changes. The biggest disadvantage of fetching data through Methods is that the data won't be automatically loaded into Minimongo, Meteor's client-side data cache, so you'll need to manage the lifecycle of that data manually.
+当服务器端数据变化时，服务器端一个复杂计算的结果不变，在这种情况下用 Method 获取数据非常有用，通过 Method 获取数据的最大不足就是获取的数据不会自动加载到 Minimongo，即 Meteor 的客户端数据缓存，所以需要你手动管理数据生命周期。
 
-<h4 id="local-collection">Using a local collection to store and display data fetched from a Method</h4>
+<h4 id="local-collection">使用一个本地数据集来存储并显示来自 Method 的数据</h4>
 
-Collections are a very convenient way of storing data on the client side. If you're fetching data using something other than subscriptions, you can put it in a collection manually. Let's look at an example where we have a complex algorithm for calculating average scores from a series of games for a number of players. We don't want to use a publication to load this data because we want to control exactly when it runs, and don't want the data to be cached automatically.
+数据集可以方便地在客户端存储数据。如果你不是通过 subscriptions 的方式获取数据，可以手动将数据添加到数据集。 下面我们来看一个例子，将复杂的算法用于计算拥有众多玩家的一系列游戏的平均得分。我们不想使用 publications 加载数据因为我们想要控制何时让它运行，而不想让数据自动缓存。
 
-First, you need to create a _local collection_ - this is a collection that exists only on the client side and is not tied to a database collection on the server. Read more in the [Collections article](http://guide.meteor.com/collections.html#local-collections).
+首先，你需要创建一个本地数据集， 该数据集只存在于客户端而不跟服务器端的数据集联系。在[数据集一章](http://guide.meteor.com/collections.html#local-collections)中了解更多。
 
 ```js
-// In client-side code, declare a local collection
-// by passing `null` as the argument
+// 在客户端声明一个本地数据集
+// 传送一个 `null` 作为参数
 ScoreAverages = new Mongo.Collection(null);
 ```
 
-Now, if you fetch data using a Method, you can put into this collection:
+现在，如果你通过 Method 获取数据，可以放在该数据集里面：
 
 ```js
 import { calculateAverages } from '../api/games/methods.js';
 
 function updateAverages() {
-  // Clean out result cache
+  // 清除结果缓存
   ScoreAverages.remove({});
 
-  // Call a Method that does an expensive computation
+  // 调用 Method 用于复杂计算
   calculateAverages.call((err, res) => {
     res.forEach((item) => {
       ScoreAverages.insert(item);
@@ -409,89 +405,88 @@ function updateAverages() {
 }
 ```
 
-We can now use the data from the local collection `ScoreAverages` inside a UI component exactly the same way we would use a regular MongoDB collection. Instead of it updating automatically, we'll need to call `updateAverages` every time we need new results.
+现在我们可以在一个 UI 组件中使用名为 `ScoreAverages` 的本地数据集中的数据，跟我们使用 MongoDB 数据集 是完全一样的。它不会自动更新，每次计算结果的时候都需要调用 `updateAverages`.
 
-<h2 id="advanced">Advanced concepts</h2>
+<h2 id="advanced">进阶概念</h2>
 
-While you can easily use Methods in a simple app by following the Meteor introductory tutorial, it's important to understand exactly how they work to use them effectively in a production app. One of the downsides of using a framework like Meteor that does a lot for you under the hood is that you don't always understand what is going on, so it's good to learn some of the core concepts.
+虽然根据 Meteor 的入门手册你可以很轻松地在简单应用中使用 Meteor, 但是了解 Method 是如何运作的可以帮你更好地使用它。类似 Meteor 这样的框架为你做了很多工作，缺点之一就是你不总是理解究竟是怎样运作的，所以学习一些核心概念是很重要的。
 
-<h3 id="call-lifecycle">Method call lifecycle</h3>
+<h3 id="call-lifecycle">Method 调用的生命周期</h3>
 
-Here's exactly what happens, in order, when a Method is called:
+当一个 Method 被调用时，会发生以下事件：
 
-<h4 id="lifecycle-simulation">1. Method simulation runs on the client</h4>
+<h4 id="lifecycle-simulation">1. Method 模拟在客户端上运行</h4>
 
-If we defined this Method in client and server code, as all Methods should be, a Method simulation is executed in the client that called it.
+跟所有 Method 一样，如果我们在客户端和服务器端定义该 Method, Method 模拟在调用它的客户端上运行。
 
-The client enters a special mode where it tracks all changes made to client-side collections, so that they can be rolled back later. When this step is complete, the user of your app sees their UI update instantly with the new content of the client-side database, but the server hasn't received any data yet.
+客户端进入到一种特殊模式，在该模式下可以跟踪到客户端数据集的所有变化，将来可以回滚。该步骤结束后，应用的用户可以看到 UI 界面立即根据客户端数据库的内容进行更新，即使服务器还没有收到任何数据。
 
-If an exception is thrown from the Method simulation, then by default Meteor ignores it and continues to step (2). If you are using `ValidatedMethod` or pass a special `throwStubExceptions` option to `Meteor.apply`, then an exception thrown from the simulation will stop the server-side Method from running at all.
+如果 Method 模拟抛出一个异常，默认情况下 Meteor 会忽略它并继续步骤 (2)。如果你使用 `ValidatedMethod` 或者传送一个特殊的 `throwStubExceptions` 选项到 `Meteor.apply`,那么从模拟中抛出的异常将导致服务器端的 Method 彻底停止运行。
 
-The return value of the Method simulation is discarded, unless the `returnStubValue` option is passed when calling the Method, in which case it is returned to the Method caller. ValidatedMethod passes this option by default.
+除非在调用 Method 时传送 `returnStubValue` 选项，否则 Method 返回值会被抛弃，而不会返回到 Method 调用者。ValidatedMethod 在默认情况下会传送 `returnStubValue` 选项。
 
-<h4 id="lifecycle-ddp-message">2. A `method` DDP message is sent to the server</h4>
+<h4 id="lifecycle-ddp-message">2. 一个 `method` DDP 消息发送到服务器</h4>
 
-The Meteor client constructs a DDP message to send to the server. This includes the Method name, arguments, and an automatically generated Method ID that represents this particular Method invocation.
+Meteor 客户端构建一个 DDP 消息并发送到服务器。消息包括 Method 的名称，参数，自动生成的代表该调用的 Method 的 ID.
 
-<h4 id="lifecycle-server">3. Method runs on the server</h4>
+<h4 id="lifecycle-server">3. Method 在服务器上运行</h4>
 
-When the server receives the message, it executes the Method code again on the server. The client side version was a simulation that will be rolled back later, but this time it's the real version that is writing to the actual database. Running the actual Method logic on the server is crucial because the server is a trusted environment where we know that security-critical code will run the way we expect.
+当服务器收到消息，会在服务器上再次运行 Method 代码。客户端的版本只是一个模拟，将会被回滚，而服务器上是真实的版本，将会被写入数据库。在服务器上运行实际的 Method 代码是很重要的，因为我们知道服务器是一个值得信赖的环境，关键的代码可以在上面按照我们所期望的方式安全地运行。
 
-<h4 id="lifecycle-result">4. Return value is sent to the client</h4>
+<h4 id="lifecycle-result">4. 返回值被发送到客户端</h4>
 
-Once the Method has finished running on the server, it sends a `result` message to the client with the Method ID generated in step 2, and the return value itself. The client stores this for later use, but _doesn't call the Method callback yet_. If you pass the [`onResultReceived` option to `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply), that callback is fired.
+Method 在服务器上结束运行后，就会把在第二步生成的 ID , `result` 消息和返回值发送到客户端。这些数据会被储存在客户端，但不会调用 Method 回调。如果你传递一个[`onResultReceived` 选项到 `Meteor.apply`](http://docs.meteor.com/#/full/meteor_apply)，回调就会被启动。
 
-<h4 id="lifecycle-publications">5. Any DDP publications affected by the Method are updated</h4>
+<h4 id="lifecycle-publications">5. DDP 发布通过 Method 实现更新</h4>
 
-If we have any publications on the page that have been affected by the database writes from this Method, the server sends the appropriate updates to the client. Note that the client data system doesn't reveal these updates to the app UI until the next step.
+如果通过 Method 写入数据库影响到某些发布，服务器会把更新的部分发送到客户端。请注意，客户端的数据系统并不会立即根据这些变化更新应用的 UI，具体的更新我们将在下一步讨论。
 
-<h4 id="lifecycle-updated">6. `updated` message sent to the client, data replaced with server result, Method callback fires</h4>
+<h4 id="lifecycle-updated">6. `updated` 发送到客户端，数据替换服务器结果，Method 回调启动</h4>
 
-After the relevant data updates have been sent to the correct client, the server sends back the last message in the Method life cycle - the DDP `updated` message with the relevant Method ID. The client rolls back any changes to client side data made in the Method simulation in step 1, and replaces them with the actual changes sent from the server in step 5.
+当相关的数据更新发送到正确的客户端后，服务器返回 Method 生命周期中的最后一条信息 —— DDP `updated` 信息和关联的 Method ID. 客户端回滚在第一步 Method 模拟中客户端数据的任何变化，并替换为第五步中服务器端发送的更新数据。
 
-Lastly, the callback passed to `Meteor.call` actually fires with the return value from step 4. It's important that the callback waits until the client is up to date, so that your Method callback can assume that the client state reflects any changes done inside the Method.
+最后，传递给 `Meteor.call` 的回调实际上跟第四步中的返回值一起启动。客户端更新后再实现回调是很重要的，所以 Method 回调可以假设客户端状态反映了 Method 所做的任何改变。
 
-<h4 id="lifecycle-error">Error case</h4>
+<h4 id="lifecycle-error">错误情况</h4>
 
-In the list above, we didn't cover the case when the Method execution on the server throws an error. In that case, there is no return value, and the client gets an error instead. The Method callback is fired instantly with the returned error as the first argument. Read more about error handling in the section about errors below.
+在上面的步骤中，我们没有考虑 Method 在服务器端执行抛出错误的情况。在这种情况下是没有返回值的，客户端也会得到一个错误值。Method 回调立即启动并返回一个错误值作为第一个参数。了解更多信息请阅读上文关于错误处理的段落。
 
-<h3 id="methods-vs-rest">Benefits of Methods over REST</h3>
+<h3 id="methods-vs-rest">与 REST 相比之下 Method 的优点</h3>
 
-We believe Methods provide a much better primitive for building modern applications than REST endpoints built on HTTP. Let's go over some of the things you get for free with Methods that you would have to worry about if using HTTP. The purpose of this section is not to convince you that REST is bad - it's just to remind you that you don't need to handle these things yourself in a Meteor app.
+相比在 HTTP REST 端点上建立现代应用程序，我们相信 Method 提供了一个更好的起点。我们回顾一下有哪些方面是你使用 HTTP 需要担心，而 Meteor 可以帮你控制的。这部分的目的不是跟你说 REST 有多不好 —— 而是提醒你在 Meteor 应用中你不必处理这些情况。
 
-<h4 id="non-blocking">Methods use synchronous-style APIs, but are non-blocking</h4>
+<h4 id="non-blocking">Methods 使用同步，非阻塞的 APIs</h4>
 
-You may notice in the example Method above, we didn't need to write any callbacks when interacting with MongoDB, but the Method still has the non-blocking properties that people associate with Node.js and callback-style code. Meteor uses a coroutine library called [Fibers](https://github.com/laverdet/node-fibers) to enable you to write code that uses return values and throws errors, and avoid dealing with lots of nested callbacks.
+你可能注意到上面的 Method 例子中，当和 MongoDB 交互时我们并不需要写任何回调，但 Method 仍然具有 Node.js 和 回调风格代码的无阻塞特性。Method 使用 Fibers 协同程序库 [Fibers](https://github.com/laverdet/node-fibers)，这样你可以在代码中使用返回值和抛出的错误，并且避免处理很多嵌套的回调。
 
-<h4 id="ordered">Methods always run and return in order</h4>
+<h4 id="ordered">Methods 总是按顺序运行和返回</h4>
 
-When accessing a REST API, you will sometimes run into a situation where you make two requests one after the other, but the results arrive out of order. Meteor's underlying machinery makes sure this never happens with Methods. When multiple Method calls are received _from the same client_, Meteor runs each Method to completion before starting the next one. If you need to disable this functionality for one particularly long-running Method, you can use [`this.unblock()`](http://docs.meteor.com/#/full/method_unblock) to allow the next Method to run while the current one is still in progress. Also, since Meteor is based on Websockets instead of HTTP, all Method calls and results are guaranteed to arrive in the order they are sent. You can also pass a special option `wait: true` to `Meteor.apply` to wait to send a particular Method until all others have returned, and not send any other Methods until this one returns.
+访问 REST API 有时会出现会出现你按顺序提出两个请求，但结果却没有按顺序返回的情况。Meteor 的运行机制可以保证这种情况不会在 Method 中产生。当从客户端收到多个调用 Method 的请求时， Meteor 会按顺序执行完一个 Method 再执行下一个 Method. 如果在一个需要长时间运行的 Method 中你想要禁用这种方法，可以使用 `this.unblock()` [`this.unblock()`](http://docs.meteor.com/#/full/method_unblock)，这样即使 Method 在运行，下一个 Method 也可以同时进行。因为 Meteor 是基于 WebSockets 而非 HTTP 的，所有的 Method 和调用和返回结果都可以保证以正确的顺序到达。你也可以把 `wait: true` 传递给 `Meteor.apply`，这样就可以实现不运行其他 Method 除非该特殊的 Method 返回结果。
 
-<h4 id="change-tracking">Change tracking for Optimistic UI</h4>
+<h4 id="change-tracking">跟踪变动，以便优化 UI</h4>
 
-When Method simulations and server-side executions run, Meteor tracks any resulting changes to the database. This is what lets the Meteor data system roll back the changes from the Method simulation and replace them with the actual writes from the server. Without this automatic database tracking, it would be very difficult to implement a correct Optimistic UI system.
+当 Method 开始模拟，服务器开始运行， Meteor 跟踪所有数据库的变化。在这种情况下， Meteor 数据系统回滚 Meteor 模拟中出现的变化并替换服务器端的数据。如果不是这种自动的数据库跟踪，要实现正确地优化 UI 是很难的。
 
-<h3 id="calling-method-from-method">Calling a Method from another Method</h3>
+<h3 id="calling-method-from-method">从一个 Method 中调用另一个 Method</h3>
 
-Sometimes, you'll want to call a Method from another Method. Perhaps you already have some functionality implemented and you want to add a wrapper that fills in some of the arguments automatically. This is a totally fine pattern, and Meteor does some nice things for you:
+有时候你需要从一个 Method 中调用另外一个 Method, 或许你已经实现了一些功能，但你需要可以添加一个封装包自动填充参数。这是一个完全正常模式，Method 也为之做了很多工作：
 
-1. Inside a client-side Method simulation, calling another Method doesn't fire off an extra request to the server - the assumption is that the server-side implementation of the Method will do it. However, it does run the _simulation_ of the called Method, so that the simulation on the client closely matches what will happen on the server.
-2. Inside a Method execution on the server, calling another Method runs that Method as if it were called by the same client. That means the Method runs as usual, and the context - `userId`, `connection`, etc - are taken from the original Method call.
+1. 在一个客户端的 Method 模拟中，调用另一个 Method 并不会因此像服务器发送额外的请求 —— 我们假设服务器端 Method 的执行会这样做，它确实运行了调用 Method 的模拟，所以客户端的模拟跟服务器上发生的模拟非常贴近。
+2. 在一个服务器端的 Method 模拟中，调用并运行另外一个 Method,  跟在客户端运行一样。这说明 Method 像往常一样运行，`userId`, `connection` 等环境变量可以从原来调用的 Method 获取。
+<h3 id="consistent-id-generation">一致的 ID 生成和 UI 的优化</h3>
 
-<h3 id="consistent-id-generation">Consistent ID generation and optimistic UI</h3>
+当从客户端 Method 模拟中往 Minimongo 插入文件时，每个文件的 `_id` 属性都是随机产生的字符串。当 Method 在服务器端执行时，在插入数据库前会重新生成 ID。如果执行不当的话，服务器端产生的 ID 可能就是不同的，在这种情况下，当 Method 模拟回滚并替换服务器的数据时，可能会出现页面闪烁和 UI 布局问题。但 Meteor 绝不会让这种情况发生！
 
-When you insert documents into Minimongo from the client-side simulation of a Method, the `_id` field of each document is a random string. When the Method call is executed on the server, the IDs are generated again before being inserted into the database. If it were implemented naively, it could mean that the IDs generated on the server are different, which would cause undesirable flickering and re-renders in the UI when the Method simulation was rolled back and replaced with the server data. But this is not the case in Meteor!
+Meteor Method 和调用该 Method 的客户端共享一个随机产生的种子，所以客户端和服务器端产生的 ID 都可以保证是相同的。这意味着当 Method 被发送到服务器时你也可以放心使用客户端产生的 ID，相信当 Method 执行结束时所产生的 ID 跟我们所使用的 ID 是一样的。一个应用场景就是用于在数据库创建文件，然后立即重定向到包含该文件 ID 的 url.
 
-Each Meteor Method invocation shares a random generator seed with the client that called the Method, so any IDs generated by the client and server Methods are guaranteed to be the same. This means you can safely use the IDs generated on the client to do things while the Method is being sent to the server, and be confident that the IDs will be the same when the Method finishes. One case where this is particularly useful is if you want to create a new document in the database, then immediately redirect to a URL that contains that new document's ID.
+<h3 id="retries">Method 重试</h3>
 
-<h3 id="retries">Method retries</h3>
+如果从客户端调用 Method, 用户在收到结果前互联网连接断开的情况，Meteor 默认 Method 并没有实际执行。当重新建立连接后，会重新调用 Method。这意味着，在特定情况下，Method 可以被多次发送。这种情况应该很少发生，如果调用其它方法会产生不利后果，应该投入额外的努力确保 Method 是幂等的 —— 多次调用并不会影响数据库的更新。
 
-If you call a Method from the client, and the user's Internet connection disconnects before the result is received, Meteor assumes that the Method didn't actually run. When the connection is re-established, the Method call will be sent again. This means that, in certain situations, Methods can be sent more than once. This should only happen very rarely, but in the case where an extra Method call could have negative consequences it is worth putting in extra effort to ensure that Methods are idempotent - that is, calling them multiple times doesn't result in additional changes to the database.
+大部分 Method 默认是幂等的。如果插入命令发生两次的话会报错因为生成的 ID 会互相冲突。执行第二次删除不会有任何结果，大部分的更新操作如 `$set` 在执行第二次时结果不变。 所需要关心的代码运行两次的唯一地方是 MongoDB 的叠加更新，如 `$inc` 和 `$push`，以及调用外部的 API.
 
-Many Method operations are idempotent by default. Inserts will throw an error if they happen twice because the generated ID will conflict. Removes on collections won't do anything the second time, and most update operators like `$set` will have the same result if run again. The only places you need to worry about code running twice are MongoDB update operators that stack, like `$inc` and `$push`, and calls to external APIs.
+<h3 id="comparison-with-allow-deny">与 allow/deny 的比较</h3>
 
-<h3 id="comparison-with-allow-deny">Historical comparison with allow/deny</h3>
+Meteor 核心 API 有一个代替 Method 从客户端操作数据的选择。相对于明确定义 Method 和参数，你可以直接在客户端使用 `insert`, `update`, 和 `remove`，只需要安全规则 allow/deny 中说明，[`allow`](http://docs.meteor.com/#/full/allow) 和 [`deny`](http://docs.meteor.com/#/full/deny)。在 Meteor 手册中，我们强烈建议使用 Method，而不是 allow/deny. 了解更多 allow/deny 可能出现的问题请阅读[安全性章节](security.html#allow-deny).
 
-The Meteor core API includes an alternative to Methods for manipulating data from the client. Instead of explicitly defining Methods with specific arguments, you can instead call `insert`, `update`, and `remove` directly from the client and specify security rules with [`allow`](http://docs.meteor.com/#/full/allow) and [`deny`](http://docs.meteor.com/#/full/deny). In the Meteor Guide, we are taking a strong position that this feature should be avoided and Methods used instead. Read more about the problems with allow/deny in the [Security article](security.html#allow-deny).
-
-Historically, there have been some misconceptions about the features of Meteor Methods as compared with the allow/deny feature, including that it was more difficult to achieve Optimistic UI when using Methods. However, the client-side `insert`, `update`, and `remove` feature is actually implemented _on top of_ Methods, so Methods are strictly more powerful. You get great default Optimistic UI just by defining your Method code on the client and the server, as described in the Method lifecycle section above.
+跟 allow/deny 的特点相比，对 Meteor Method 的了解一向存在误解，包括 Method 更难实现 UI 优化。但是，客户端的 `insert`, `update`, 和 `remove` 是在 Method 的基础上执行的，所以 Method 更加强大。只需要在客户端和服务器上定义 Method 代码，就默认得到优化的 UI, 如以上方法生命周期部分所述。
