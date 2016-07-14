@@ -327,7 +327,7 @@ Migrations.add({
     });
   },
   down() {
-    Lists.update({}, {$unset: {todoCount: true}});
+    Lists.update({}, {$unset: {todoCount: true}}, {multi: true});
   }
 });
 ```
@@ -358,12 +358,17 @@ Migrations.add({
       batch.find({_id: list._id}).updateOne({$set: {todoCount}});
     });
 
-    // We need to wrap the async function to get a synchronous API that migrations expects
-    const execute = Meteor.wrapAsync(batch.execute, batch);
-    return execute();
+    //Mongo throws an error if we execute a batch operation without actual operations, e.g. when Lists was empty.
+    if(batch.s && batch.s.currentBatch && batch.s.currentBatch.operations && batch.s.currentBatch.operations.length > 0){
+      // We need to wrap the async function to get a synchronous API that migrations expects
+      const execute = Meteor.wrapAsync(batch.execute, batch);
+      return execute();
+    }
+  
+    return true;
   },
   down() {
-    Lists.update({}, {$unset: {todoCount: true}});
+    Lists.update({}, {$unset: {todoCount: true}}, {multi: true});
   }
 });
 ```
