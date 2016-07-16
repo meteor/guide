@@ -81,8 +81,6 @@ There are several options. Choose the ones that makes sense for your app. You ma
 * [dispatch:mocha-browser](https://atmospherejs.com/dispatch/mocha-browser) Runs client and server package or app tests with Mocha reporting client results in a web browser and server results in the server console. Has a watch mode.
 * [dispatch:mocha](https://atmospherejs.com/dispatch/mocha) Runs server-only package or app tests with Mocha and reports all results in the server console. Can be used for running tests on a CI server. Has a watch mode.
 
-NOTE: Currently tests may not run properly if you add both a `practicalmeteor:*` package and a `dispatch:*` package to your app. This is being fixed. See [this issue](https://github.com/practicalmeteor/meteor-mocha/issues/23).
-
 These packages don't do anything in development or production mode. They declare themselves `testOnly` so they are not even loaded outside of testing. But when our app is run in [test mode](#test-modes), the test driver package takes over, executing test code on both the client and server, and rendering results to the browser.
 
 Here's how we can add the [`practicalmeteor:mocha`](https://atmospherejs.com/practicalmeteor/mocha) package to our app:
@@ -199,11 +197,11 @@ Unit testing is the process of isolating a section of code and then testing that
 
 By isolating a module and simply testing its internal functionality, we can write tests that are *fast* and *accurate*---they can quickly tell you where a problem in your application lies. Note however that incomplete unit tests can often hide bugs because of the way they stub out dependencies. For that reason it's useful to combine unit tests with slower (and perhaps less commonly run) integration and acceptance tests.
 
-<h3 id="simple-unit-test">A simple unit test</h3>
+<h3 id="simple-blaze-unit-test">A simple Blaze unit test</h3>
 
 In the [Todos](https://github.com/meteor/todos) example app, thanks to the fact that we've split our User Interface into [smart and reusable components](ui-ux.html#components), it's natural to want to unit test some of our reusable components (we'll see below how to [integration test](#simple-integration-test) our smart components).
 
-To do so, we'll use a very simple test helper that renders a Blaze component off-screen with a given data context (note that the [React test utils](https://facebook.github.io/react/docs/test-utils.html) can do a similar thing for React). As we place it in `imports`, it won't load in our app by in normal mode (as it's not required anywhere).
+To do so, we'll use a very simple test helper that renders a Blaze component off-screen with a given data context. As we place it in `imports`, it won't load in our app by in normal mode (as it's not required anywhere).
 
 [`imports/ui/test-helpers.js`](https://github.com/meteor/todos/blob/master/imports/ui/test-helpers.js):
 
@@ -223,7 +221,7 @@ const withDiv = function withDiv(callback) {
   }
 };
 
-export const function withRenderedTemplate(template, data, callback) {
+export const withRenderedTemplate = function withRenderedTemplate(template, data, callback) {
   withDiv((el) => {
     const ourTemplate = _.isString(template) ? Template[template] : template;
     Blaze.renderWithData(ourTemplate, data, el);
@@ -289,7 +287,7 @@ If you're testing code that makes use of globals, you'll need to import those gl
 
 ```js
 // logging.js
-export const function logTodos() {
+export function logTodos() {
   console.log(Todos.findOne());
 }
 ```
@@ -299,7 +297,7 @@ then you'll need to import `Todos` both in that file and in the test:
 ```js
 // logging.js
 import { Todos } from './todos.js'
-export const function logTodos() {
+export function logTodos() {
   console.log(Todos.findOne());
 }
 ```
@@ -320,6 +318,61 @@ import { logTodos } from './logging.js'
 
 We can use the [Factory package's](#test-data) `.build()` API to create a test document without inserting it into any collection. As we've been careful not to call out to any collections directly in the reusable component, we can pass the built `todo` document directly into the template.
 
+<h3 id="simple-react-unit-test">A simple React unit test</h3>
+
+We can also apply the same structure to testing React components and recommend the [Enzyme](https://github.com/airbnb/enzyme) package, which simulates a React component's environment and allows you to query it using CSS selectors. A larger suite of tests is available in the [react branch of the Todos app](https://github.com/meteor/todos/tree/react), but let's look at a simple example for now:
+
+```js
+import { Factory } from 'meteor/factory';
+import React from 'react';
+import { shallow } from 'enzyme';
+import { chai } from 'meteor/practicalmeteor:chai';
+import TodoItem from './TodoItem.jsx';
+
+describe('TodoItem', () => {
+  it('should render', () => {
+    const todo = Factory.build('todo', { text: 'testing', checked: false });
+    const item = shallow(<TodoItem todo={todo} />);
+    chai.assert(item.hasClass('list-item'));
+    chai.assert(!item.hasClass('checked'));
+    chai.assert.equal(item.find('.editing').length, 0);
+    chai.assert.equal(item.find('input[type="text"]').prop('defaultValue'), 'testing');
+  });
+});
+```
+
+The test is slightly simpler than the Blaze version above because the React sample app is not internationalized. Otherwise, it's conceptually identical. We use Enzyme's `shallow` function to render the `TodoItem` component, and the resulting object to query the document, and also to simulate user interactions. And here's an example of simulating a user checking the todo item:
+
+```js
+import { Factory } from 'meteor/factory';
+import React from 'react';
+import { shallow } from 'enzyme';
+import { sinon } from 'meteor/practicalmeteor:sinon';
+import TodoItem from './TodoItem.jsx';
+import { setCheckedStatus } from '../../api/todos/methods.js';
+
+describe('TodoItem', () => {
+  it('should update status when checked', () => {
+    sinon.stub(setCheckedStatus, 'call');
+    const todo = Factory.create('todo', { checked: false });
+    const item = shallow(<TodoItem todo={todo} />);
+
+    item.find('input[type="checkbox"]').simulate('change', {
+      target: { checked: true },
+    });
+
+    sinon.assert.calledWith(setCheckedStatus.call, {
+      todoId: todo._id,
+      newCheckedStatus: true,
+    });
+
+    setCheckedStatus.call.restore();
+  });
+});
+```
+
+In this case, the `TodoItem` component calls a [Meteor Method](/methods.html) `setCheckedStatus` when the user clicks, but this is a unit test so there's no server running. So we stub it out using [Sinon](http://sinonjs.org). After we simulate the click, we verify that the stub was called with the correct arguments. Finally, we clean up the stub and restore the original method behavior.
+
 <h3 id="running-unit-tests">Running unit tests</h3>
 
 To run the tests that our app defines, we run our app in [test mode](#test-modes):
@@ -334,7 +387,7 @@ To run the tests, visit http://localhost:3000 in your browser. This kicks off `p
 
 <img src="images/mocha-test-results.png">
 
-Usually, while developing an application, it make sense to run `meteor test` on a second port (say `3100`), while also running your main application in a separate process:
+Usually, while developing an application, it makes sense to run `meteor test` on a second port (say `3100`), while also running your main application in a separate process:
 
 ```bash
 # in one terminal window
@@ -348,7 +401,7 @@ Then you can open two browser windows to see the app in action while also ensuri
 
 <h3 id="isolation-techniques">Isolation techniques</h3>
 
-In the [unit test above](#simple-unit-test) we saw a very limited example of how to isolate a module from the larger app. This is critical for proper unit testing. Some other utilities and techniques include:
+In the [unit tests above](#simple-blaze-unit-test) we saw a very limited example of how to isolate a module from the larger app. This is critical for proper unit testing. Some other utilities and techniques include:
 
   - The [`velocity:meteor-stubs`](https://atmospherejs.com/velocity/meteor-stubs) package, which creates simple stubs for most Meteor core objects.
 
@@ -356,23 +409,33 @@ In the [unit test above](#simple-unit-test) we saw a very limited example of how
 
   - The [`hwillson:stub-collections`](https://atmospherejs.com/hwillson/stub-collections) package we mentioned [above](#mocking-the-database).
 
-  - (Using another package from the [Todos](https://github.com/meteor/todos) example app) to isolate a publication, the `publication-collector` package:
+There's a lot of scope for better isolation and testing utilities.
 
-    ```js
-    describe('lists.public', function () {
-      it('sends all public lists', function (done) {
-        // Allows us to look at the output of a publication without
-        // needing a client connection
-        const collector = new PublicationCollector();
-        collector.collect('lists.public', (collections) => {
-          chai.assert.equal(collections.Lists.length, 3);
-          done();
-        });
-      });
+<h4 id="testing-publications">Testing publications</h4>
+
+Using the [`johanbrook:publication-collector`](https://atmospherejs.com/johanbrook/publication-collector) package, you're able to test individual publication's output without needing to create a traditional subscription:
+
+```js
+describe('lists.public', function () {
+  it('sends all public lists', function (done) {
+    // Set a user id that will be provided to the publish function as `this.userId`,
+    // in case you want to test authentication.
+    const collector = new PublicationCollector({userId: 'some-id'});
+
+    // Collect the data published from the `lists.public` publication.
+    collector.collect('lists.public', (collections) => {
+      // `collections` is a dictionary with collection names as keys,
+      // and their published documents as values in an array.
+      // Here, documents from the collection 'Lists' are published.
+      chai.assert.typeOf(collections.Lists, 'array');
+      chai.assert.equal(collections.Lists.length, 3);
+      done();
     });
-    ```
+  });
+});
+```
 
-There's a lot of scope for better isolation and testing utilities (the two packages from the example app above could be improved greatly!). We encourage the community to take the lead on these.
+Note that user documents – ones that you would normally query with `Meteor.users.find()` – will be available as the key `users` on the dictionary passed from a `PublicationCollector.collect()` call. See the [tests](https://github.com/johanbrook/meteor-publication-collector/blob/master/tests/publication-collector.test.js) in the package for more details.
 
 <h2 id="integration-testing">Integration testing</h2>
 
@@ -487,6 +550,7 @@ import { assert } from 'meteor/practicalmeteor:chai';
 import { Promise } from 'meteor/promise';
 import { $ } from 'meteor/jquery';
 
+import { denodeify } from '../../utils/denodeify';
 import { generateData } from './../../api/generate-data.app-tests.js';
 import { Lists } from '../../api/lists/lists.js';
 import { Todos } from '../../api/todos/todos.js';
@@ -496,7 +560,7 @@ import { Todos } from '../../api/todos/todos.js';
 const waitForSubscriptions = () => new Promise(resolve => {
   const poll = Meteor.setInterval(() => {
     if (DDP._allSubscriptionsReady()) {
-      clearInterval(poll);
+      Meteor.clearInterval(poll);
       resolve();
     }
   }, 200);
@@ -504,13 +568,16 @@ const waitForSubscriptions = () => new Promise(resolve => {
 
 // Tracker.afterFlush runs code when all consequent of a tracker based change
 //   (such as a route change) have occured. This makes it a promise.
-const afterFlushPromise = Promise.denodeify(Tracker.afterFlush);
+const afterFlushPromise = denodeify(Tracker.afterFlush);
 
 if (Meteor.isClient) {
   describe('data available when routed', () => {
     // First, ensure the data that we expect is loaded on the server
     //   Then, route the app to the homepage
-    beforeEach(() => generateData().then(() => FlowRouter.go('/')));
+    beforeEach(() => generateData()
+      .then(() => FlowRouter.go('/'))
+      .then(waitForSubscriptions)
+    );
 
     describe('when logged out', () => {
       it('has all public lists at homepage', () => {
@@ -522,11 +589,9 @@ if (Meteor.isClient) {
         FlowRouter.go('Lists.show', { _id: list._id });
 
         return afterFlushPromise()
+          .then(waitForSubscriptions)
           .then(() => {
             assert.equal($('.title-wrapper').html(), list.name);
-          })
-          .then(() => waitForSubscriptions())
-          .then(() => {
             assert.equal(Todos.find({ listId: list._id }).count(), 3);
           });
       });
@@ -569,6 +634,8 @@ import { resetDatabase } from 'meteor/xolvio:cleaner';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
+import { denodeify } from '../utils/denodeify';
+
 const createList = (userId) => {
   const list = Factory.create('list', { userId });
   _.times(3, () => Factory.create('todo', { listId: list._id }));
@@ -578,7 +645,7 @@ const createList = (userId) => {
 // Remember to double check this is a test-only file before
 // adding a method like this!
 Meteor.methods({
-  generateFixtures: function generateFixturesMethod() {
+  generateFixtures() {
     resetDatabase();
 
     // create 3 public lists
@@ -596,7 +663,7 @@ if (Meteor.isClient) {
   // with the currently tested user's connection.
   const testConnection = Meteor.connect(Meteor.absoluteUrl());
 
-  generateData = Promise.denodeify((cb) => {
+  generateData = denodeify((cb) => {
     testConnection.call('generateFixtures', cb);
   });
 }

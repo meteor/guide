@@ -337,7 +337,7 @@ This way you get the full reactive power of the store.
 
 <h3 id="updating-stores">Updating stores</h3>
 
-If you need to update a store as a result of user action, you'd update the store from an event handler, just like you call Methods.
+If you need to update a store as a result of user action, you'd update the store from an event handler, just like you call [Methods](methods.html).
 
 If you need to perform complex logic in the update (e.g. not just call `.set()` etc), it's a good idea to define a mutator on the store. As the store is a singleton, you can just attach a function to the object directly:
 
@@ -365,7 +365,7 @@ Meteor.publish('todos.inList', function(listId) {
     listId: {type: String}
   }).validate({ listId });
 
-  const list = List.findOne(listId);
+  const list = Lists.findOne(listId);
 
   if (list && (!list.userId || list.userId === this.userId)) {
     return [
@@ -582,9 +582,7 @@ Meteor.publish('polled-publication', function() {
         this.changed(COLLECTION_NAME, doc._id, doc);
       } else {
         publishedKeys[doc._id] = true;
-        if (publishedKeys[doc._id]) {
-          this.added(COLLECTION_NAME, doc._id, doc);
-        }
+        this.added(COLLECTION_NAME, doc._id, doc);
       }
     });
   };

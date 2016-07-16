@@ -208,7 +208,7 @@ ListPage.propTypes = {
 };
 ```
 
-Then we create a `ListContainer` container component which wraps it and provides a data source:
+Then we create a `ListPageContainer` container component which wraps it and provides a data source:
 
 ```js
 import { Meteor } from 'meteor/meteor';
@@ -216,7 +216,7 @@ import { Lists } from '../../api/lists/lists.js';
 import { createContainer } from 'meteor/react-meteor-data';
 import ListPage from '../pages/ListPage.js';
 
-export default ListContainer = createContainer(({ params }) => {
+export default ListPageContainer = createContainer(({ params }) => {
   const { id } = params;
   const todosHandle = Meteor.subscribe('todos.inList', id);
   const loading = !todosHandle.ready();
@@ -231,12 +231,14 @@ export default ListContainer = createContainer(({ params }) => {
 }, ListPage);
 ```
 
+It's a good habit to name your container exactly like the component that it wraps, with the word “Container” tacked onto the end. This way, when you're attempting to track down issues in your code, it makes it much easier to locate the appropriate files/classes.
+
 The container component created by `createContainer()` will reactively rerender the wrapped component in response to any changes to [reactive data sources](https://atmospherejs.com/meteor/tracker) accessed from inside the function provided to it.
 
-Although this `ListContainer` container is intended to be instantiated by the React Router (which passes in the props automatically), if we did ever want to create one manually, we would need to pass in the props to the container component (which then get passed into our data function above):
+Although this `ListPageContainer` container is intended to be instantiated by the React Router (which passes in the props automatically), if we did ever want to create one manually, we would need to pass in the props to the container component (which then get passed into our data function above):
 
 ```jsx
-<ListContainer params={{id: '7'}}/>
+<ListPageContainer params={{id: '7'}}/>
 ```
 
 <h3 id="preventing-rerenders">Preventing re-renders</h3>
@@ -261,14 +263,14 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mount } from 'react-mounter';
 
 import AppContainer from '../../ui/containers/AppContainer.js';
-import ListContainer from '../../ui/containers/ListContainer.js';
+import ListPageContainer from '../../ui/containers/ListPageContainer.js';
 
 
 FlowRouter.route('/lists/:_id', {
   name: 'Lists.show',
   action() {
     mount(AppContainer, {
-      main: <ListContainer/>,
+      main: <ListPageContainer/>,
     });
   },
 });
@@ -305,7 +307,7 @@ import { Router, Route, browserHistory } from 'react-router';
 
 // route components
 import AppContainer from '../../ui/containers/AppContainer.js';
-import ListContainer from '../../ui/containers/ListContainer.js';
+import ListPageContainer from '../../ui/containers/ListPageContainer.js';
 import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
 import NotFoundPage from '../../ui/pages/NotFoundPage.js';
@@ -313,7 +315,7 @@ import NotFoundPage from '../../ui/pages/NotFoundPage.js';
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
-      <Route path="lists/:id" component={ListContainer}/>
+      <Route path="lists/:id" component={ListPageContainer}/>
       <Route path="signin" component={AuthPageSignIn}/>
       <Route path="join" component={AuthPageJoin}/>
       <Route path="*" component={NotFoundPage}/>
