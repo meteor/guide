@@ -127,4 +127,6 @@ Going to add notes here of how the migration of Todos to Apollo went in case it 
     1. Why do the docs use `async/await` when Meteor's API doesn't return promises?
     2. Apollo Server docs are pretty hard to use here. You can get what you need if you follow the tutorial but this isn't a good way for reference.
 
-https://github.com/meteor/todos/commit/f7f3713e267932b4e9133704da7289152aab0d3f
+  4. First commit: https://github.com/meteor/todos/commit/f7f3713e267932b4e9133704da7289152aab0d3f
+    1. At this point, my full publication API has more or less been replaced (of course I need to integrate it client-side).
+    2. I think things will still get cleaned up a bit, once the questions above are resolved.
