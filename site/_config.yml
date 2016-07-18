@@ -29,6 +29,7 @@ sidebar_categories:
     - data-loading
     - methods
     - accounts
+    - apollo
     - testing
   View:
     - routing
