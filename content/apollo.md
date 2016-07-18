@@ -105,3 +105,26 @@ After reading this article, you'll know:
  - Here's an example:
  - A note about bindEnvironment?
  - What to return from mutations?
+
+# Migration log
+
+Going to add notes here of how the migration of Todos to Apollo went in case it ends up being interesting, in the style of Sashko's dev log.
+
+1. Blindly followed instructions from http://docs.apollostack.com/apollo-client/meteor.html to install apollo + meteor package
+  1. Added `graphql` as a dependency too
+  2. Also decided to update to `1.4-beta.14`
+  3. Ran into some version issues, cloned the latest `apollostack/meteor-integration` repo as a submodule
+
+2. Added `imports/api/apollo-server.js` + accompanying `resolvers.js` and `schema.js`
+  1. What should my schema look like? Surely the existing simple-schema schema should give me some hints.
+    1. Copied the schemas from `lists/lists.js` and `todos/todo.js` into `schema.js` -- would it make more sense to import the sub-schemas?
+    2. Also copied the publications in from `lists|todos/server/publications` to inspire the root queries
+  2. Ended up exporting the GraphQL schema from the same file as the SimpleSchema. It's clear they should share code somehow.
+    1. Not sure if the Todo should have a `list` or `listId` field. Hopefully it'll become clear.
+    2. Switched the `userId` field on Lists to be `private`, which better reflects the client-side nature of the field (the client doesn't care who it belongs to, just if it's the current user).
+    3. Added a `todos` field to the List.
+  3. Wrote some simple resolvers in `resolvers.js` to see how it would go
+    1. Why do the docs use `async/await` when Meteor's API doesn't return promises?
+    2. Apollo Server docs are pretty hard to use here. You can get what you need if you follow the tutorial but this isn't a good way for reference.
+
+https://github.com/meteor/todos/commit/f7f3713e267932b4e9133704da7289152aab0d3f
