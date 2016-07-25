@@ -1,5 +1,5 @@
 ---
-title: Contribution guidelines
+title: Contribution Guidelines
 order: 1000
 description: Tips for contributing to the Meteor Guide.
 ---
@@ -23,6 +23,10 @@ Things to be aware of:
 // good
 <h2 id="schemas-with-collections">Using schemas with collections</h2>
 ```
+
+#### Titles and headers
+
+Article titles are `Title Case`, and headers are `Sentence case`.
 
 #### Always put a blank line after each header
 
@@ -49,4 +53,15 @@ Render multiple items in your template with `{{#each}}`
 
 // good
 Render multiple items in your template with `{% raw %}{{#each}}{% endraw %}`
+```
+
+### Running the static site generator locally
+
+The site is built using hexo, a static site generator. You'll need to `npm install -g hexo-cli`, then
+
+```
+git submodule update --init --recursive
+cd site
+npm install
+hexo server
 ```

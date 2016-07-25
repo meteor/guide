@@ -1,6 +1,6 @@
 ---
-title: Application structure
-order: 1
+title: Application Structure
+order: 2
 description: How to structure your Meteor app with ES2015 modules, ship code to the client and server, and split your code into multiple apps.
 discourseTopicId: 20187
 ---
@@ -36,7 +36,9 @@ import './loading.html';              // import Blaze compiled HTML from relativ
 import '/imports/ui/style.css';       // import CSS from absolute path
 ```
 
-Meteor also supports the standard E2015 modules `export` syntax:
+> For more ways to import styles, see the [Build System](build-tool.html#css-importing) article.
+
+Meteor also supports the standard ES2015 modules `export` syntax:
 
 ```js
 export const listRenderHold = LaunchScreen.hold();  // named export
@@ -45,7 +47,7 @@ export default Lists;                               // default export
 export default new Collection('lists');             // default export
 ```
 
-<h4 id="importing-from-packages">Importing from packages</h4>
+<h3 id="importing-from-packages">Importing from packages</h3>
 
 In Meteor, it is also simple and straightforward to use the `import` syntax to load npm packages on the client or server and access the package's exported symbols as you would with any other module. You can also import from Meteor Atmosphere packages, but the import path must be prefixed with `meteor/` to avoid conflict with the npm package namespace. For example, to import `moment` from npm and `HTTP` from Atmosphere:
 
@@ -56,7 +58,7 @@ import { HTTP } from 'meteor/http';   // named import from Atmosphere
 
 For more details using `imports` with packages see [Using Packages](using-packages.html) in the Meteor Guide.
 
-<h4 id="using-require">Using `require`</h4>
+<h3 id="using-require">Using `require`</h3>
 
 In Meteor, `import` statements compile to CommonJS `require` syntax. However, as a convention we encourage you to use `import`.
 
@@ -79,7 +81,7 @@ Another situation where you'll need to use `require` is in CoffeeScript files. A
 React = require 'react'
 ```
 
-<h4 id="exporting-from-coffeescript">Exporting with CoffeeScript</h4>
+<h3 id="exporting-from-coffeescript">Exporting with CoffeeScript</h3>
 
 When using CoffeeScript, not only the syntax to import variables is different, but also the export has to be done in a different way. Variables to be exported are put in the `exports` object:
 

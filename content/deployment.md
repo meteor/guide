@@ -22,6 +22,10 @@ Deploying a web application is fundamentally different to releasing most other k
 
 However, it's still important to test your changes throughly with a good process of Quality Assurance (QA). Although it's easy to push out fixes to bugs, those bugs can still cause major problems to users and even potentially data corruption!
 
+> <h3 id="never-use-production-flag">Never use `--production` flag to deploy!</h3>
+> 
+> `--production` flag is purely meant to simulate production minification, but does almost nothing else. This still watches source code files, exchanges data with package server and does a lot more than just running the app, leading to unnecessary computing resource wasting and security issues. Please don't use `--production` flag to deploy!
+
 <h3 id="environments">Deployment environments</h3>
 
 In web application deployment it's common to refer to three runtime environments:
@@ -61,11 +65,33 @@ It's always a good idea to use SSL for Meteor applications (see the [Security Ar
 
 <h3 id="cdn">CDN</h3>
 
-It's not strictly required, but often a good idea to setup a Content Delivery Network (CDN) for your site. A CDN is a proxy that sits in front of the static assets of your site (such as JavaScript, CSS files, and some images) and caches copies of those files in locations that are closer to the location of the user. For example, if the actual web server for your application is on the east coast of the USA, if a user is in Australia, a CDN could host a copy of the JavaScript of the site within Australia or even in the city the user is in. This has huge benefits for the initial loading time for your site.
+It's not strictly required, but often a good idea to set up a Content Delivery Network (CDN) for your site. A CDN is a network of servers that hosts the static assets of your site (such as JavaScript, CSS, and images) in numerous locations around the world and uses the server closest to your user to provide those files in order to speed up their delivery. For example, if the actual web server for your application is on the east coast of the USA and your user is in Australia, a CDN could host a copy of the JavaScript of the site within Australia or even in the city the user is in. This has huge benefits for the initial loading time of your site.
 
-You want to put your CDN in front of the static assets that Meteor knows about. You can use `WebAppInternals.setBundledJsCssPrefix(DNS_HOSTNAME)` to set a prefix that applies to all of the bundled JS and CSS assets that the Meteor app serves. In particular, this means if you have relative image URLs inside your CSS files, they will also be served from the CDN.
+The basic way to use a CDN is to upload your files to the CDN and change your URLs to point at the CDN (for instance if your Meteor app is at `http://myapp.com`, changing your image URL from `<img src="http://myapp.com/cats.gif">` to `<img src="http://mycdn.com/cats.gif">`). However, this would be hard to do with Meteor, since the largest file – your Javascript bundle – changes every time you edit your app.
 
-If you are following the above approach, you may also want to manually add the CDN's hostname whenever you put an image/other asset URL in your application's code. To do this throughout your app, you can write a generic helper like `imageUrl()`.
+For Meteor, we recommend using a CDN with "origin" support (like [CloudFront](http://joshowens.me/using-a-cdn-with-your-production-meteor-app/)), which means that instead of uploading your files in advance, the CDN automatically fetches them from your server. You put your files in `public/` (in this case `public/cats.gif`), and when your Australian user asks the CDN for `http://mycdn.com/cats.gif`, the CDN, behind the scenes, fetches `http://myapp.com/cats.gif` and then delivers it to the user. While this is slightly slower than getting `http://myapp.com/cats.gif` directly, it only happens one time, because the CDN saves the file, and all subsequent Australians who ask for the file get it quickly.
+
+To get Meteor to use the CDN for your Javascript and CSS bundles, call `WebAppInternals.setBundledJsCssPrefix("http://mycdn.com")` on the server. This will also take care of relative image URLs inside your CSS files. If you need to use a dynamic prefix, you can return the prefix from a function passed to `WebAppInternals.setBundledJsCssUrlRewriteHook()`.
+
+For all your files in `public/`, change their URLs to point at the CDN. You can use a helper like `assetUrl`.
+
+Before:
+
+```html
+<img src="http://myapp.com/cats.gif">
+```
+
+After:
+
+```js
+Template.registerHelper("assetUrl", (asset) => {
+  return "http://mycdn.com/" + asset
+});
+```
+
+```html
+<img src="{{assetUrl 'cats.gif'}}">
+```
 
 <h4 id="cdn-webfonts">CDNs and webfonts</h4>
 
@@ -75,12 +101,22 @@ If you are hosting a webfont as part of your application and serving it via a CD
 import { WebApp } from 'meteor/webapp';
 
 WebApp.rawConnectHandlers.use(function(req, res, next) {
-  if (req._parsedUrl.pathname.match(/\.(ttf|ttc|otf|eot|woff|font\.css|css)$/) {
+  if (req._parsedUrl.pathname.match(/\.(ttf|ttc|otf|eot|woff|font\.css|css)$/)) {
     res.setHeader('Access-Control-Allow-Origin', /* your hostname, or just '*' */);
   }
   next();
 });
 ```
+
+And then for example with Cloudfront, you would:
+
+- Select your distribution
+- Behavior tab
+- Select your app origin
+- Edit button
+- Under "Whitelist Headers", scroll down to select "Origin"
+- Add button
+- "Yes, Edit" button
 
 <h2 id="deployment-options">Deployment options</h2>
 
@@ -92,21 +128,21 @@ The easiest way to operate your app with confidence is to use Galaxy, the servic
 
 Galaxy is a distributed system that runs on Amazon AWS. If you understand what it takes to run Meteor apps correctly and just how Galaxy works, you’ll come to appreciate Galaxy’s value, and that it will save you a lot of time and trouble. Most large Meteor apps run on Galaxy today, and many of them have switched from custom solutions they used prior to Galaxy’s launch.
 
-In order to deploy to Galaxy, you'll need to sign up for an account [here](https://www.meteor.com/why-meteor/pricing), and separately provision a MongoDB database (see below).
+In order to deploy to Galaxy, you'll need to [sign up for an account](https://www.meteor.com/galaxy/signup), and separately provision a MongoDB database (see below).
 
-Once you've done that, it's easy to [deploy to Galaxy](https://galaxy.meteor.com/help/deploying-to-galaxy). You just need to [add some environment variables to your settings file](https://galaxy.meteor.com/help/setting-environment-variables) to point it at your MongoDB, and you can deploy with:
+Once you've done that, it's easy to [deploy to Galaxy](http://galaxy-guide.meteor.com/deploy-guide.html). You just need to [add some environment variables to your settings file](http://galaxy-guide.meteor.com/environment-variables.html) to point it at your MongoDB, and you can deploy with:
 
 ```bash
-DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy your-app.com --settings production-settings.json
+DEPLOY_HOSTNAME=us-east-1.galaxy-deploy.meteor.com meteor deploy your-app.com --settings production-settings.json
 ```
 
-In order for Galaxy to work with your custom domain (`your-app.com` in this case), you need to [set up your DNS to point at Galaxy](https://galaxy.meteor.com/help/configuring-dns). Once you've done this, you should be able to reach your site from a browser.
+In order for Galaxy to work with your custom domain (`your-app.com` in this case), you need to [set up your DNS to point at Galaxy](http://galaxy-guide.meteor.com/dns.html). Once you've done this, you should be able to reach your site from a browser.
 
 You can also log into the Galaxy UI at https://galaxy.meteor.com. Once there you can manage your applications, monitor the number of connections and resource usage, view logs, and change settings.
 
 <img src="images/galaxy-org-dashboard.png">
 
-If you are following [our advice](security.html#ssl), you'll probably want to [set up SSL](https://galaxy.meteor.com/help/using-ssl) on your Galaxy application with the certificate and key for your domain. The key things here are to add the `force-ssl` package and to use the Galaxy UI to add your SSL certificate.
+If you are following [our advice](security.html#ssl), you'll probably want to [set up SSL](http://galaxy-guide.meteor.com/encryption.html) on your Galaxy application with the certificate and key for your domain. The key things here are to add the `force-ssl` package and to use the Galaxy UI to add your SSL certificate.
 
 Once you are setup with Galaxy, deployment is simple (just re-run the `meteor deploy` command above), and scaling is even easier---simply log into galaxy.meteor.com, and scale instantly from there.
 
@@ -114,11 +150,11 @@ Once you are setup with Galaxy, deployment is simple (just re-run the `meteor de
 
 <h4 id="galaxy-mongo">MongoDB hosting services to use with Galaxy</h4>
 
-If you are using Galaxy (or need a production quality, managed MongoDB for one of the other options listed here), it's usually a good idea to use a [MongoDB hosting provider](https://galaxy.meteor.com/help/configuring-mongodb). There are a variety of options out there, but a good choice is [mLab](https://mlab.com/). The main things to look for are support for oplog tailing, and a presence in the us-east-1 AWS region.
+If you are using Galaxy (or need a production quality, managed MongoDB for one of the other options listed here), it's usually a good idea to use a [MongoDB hosting provider](http://galaxy-guide.meteor.com/mongodb.html). There are a variety of options out there, but a good choice is [mLab](https://mlab.com/). The main things to look for are support for oplog tailing, and a presence in the us-east-1 or eu-west-1 AWS region.
 
 <h3 id="mup">Meteor Up</h3>
 
-[Meteor Up](https://github.com/arunoda/meteor-up), often referred to as "mup", is an open source tool that can be used to deploy Meteor application to any online server over SSH. Mup handles some of the essential deployment requirements, but you will still need to do a lot of work to get your load balancing and version updates working smoothly - it's essentially a way to automate the manual steps of using `meteor build` and putting that bundle on your server.
+[Meteor Up X](https://github.com/arunoda/meteor-up/tree/mupx), often referred to as "mupx", is an open source tool that can be used to deploy Meteor application to any online server over SSH. Mup handles some of the essential deployment requirements, but you will still need to do a lot of work to get your load balancing and version updates working smoothly - it's essentially a way to automate the manual steps of using `meteor build` and putting that bundle on your server.
 
 You can obtain a server running Ubuntu or Debian from many generic hosting providers. Mup can SSH into your server with the keys you provide in the config. You can also [watch this video](https://www.youtube.com/watch?v=WLGdXtZMmiI) for a more complete walkthrough on how to do it.
 

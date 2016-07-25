@@ -274,7 +274,7 @@ Meteor.publish('list', function (listId) {
 
   const list = Lists.findOne(listId);
 
-  if (! list.userId === this.userId) {
+  if (list.userId !== this.userId) {
     throw new Meteor.Error('list.unauthorized',
       'This list doesn\'t belong to you.');
   }
@@ -395,7 +395,7 @@ Here's what a settings file with some API keys might look like:
 
 In your app's JavaScript code, these settings can be accessed from the variable `Meteor.settings`.
 
-[Read more about managing keys and settings in the Deployment article.](#environment)
+[Read more about managing keys and settings in the Deployment article.](deployment.html#environment)
 
 <h3 id="client-settings">Settings on the client</h3>
 
@@ -441,7 +441,7 @@ You can ensure that any unsecured connection to your app redirects to a secure c
 
 #### Setting up SSL
 
-1. On [Galaxy](deployment.html#galaxy), most things are set up for you, but you need to add a certificate. [See the help article about SSL on Galaxy](https://galaxy.meteor.com/help/using-ssl).
+1. On [Galaxy](deployment.html#galaxy), most things are set up for you, but you need to add a certificate. [See the help article about SSL on Galaxy](http://galaxy-guide.meteor.com/encryption.html).
 2. If you are running on your own [infrastructure](deployment.html#custom-deployment), there are a few options for setting up SSL, mostly through configuring a proxy web server. See the articles: [Josh Owens on SSL and Meteor](http://joshowens.me/ssl-and-meteor-js/), [SSL on Meteorpedia](http://www.meteorpedia.com/read/SSL), and [Digital Ocean tutorial with an Nginx config](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-meteor-js-application-on-ubuntu-14-04-with-nginx).
 
 <h2 id="checklist">Security checklist</h2>
