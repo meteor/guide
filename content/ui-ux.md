@@ -45,7 +45,7 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
   - 所有三种库都可以在 Cordova 网页视图中良好运作，因此，你可以选择其中任意一个库并配套使用其它移动 CSS 库，例如 Ionic。
   - 目前最先进的移动网页框架是 [Ionic 2](http://ionicframework.com/docs/v2/)，它使用 Angular 2。
   - Ionic 1 使用 Angular 1， 但这里同样有 [Blaze](http://meteoric-doc.com/) 和 [React](http://reactionic.github.io/) 的移植版。
-  - 如果你使用 React，目前最流行的 React 移动网页框架是 [Reapp](http://reapp.io/)。
+  - 另一个好选择是 [Onsen UI](https://onsen.io/v2/)，它有一个 [React 版](https://onsen.io/v2/docs/guide/react/)。
 - **原生应用**
   - 任何原生 iOS 或 Android 应用都可以通过 [DDP](https://www.meteor.com/ddp) 和一个 Meteor 服务器进行连接。对于 iOS 应用， 你可以使用 [`meteor-ios`](https://github.com/martijnwalraven/meteor-ios) 框架。
   - 你可以使用 [React Native](https://facebook.github.io/react-native/) 来以 JavaScript 编写原生客户端应用。想了解更多关于如何在 Meteor 中使用 React Native，参考[这里](https://github.com/spencercarli/react-native-meteor-index)。

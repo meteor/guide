@@ -68,7 +68,7 @@ meteor add static-html
 
 <h3 id="using-third-party-npm-packages">使用第三方 npm 包</h3>
 
-如果你想使用在 npm 上发布的第三方 React 组件（比如你在 [React Components site](http://react-components.com) 上找到的组件），你可以通过 `npm install --save` 来安装它们，并在应用中通过 `import` 来导入他们。
+如果你想使用在 [npm 上发布的第三方 React 组件](https://www.npmjs.com/search?q=react)，你可以通过 `npm install --save` 来安装它们，并在应用中通过 `import` 来导入他们。
 
 例如，为了使用超棒的 React 包 [Griddle](http://griddlegriddle.github.io/Griddle/) 来制作表格，你可以运行如下命令：
 
@@ -218,7 +218,7 @@ import { Lists } from '../../api/lists/lists.js';
 import { createContainer } from 'meteor/react-meteor-data';
 import ListPage from '../pages/ListPage.js';
 
-export default ListContainer = createContainer(({ params }) => {
+export default ListPageContainer = createContainer(({ params }) => {
   const { id } = params;
   const todosHandle = Meteor.subscribe('todos.inList', id);
   const loading = !todosHandle.ready();
@@ -265,14 +265,14 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mount } from 'react-mounter';
 
 import AppContainer from '../../ui/containers/AppContainer.js';
-import ListContainer from '../../ui/containers/ListContainer.js';
+import ListPageContainer from '../../ui/containers/ListPageContainer.js';
 
 
 FlowRouter.route('/lists/:_id', {
   name: 'Lists.show',
   action() {
     mount(AppContainer, {
-      main: <ListContainer/>,
+      main: <ListPageContainer/>,
     });
   },
 });
@@ -309,7 +309,7 @@ import { Router, Route, browserHistory } from 'react-router';
 
 // route components
 import AppContainer from '../../ui/containers/AppContainer.js';
-import ListContainer from '../../ui/containers/ListContainer.js';
+import ListPageContainer from '../../ui/containers/ListPageContainer.js';
 import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
 import NotFoundPage from '../../ui/pages/NotFoundPage.js';
@@ -317,7 +317,7 @@ import NotFoundPage from '../../ui/pages/NotFoundPage.js';
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
-      <Route path="lists/:id" component={ListContainer}/>
+      <Route path="lists/:id" component={ListPageContainer}/>
       <Route path="signin" component={AuthPageSignIn}/>
       <Route path="join" component={AuthPageJoin}/>
       <Route path="*" component={NotFoundPage}/>
