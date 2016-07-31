@@ -88,7 +88,7 @@ ECMAScript，所有浏览器的 JavaScript 实现的语言标准，转移到了�
 安装这些 [npm](https://docs.npmjs.com/getting-started/what-is-npm) 包以在你的应用里配置 ESLint：
 
 ```
-meteor npm install --save-dev eslint-config-airbnb eslint-plugin-import eslint-plugin-meteor eslint-plugin-react eslint-plugin-jsx-a11y eslint
+meteor npm install --save-dev babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-meteor eslint-plugin-react eslint-plugin-jsx-a11y eslint-import-resolver-meteor eslint
 ```
 
 > Meteor 自带了一个 npm，所以你可以输入 `meteor npm` 而不需自己安装一个。当然，如果你愿意，可以使用一个全局安装的 npm 来管理包。
@@ -104,6 +104,10 @@ meteor npm install --save-dev eslint-config-airbnb eslint-plugin-import eslint-p
     "pretest": "npm run lint --silent"
   },
   "eslintConfig": {
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "allowImportExportEverywhere": true
+    },
     "plugins": [
       "meteor"
     ],
@@ -111,6 +115,9 @@ meteor npm install --save-dev eslint-config-airbnb eslint-plugin-import eslint-p
       "airbnb",
       "plugin:meteor/recommended"
     ],
+    "settings": {
+      "import/resolver": "meteor"
+    },
     "rules": {}
   }
 }
@@ -122,6 +129,7 @@ meteor npm install --save-dev eslint-config-airbnb eslint-plugin-import eslint-p
 meteor npm run lint
 ```
 
+<<<<<<< HEAD
 如果你在一个 `meteor create myapp` 生成的项目中得到下面这样的错误：
 
 ```bash
@@ -155,6 +163,9 @@ meteor npm run lint
 
 
 更多细节请在 ESLint 网站上 [Getting Started](http://eslint.org/docs/user-guide/getting-started) 一节了解。
+=======
+For more details, read the [Getting Started](http://eslint.org/docs/user-guide/getting-started) directions from the ESLint website.
+>>>>>>> b065d0d3a9469e032562f79ddb06b5e38b425aa9
 
 <h3 id="eslint-editor">与你的编辑器集成</h3>
 

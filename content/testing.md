@@ -81,8 +81,6 @@ There are several options. Choose the ones that makes sense for your app. You ma
 * [dispatch:mocha-browser](https://atmospherejs.com/dispatch/mocha-browser) Runs client and server package or app tests with Mocha reporting client results in a web browser and server results in the server console. Has a watch mode.
 * [dispatch:mocha](https://atmospherejs.com/dispatch/mocha) Runs server-only package or app tests with Mocha and reports all results in the server console. Can be used for running tests on a CI server. Has a watch mode.
 
-NOTE: Currently tests may not run properly if you add both a `practicalmeteor:*` package and a `dispatch:*` package to your app. This is being fixed. See [this issue](https://github.com/practicalmeteor/meteor-mocha/issues/23).
-
 These packages don't do anything in development or production mode. They declare themselves `testOnly` so they are not even loaded outside of testing. But when our app is run in [test mode](#test-modes), the test driver package takes over, executing test code on both the client and server, and rendering results to the browser.
 
 Here's how we can add the [`practicalmeteor:mocha`](https://atmospherejs.com/practicalmeteor/mocha) package to our app:
@@ -389,7 +387,7 @@ To run the tests, visit http://localhost:3000 in your browser. This kicks off `p
 
 <img src="images/mocha-test-results.png">
 
-Usually, while developing an application, it make sense to run `meteor test` on a second port (say `3100`), while also running your main application in a separate process:
+Usually, while developing an application, it makes sense to run `meteor test` on a second port (say `3100`), while also running your main application in a separate process:
 
 ```bash
 # in one terminal window
@@ -410,7 +408,7 @@ In the [unit tests above](#simple-blaze-unit-test) we saw a very limited example
   - Alternatively, you can also use tools like [Sinon](http://sinonjs.org) to stub things directly, as we'll see for example in our [simple integration test](#simple-integration-test).
 
   - The [`hwillson:stub-collections`](https://atmospherejs.com/hwillson/stub-collections) package we mentioned [above](#mocking-the-database).
-  
+
 There's a lot of scope for better isolation and testing utilities.
 
 <h4 id="testing-publications">Testing publications</h4>
@@ -423,7 +421,7 @@ describe('lists.public', function () {
     // Set a user id that will be provided to the publish function as `this.userId`,
     // in case you want to test authentication.
     const collector = new PublicationCollector({userId: 'some-id'});
-  
+
     // Collect the data published from the `lists.public` publication.
     collector.collect('lists.public', (collections) => {
       // `collections` is a dictionary with collection names as keys,
@@ -526,7 +524,7 @@ As we'll run this test in the same way that we did our unit test, we need to `im
 
 <h4 id="simple-integration-test-stubbing">Stubbing</h4>
 
-As the system under test in our integration test has a larger surface area, we need to stub out a few more points of integration with the rest of the stack. Of particular interest here is our use of the [`hwillson:stub-collections`](#mocking-the-database) package and of [Sinon](https://sinonjs.org) to stub out Flow Router and our Subscription.
+As the system under test in our integration test has a larger surface area, we need to stub out a few more points of integration with the rest of the stack. Of particular interest here is our use of the [`hwillson:stub-collections`](#mocking-the-database) package and of [Sinon](http://sinonjs.org) to stub out Flow Router and our Subscription.
 
 <h4 id="simple-integration-test-data">Creating data</h4>
 
@@ -552,6 +550,7 @@ import { assert } from 'meteor/practicalmeteor:chai';
 import { Promise } from 'meteor/promise';
 import { $ } from 'meteor/jquery';
 
+import { denodeify } from '../../utils/denodeify';
 import { generateData } from './../../api/generate-data.app-tests.js';
 import { Lists } from '../../api/lists/lists.js';
 import { Todos } from '../../api/todos/todos.js';
@@ -561,7 +560,7 @@ import { Todos } from '../../api/todos/todos.js';
 const waitForSubscriptions = () => new Promise(resolve => {
   const poll = Meteor.setInterval(() => {
     if (DDP._allSubscriptionsReady()) {
-      clearInterval(poll);
+      Meteor.clearInterval(poll);
       resolve();
     }
   }, 200);
@@ -569,13 +568,16 @@ const waitForSubscriptions = () => new Promise(resolve => {
 
 // Tracker.afterFlush runs code when all consequent of a tracker based change
 //   (such as a route change) have occured. This makes it a promise.
-const afterFlushPromise = Promise.denodeify(Tracker.afterFlush);
+const afterFlushPromise = denodeify(Tracker.afterFlush);
 
 if (Meteor.isClient) {
   describe('data available when routed', () => {
     // First, ensure the data that we expect is loaded on the server
     //   Then, route the app to the homepage
-    beforeEach(() => generateData().then(() => FlowRouter.go('/')));
+    beforeEach(() => generateData()
+      .then(() => FlowRouter.go('/'))
+      .then(waitForSubscriptions)
+    );
 
     describe('when logged out', () => {
       it('has all public lists at homepage', () => {
@@ -587,11 +589,9 @@ if (Meteor.isClient) {
         FlowRouter.go('Lists.show', { _id: list._id });
 
         return afterFlushPromise()
+          .then(waitForSubscriptions)
           .then(() => {
             assert.equal($('.title-wrapper').html(), list.name);
-          })
-          .then(() => waitForSubscriptions())
-          .then(() => {
             assert.equal(Todos.find({ listId: list._id }).count(), 3);
           });
       });
@@ -634,6 +634,8 @@ import { resetDatabase } from 'meteor/xolvio:cleaner';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
+import { denodeify } from '../utils/denodeify';
+
 const createList = (userId) => {
   const list = Factory.create('list', { userId });
   _.times(3, () => Factory.create('todo', { listId: list._id }));
@@ -643,7 +645,7 @@ const createList = (userId) => {
 // Remember to double check this is a test-only file before
 // adding a method like this!
 Meteor.methods({
-  generateFixtures: function generateFixturesMethod() {
+  generateFixtures() {
     resetDatabase();
 
     // create 3 public lists
@@ -661,7 +663,7 @@ if (Meteor.isClient) {
   // with the currently tested user's connection.
   const testConnection = Meteor.connect(Meteor.absoluteUrl());
 
-  generateData = Promise.denodeify((cb) => {
+  generateData = denodeify((cb) => {
     testConnection.call('generateFixtures', cb);
   });
 }

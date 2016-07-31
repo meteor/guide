@@ -45,7 +45,7 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
   - 所有三种库都可以在 Cordova 网页视图中良好运作，因此，你可以选择其中任意一个库并配套使用其它移动 CSS 库，例如 Ionic。
   - 目前最先进的移动网页框架是 [Ionic 2](http://ionicframework.com/docs/v2/)，它使用 Angular 2。
   - Ionic 1 使用 Angular 1， 但这里同样有 [Blaze](http://meteoric-doc.com/) 和 [React](http://reactionic.github.io/) 的移植版。
-  - 如果你使用 React，目前最流行的 React 移动网页框架是 [Reapp](http://reapp.io/)。
+  - 另一个好选择是 [Onsen UI](https://onsen.io/v2/)，它有一个 [React 版](https://onsen.io/v2/docs/guide/react/)。
 - **原生应用**
   - 任何原生 iOS 或 Android 应用都可以通过 [DDP](https://www.meteor.com/ddp) 和一个 Meteor 服务器进行连接。对于 iOS 应用， 你可以使用 [`meteor-ios`](https://github.com/martijnwalraven/meteor-ios) 框架。
   - 你可以使用 [React Native](https://facebook.github.io/react-native/) 来以 JavaScript 编写原生客户端应用。想了解更多关于如何在 Meteor 中使用 React Native，参考[这里](https://github.com/spencercarli/react-native-meteor-index)。
@@ -67,14 +67,14 @@ Meteor 官方支持三种用户界面 （UI） 渲染库：[Blaze](blaze.html)�
 可复用组件用许多优势：
 
  1. 容易理解——你不需要了解数据在全局数据囤中如何变化，只需要知道组件参数如何变化就可以了。
- 
+
  2. 容易测试——你不需要在意他们的渲染环境，只需要提供正确的参数即可。
- 
+
  3. 容易构建样式指南——正如我们即将在[「组件样式指南」章节](#styleguides)中看到那样，在创建样式指南时，一个纯净的环境将极大地简化我们的工作。
 
  4. 在不同的环境中，你能够很确切地知道你需要向它们提供什么依赖。
 
- 这里还有一种更加严格的可复用组件——「纯」组件——它没有任何内部状态。例如，在 Todos 应用中，`Todos_item` 模板仅仅根据它的参数来决定如何进行渲染。纯组件比起其它可复用组件更加容易理解和测试，因此在可能的情况下，尽量使用纯组件。 
+ 这里还有一种更加严格的可复用组件——「纯」组件——它没有任何内部状态。例如，在 Todos 应用中，`Todos_item` 模板仅仅根据它的参数来决定如何进行渲染。纯组件比起其它可复用组件更加容易理解和测试，因此在可能的情况下，尽量使用纯组件。
 
 <h3 id="global-stores">全局数据囤</h3>
 
@@ -168,20 +168,22 @@ Chromatic 帮助我们快速构建复杂组件。通常，在一个大型应用�
 
 在构建 Meteor 应用的用户界面时，有一些模式非常有用。
 
-<h3 id="i18n">使用「tapi18n」进行国际化</h3>
+<h3 id="i18n">国际化</h3>
 
-国际化（i18n）是一种构建 UI 的过程，它使你能够很容易地将应用中的所有文字替换为其他语言。在 Meteor 中，[超棒的 `tap:i18n` 包](https://atmospherejs.com/tap/i18n)提供了一系列 API 来帮助你构建各种翻译将其应用于你的组件和前端代码之中。
+国际化（i18n）是一种构建 UI 的过程，它使你能够很容易地在应用中渲染另一种语言的文字。Meteor 的包生态系统包括了能与你的前端框架无缝集成的国际化选项。
 
 <h4 id="places-to-i18n">需要翻译的地方</h4>
 
-最好仔细思考一下，在你的系统中哪些地方有用户可读的字符串，并确保你是在合理地使用 i18n 来生成这些字符串。在这一节中，我们会大致看到如何在不同的地方使用 [`tap:i18n`](#tap-i18n-js) 进行具体处理。
+最好仔细思考一下，在你的系统中哪些地方有用户可读的字符串，并确保你是在合理地使用 i18n 来生成这些字符串。在这一节中，我们会大致看到如何在不同的地方使用 [`tap:i18n`](#tap-i18n-js) 和 [`universe:i18n`](#universe-i18n) 进行具体处理。
 
-1. **HTML 模板。**UI 组件中用户可见的所有内容——这是最明显的地方。
-2. **客户端 JavaScript 消息。**通知或其他在客户端生成并展示给用户的消息，都应当被翻译。
-3. **服务端 JavaScript 消息和电子邮件。**服务端生成的消息或错误有时经常被用户看到。显而易见之处包括电子邮件和其他服务端生成的消息，例如移动推送通知。但微妙之处在于如何对方法调用的返回值和错误消息进行处理。错误通常都以一种更加通用的形式在连接上传递，并在到达客户端后才被翻译。
-4. **数据库中的数据。**另一个你可能想进行翻译的地方是数据库中那些用户实际产生的数据。例如，如果你在运行一个 wiki 应用，你可能想有一种机制让 wiki 页面能够被翻译成各种语言。如果实现这一点得根据你应用的具体情况来确定。
+1. **HTML 模板及组件。** UI 组件中用户可见的所有内容——这是最明显的地方。
+2. **客户端 JavaScript 消息。** 通知或其他在客户端生成并展示给用户的消息，都应当被翻译。
+3. **服务端 JavaScript 消息和电子邮件。** 服务端生成的消息或错误有时经常被用户看到。显而易见之处包括电子邮件和其他服务端生成的消息，例如移动推送通知。但微妙之处在于如何对方法调用的返回值和错误消息进行处理。错误通常都以一种更加通用的形式在连接上传递，并在到达客户端后才被翻译。
+4. **数据库中的数据。** 另一个你可能想进行翻译的地方是数据库中那些用户实际产生的数据。例如，如果你在运行一个 wiki 应用，你可能想有一种机制让 wiki 页面能够被翻译成各种语言。如果实现这一点得根据你应用的具体情况来确定。
 
 <h4 id="tap-i18n-js">在 JavaScript 中使用 `tap:i18n`</h4>
+
+在 Meteor 中，[超棒的 `tap:i18n` 包](https://atmospherejs.com/tap/i18n)提供了一种构造翻译并应用于组件和前端代码的 API。
 
 通过 `meteor add tap:i18n` 在你的应用中安装 `tap:i18n` 之后，你便可以使用它。然后，我们需要为我们的默认语言（`en` 即英语）添加一个 JSON 翻译文件——我们可以将它放在 `i18n/en.i18n.json`。一旦我们完成这些，我们便可以在 JavaScript 代码中导入并使用 `TAPi18n.__()` 函数来获取字符串或键的翻译。
 
@@ -238,7 +240,7 @@ export const displayError = (error) =>  {
 </template>
 ```
 
-<h4 id="tap-i18n-changing-language">改变语言</h4>
+<h4 id="tap-i18n-changing-language">切换语言</h4>
 
 你可以调用 `TAPi18n.setLanguage(fn)` 来改变语言。 `fn` 是一个（可能是响应式的）函数，它返回当前语言。例如，你可以这样写
 
@@ -253,7 +255,54 @@ TAPi18n.setLanguage(() => {
 });
 ```
 
-然后，在你的 UI 中的某个地方，如果用户选择了一个语言，你可以 `CurrentLanguage.set('es')`
+然后，在你的 UI 中的某个地方，当用户选择了一个语言，你可以 `CurrentLanguage.set('es')`
+
+<h4 id="universe-i18n">在 React 中使用 `universe:i18n`</h4>
+
+对于基于 React 的应用来说，除了 `tap:i18n`，还有另一个选择，即 [`universe:18n` 包](https://atmospherejs.com/universe/i18n)。`universe:i18n`使用了与 `tap:i18n` 类似的概念和约定，但除此之外，它还提供了一个开箱即用的 React 组件，并且去掉了 `tap:i18n` 中对于 Meteor 的 `templating` 和 `jquery` 的依赖。`universe:i18n` 为使用 `ES2015` 模块的 Meteor React 应用而生，但它完全可以被运用于没有 React 或模块的应用。
+
+<h4 id="universe-i18n-js">在 JS 中使用 `universe:i18n`</h4>
+
+首先，运行 `meteor add universe:i18n` 以在应用中添加这个包。然后，在你的应用中添加一个 `JSON` 格式的英文（`en-US`）翻译文件，并命名为 `en-us.i18n.json`。翻译文件能够通过文件名或 `{"_locale": "en-US"}` 这个 JSON 属性而被识别。除了 JSON，这个包同样还支持 `YAML` 文件格式。
+
+如果你的应用使用 `ES2015` 模块，并使用 `client/main.js` 和 `server/main.js` 来作为应用的逻辑入口，那么你可以在这里导入刚才定义的翻译文件。现在，`i18n.__()` 函数可以识别你传入的键了。
+
+
+浏览一下[上面](#tap-i18n-js)的 `tap:i18n` 例子，使用 `universe:i18n` 之后，现在我们的 `displayError` 函数看起来大致是这样：
+
+```js
+import i18n from 'meteor/universe:i18n';
+
+export const displayError = (error) =>  {
+  if (error) {
+    alert(i18n.__(error.error));
+  }
+};
+```
+
+可以调用 `i18n.setLocale('en-US')` 来改变用户的语言设置。除了使用随客户端应用一起打包的 JSON 翻译文件之外，`universe:i18n` 还可以通过 method 来获取更多的翻译。
+
+<h4 id="universe-i18n-react">在 React 组件中使用 `universe:i18n`</h4>
+
+只需要简单地使用 `i18n.createComponent()` 函数创建一个组件，并将你在翻译文件中定义的键传递给它，你就可以向你的 React 组件中添加响应式的 i81n 行内元素了。这里有一个例子，展示了一个封装了 i18n 翻译的简单组件：
+
+```js
+import React from 'react';
+import i18n from 'meteor/universe:i18n';
+
+const T = i18n.createComponent();
+
+// 由于我们的 en-us.i18n.json 文件中定义了键值对 { "hello": "hello world!" }
+// 这里将显示 'hello world!'
+
+const Welcome = (props) => <div>
+  <T>hello</T>
+</div>;
+
+export default Welcome;
+```
+
+请参考 [`universe:i18n`](https://atmospherejs.com/universe/i18n) 的文档以了解更多配置和选项。
 
 <h3 id="event-handling">事件处理</h3>
 
@@ -328,7 +377,7 @@ Template.Todos_item.events({
 ```
 
 然后，我们便可以根据这个状态来判断应该在可复用组件中渲染什么：
- 
+
  (`listShow`):
 
 ```html
@@ -389,7 +438,7 @@ Template.Todos_item.events({
 
 基于上述条件，我们可以区分当前列表组件处于何种状态：
 
-1. `countReady` 为假，或 `count > 0` 且 `items` 为空。（这实际上是两种状态，但无需在视觉上有所区分） 
+1. `countReady` 为假，或 `count > 0` 且 `items` 为空。（这实际上是两种状态，但无需在视觉上有所区分）
 2. `items.length === requested && requested < count`
 3. `0 < items.length < requested`
 4. `items.length === requested && count > 0`
@@ -421,7 +470,7 @@ Template.Lists_show_page.onCreated(function() {
     this.subscribe('List.todos', this.getListId(), this.state.get('requested'));
     this.countSub = this.subscribe('Lists.todoCount', this.getListId());
   });
-  
+
   // `onNextPage` 函数用于增涨 `requested` 状态变量。它被传入 listShow 子组件，
   // 在用户到达所有可见的 todos 的，它将被触发
   this.onNextPage = () => {
@@ -574,7 +623,7 @@ Messages.methods.insert = new ValidatedMethod({
 
 在上面的例子中，我们已经看到了一些意料之外的失败情况。要去防御所有可能但是概率很小的错误，很难，也很低效。别担心，这里有一些模式可以用于拦截所有意料之外的失败。
 
-感谢 Meteor 对乐观 UI 的自动处理，当一个 method 意外失败时，客户端的乐观更新会被回滚，并且 Minimongo 数据库会最终进入和真实数据一致的状态。如果你使用 Minimongo 的数据进行渲染，用户会看到和真实状态一致的界面，当然，这可能不是他们所期待看到的那个样子。有时候，你在 Minimongo 之外还保存着一些状态，你可能需要对它们做一些手动更改来反映这种情况。在上面的例子中你也看到了，如果操作失败，我们需要更新路由器状态以跳转页面。 
+感谢 Meteor 对乐观 UI 的自动处理，当一个 method 意外失败时，客户端的乐观更新会被回滚，并且 Minimongo 数据库会最终进入和真实数据一致的状态。如果你使用 Minimongo 的数据进行渲染，用户会看到和真实状态一致的界面，当然，这可能不是他们所期待看到的那个样子。有时候，你在 Minimongo 之外还保存着一些状态，你可能需要对它们做一些手动更改来反映这种情况。在上面的例子中你也看到了，如果操作失败，我们需要更新路由器状态以跳转页面。
 
 然而，不加解释地将用户跳转到一个意料之外的状态是一种糟糕的 UX。在上面的例子中，我们使用了 `alert()`，虽然这是个糟糕的选择，但是它至少能完成任务。一个更好的方法是使用一个「暂显通知」来表明情况。它是一种「额外显示」的 UI 元素，通常浮在屏幕的右上角，以「某种」方式向用户表明发生了什么。这里有一个来自 Galaxy 的例子，注意在页面的右上角有一个暂显通知：
 
@@ -586,7 +635,7 @@ Messages.methods.insert = new ValidatedMethod({
 
 <h3 id="animating-visiblity">为可见性变化添加动画效果</h3>
 
-有哪些 UI 变化需要动画效果呢？这其中最基本的恐怕要数条目的出现与消失了。在 Blaze 中，我们可以使用 [`percolate:momentum` 包](https://atmospherejs.com/percolate/momentum)来向这种状态变化添加一系列来自 [`velocity 动画库`](http://julian.com/research/velocity/)的动画效果。 
+有哪些 UI 变化需要动画效果呢？这其中最基本的恐怕要数条目的出现与消失了。在 Blaze 中，我们可以使用 [`percolate:momentum` 包](https://atmospherejs.com/percolate/momentum)来向这种状态变化添加一系列来自 [`velocity 动画库`](http://julian.com/research/velocity/)的动画效果。
 
 在 Todos 示例应用中，list 的编辑状态变化就是一个很好的例子：
 
