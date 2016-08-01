@@ -22,6 +22,10 @@ Deploying a web application is fundamentally different to releasing most other k
 
 However, it's still important to test your changes throughly with a good process of Quality Assurance (QA). Although it's easy to push out fixes to bugs, those bugs can still cause major problems to users and even potentially data corruption!
 
+> <h3 id="never-use-production-flag">Never use `--production` flag to deploy!</h3>
+> 
+> `--production` flag is purely meant to simulate production minification, but does almost nothing else. This still watches source code files, exchanges data with package server and does a lot more than just running the app, leading to unnecessary computing resource wasting and security issues. Please don't use `--production` flag to deploy!
+
 <h3 id="environments">Deployment environments</h3>
 
 In web application deployment it's common to refer to three runtime environments:
@@ -53,11 +57,11 @@ There are some other considerations that you should make before you deploy your 
 
 <h3 id="domain-name">Domain name</h3>
 
-What URL will users use to access your site? You'll probably need to register a domain name with a domain registrar, and setup DNS entries to point to the site (this will depend on how you deploy, see below). If you deploy to Galaxy, you can use a `x.meteorapp.com` domain while you are testing the app.
+What URL will users use to access your site? You'll probably need to register a domain name with a domain registrar, and setup DNS entries to point to the site (this will depend on how you deploy, see below). If you deploy to Galaxy, you can use a `x.meteorapp.com` or `x.eu.meteorapp.com` domain while you are testing the app. [Learn more about Galaxy domains »](http://galaxy-guide.meteor.com/custom-domains.html#meteorapp-subdomain)
 
 <h3 id="ssl">SSL Certificate</h3>
 
-It's always a good idea to use SSL for Meteor applications (see the [Security Article](security.html#ssl) to find out why). Once you have a registered domain name, you'll need to generate an SSL certificate with a certificate authority for your domain.
+It's always a good idea to use SSL for Meteor applications (see the [Security Article](security.html#ssl) to find out why). Once you have a registered domain name, you'll need to generate an SSL certificate with a certificate authority for your domain. If you deploy to Galaxy, you can [generate a free SSL certificate with a single click](http://galaxy-guide.meteor.com/encryption.html#lets-encrypt)(courtesy of Let's Encrypt!).
 
 <h3 id="cdn">CDN</h3>
 
@@ -150,9 +154,18 @@ If you are using Galaxy (or need a production quality, managed MongoDB for one o
 
 <h3 id="mup">Meteor Up</h3>
 
-[Meteor Up X](https://github.com/arunoda/meteor-up/tree/mupx), often referred to as "mupx", is an open source tool that can be used to deploy Meteor application to any online server over SSH. Mup handles some of the essential deployment requirements, but you will still need to do a lot of work to get your load balancing and version updates working smoothly - it's essentially a way to automate the manual steps of using `meteor build` and putting that bundle on your server.
+Meteor Up, often referred to as "mupx" or "mup", is a third-party open-source tool that can be used to deploy Meteor application to any online server over SSH. It handles some of the essential deployment requirements, but you will still need to do a lot of work to get your load balancing and version updates working smoothly.  It's essentially a way to automate the manual steps of using `meteor build` and putting that bundle on your server.
 
-You can obtain a server running Ubuntu or Debian from many generic hosting providers. Mup can SSH into your server with the keys you provide in the config. You can also [watch this video](https://www.youtube.com/watch?v=WLGdXtZMmiI) for a more complete walkthrough on how to do it.
+You can obtain a server running Ubuntu or Debian from many generic hosting providers and Meteor Up can SSH into your server with the keys you provide in the config. You can also [watch this video](https://www.youtube.com/watch?v=WLGdXtZMmiI) for a more complete walkthrough on how to do it.
+
+Meteor Up has multiple projects so select what is best for your project:
+* Original [Meteor Up](https://github.com/arunoda/meteor-up) (not generally recommended any longer)
+* The [`mupx`](https://github.com/arunoda/meteor-up/tree/mupx) branch (best for pre-Meteor 1.4)
+* The [`kadirahq/mup`](https://github.com/kadirahq/meteor-up) fork _(best for Meteor 1.4 or higher)_
+
+> Currently, using Meteor Up with Meteor 1.4 requires `kadirahq/mup` (still in development) and a special docker image with the correct Node version.
+
+For further assistance, consult the documentation for the option you select.
 
 <h3 id="custom-deployment">Custom deployment</h3>
 
@@ -166,15 +179,27 @@ npm install --production
 meteor build /path/to/build --architecture os.linux.x86_64
 ```
 
-To run this application, you need to provide Node.js 0.10.x and a MongoDB server. The current release of Meteor has been tested with Node 0.10.43. You can then run the application by invoking `node`, a ROOT_URL, and the MongoDB endpoint.
+This will provide you with a bundled application `.tar.gz` which you can extract and run without the `meteor` tool.  The environment you choose will need the correct version of Node.js and connectivity to a MongoDB server.
+
+Depending on the version of Meteor you are using, you should install the proper version of `node` using the appropriate installation process for your platform.
+* Node 4.4.7 for *Meteor 1.4.x*
+* Node 0.10.43 for *Meteor 1.3.x and earlier*
+
+> If you use a mis-matched version of Node when deploying your application, you will encounter errors!
+
+You can then run the application by invoking `node` with a `ROOT_URL`, and `MONGO_URL`.  These instructions are also available in the `README` file found in the root of the bundle you built above.
 
 ```bash
-cd my_directory
+cd my_build_bundle_directory
 (cd programs/server && npm install)
 MONGO_URL=mongodb://localhost:27017/myapp ROOT_URL=http://my-app.com node main.js
 ```
 
-However, unless you have a specific need to roll your own hosting environment, the other options here are definitely easier, and probably make for a better setup than doing everything from scratch. Operating a Meteor app in a way that it works correctly for everyone can be complex, and [Galaxy](#galaxy) handles a lot of the specifics like routing clients to the right containers and handling coordinated version updates for you.
+* `ROOT_URL` is the base URL for your Meteor project
+* `MONGO_URL` is a [Mongo connection string URI](https://docs.mongodb.com/manual/reference/connection-string/) supplied by the MongoDB provider.
+
+
+Unless you have a specific need to roll your own hosting environment, the other options here are definitely easier, and probably make for a better setup than doing everything from scratch. Operating a Meteor app in a way that it works correctly for everyone can be complex, and [Galaxy](#galaxy) handles a lot of the specifics like routing clients to the right containers and handling coordinated version updates for you.
 
 <h2 id="process">Deployment process</h2>
 

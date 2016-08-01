@@ -68,7 +68,7 @@ meteor add static-html
 
 <h3 id="using-third-party-npm-packages">使用第三方 npm 包</h3>
 
-如果你想使用在 npm 上发布的第三方 React 组件（比如你在 [React Components site](http://react-components.com) 上找到的组件），你可以通过 `npm install --save` 来安装它们，并在应用中通过 `import` 来导入他们。
+如果你想使用在 [npm 上发布的第三方 React 组件](https://www.npmjs.com/search?q=react)，你可以通过 `npm install --save` 来安装它们，并在应用中通过 `import` 来导入他们。
 
 例如，为了使用超棒的 React 包 [Griddle](http://griddlegriddle.github.io/Griddle/) 来制作表格，你可以运行如下命令：
 
@@ -218,7 +218,7 @@ import { Lists } from '../../api/lists/lists.js';
 import { createContainer } from 'meteor/react-meteor-data';
 import ListPage from '../pages/ListPage.js';
 
-export default ListContainer = createContainer(({ params }) => {
+export default ListPageContainer = createContainer(({ params }) => {
   const { id } = params;
   const todosHandle = Meteor.subscribe('todos.inList', id);
   const loading = !todosHandle.ready();
@@ -233,12 +233,14 @@ export default ListContainer = createContainer(({ params }) => {
 }, ListPage);
 ```
 
+最好给 container 和它包裹的组件起一样的名字，并在最后添加「Container」这个单词。这样一来，当你想在代码中追踪问题时，你将很容易定位到可能的文件或类。
+
 一旦在函数中访问过的[响应式数据源](https://atmospherejs.com/meteor/tracker)发生任何变化，这个由 `createContainer()` 创建的 container 组件就会相应地重新渲染它所包裹的组件。
 
 虽然，这个 `ListContainer` 的设计使用场景是将其放在 React Router 之中并根据路由自动传入参数，不过，如果你想手动实例化这个 container 组件，你只需要将参数作为 props 传入即可：
 
 ```jsx
-<ListContainer params={{id: '7'}}/>
+<ListPageContainer params={{id: '7'}}/>
 ```
 
 <h3 id="preventing-rerenders">防止重新渲染</h3>
@@ -263,14 +265,14 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mount } from 'react-mounter';
 
 import AppContainer from '../../ui/containers/AppContainer.js';
-import ListContainer from '../../ui/containers/ListContainer.js';
+import ListPageContainer from '../../ui/containers/ListPageContainer.js';
 
 
 FlowRouter.route('/lists/:_id', {
   name: 'Lists.show',
   action() {
     mount(AppContainer, {
-      main: <ListContainer/>,
+      main: <ListPageContainer/>,
     });
   },
 });
@@ -307,7 +309,7 @@ import { Router, Route, browserHistory } from 'react-router';
 
 // route components
 import AppContainer from '../../ui/containers/AppContainer.js';
-import ListContainer from '../../ui/containers/ListContainer.js';
+import ListPageContainer from '../../ui/containers/ListPageContainer.js';
 import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
 import NotFoundPage from '../../ui/pages/NotFoundPage.js';
@@ -315,7 +317,7 @@ import NotFoundPage from '../../ui/pages/NotFoundPage.js';
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
-      <Route path="lists/:id" component={ListContainer}/>
+      <Route path="lists/:id" component={ListPageContainer}/>
       <Route path="signin" component={AuthPageSignIn}/>
       <Route path="join" component={AuthPageJoin}/>
       <Route path="*" component={NotFoundPage}/>
@@ -341,7 +343,7 @@ Meteor.startup(() => {
 其中有一些应当注意的不同点，例如：
  - React Router 鼓励你在路由定义中耦合你的URL设计与布局层次。而 Flow Router 则更加灵活，虽然这样可能会导致更多的样板代码。
  - React Router 拥抱 React 独有的特性，例如将 router 实例通过 React [context](https://facebook.github.io/react/docs/context.html) 进行传递。虽然，Flow Router 并没有默认这样做，但你也同样可以显式地将你的 Flow Router 实例作为 context 进行传递（事实上，这很可能正是最佳实践）。
- 
+
 <h2 id="meteor-and-react">Meteor 和 React</h2>
 
 <h3 id="atmosphere-packages">在 Atmosphere 包中使用 React</h3>

@@ -80,9 +80,15 @@ SelectedTodos = new Mongo.Collection(null);
 
 <h2 id="schemas">定义一个数据结构</h2>
 
+<<<<<<< HEAD
 虽然 MongoDB 是一种无结构的数据库，赋予数据结构最大限度的灵活性，但是最好使用一个数据结构来约束集合中的内容，使其符合已知的格式。如果你不这么做的话，那么最终你需要去编写防卫性的代码来检查并确认你的数据结构，并且，你同样需要在数据从数据库*读出来的时候*确定结构以防止使用时出现问题，而不仅仅是在数据*写入*数据库的时候。大多数情况下，你会发现*读取较写入更为频繁*，所以使用数据结构写入数据通常会更简单，也很少会产生 bug。
 在 Meteor 中，aldeed:simple-schema 是一款杰出的数据结构包。它提供富有表现力且基于 MongoDB 的数据结构，用于插入和更新文档。
 使用 simple-schema 来编写一个数据结构，你可以轻松的创建一个基于 SimpleSchema 类的新实例：
+=======
+In Meteor, the pre-eminent schema package is [aldeed:simple-schema](https://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents. Another alternative is [jagi:astronomy](https://atmospherejs.com/jagi/astronomy) which is a full Object Model (OM) layer offering schema definition, server/client side validators, object methods and event handlers.
+
+To write a schema using `simple-schema`, you can simply create a new instance of the `SimpleSchema` class:
+>>>>>>> b065d0d3a9469e032562f79ddb06b5e38b425aa9
 
 ```js
 Lists.schema = new SimpleSchema({
@@ -316,7 +322,7 @@ Migrations.add({
   version: 1,
   up() {
     Lists.find({todoCount: {$exists: false}}).forEach(list => {
-      const todoCount = Todos.find({listId: list._id})).count();
+      const todoCount = Todos.find({listId: list._id}).count();
       Lists.update(list._id, {$set: {todoCount}});
     });
   },
