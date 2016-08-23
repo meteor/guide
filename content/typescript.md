@@ -124,7 +124,7 @@ typings install dt~react --save --global
 
 Nice people have also created type definitions for Meteor that you can install with:
 ```sh
-typigns install env~meteor --save --global
+typings install env~meteor --save --global
 ```
 
 <h3 id="load-the-type-definitions-into-typescript">Load the type definitions into TypeScript</h3>
