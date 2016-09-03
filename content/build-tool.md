@@ -1,5 +1,5 @@
 ---
-title: Build system
+title: Build System
 order: 33
 description: How to use Meteor's build system to compile your app.
 discourseTopicId: 19669
@@ -17,7 +17,7 @@ When you run `meteor`, the tool starts up, and you should leave it running conti
 
 <h3 id="compiles-with-build-plugins">Compiles files with build plugins</h3>
 
-The main function of the Meteor build tool is to run "build plugins" - these plugins define different parts of your app build process. Meteor puts heavy emphasis on reducing or removing build configuration files, so you won't see any large build process config files like you would in Gulp or Webpack. The Meteor build process is configured almost entirely through adding and removing packages to your app, and putting files in specially named directories. For example, to get all of the newest stable ES2015 JavaScript features in your app, you just add the `ecmascript` package. As new Meteor releases add new features to this package, you'll get them for free.
+The main function of the Meteor build tool is to run "build plugins". These plugins define different parts of your app build process. Meteor puts heavy emphasis on reducing or removing build configuration files, so you won't see any large build process config files like you would in Gulp or Webpack. The Meteor build process, and [file load order](structure.html#load-order), is configured almost entirely through adding and removing packages to your app and putting files in specially named directories. For example, to get all of the newest stable ES2015 JavaScript features in your app, you just add the [`ecmascript` package](http://docs.meteor.com/#/full/ecmascript). This package provides support for ES2015 modules, which gives you even more fine grained control over file load order using ES2015 `import` and `export`. As new Meteor releases add new features to this package you just get them for free.
 
 <h3 id="concatenate-and-minify">Combines and minifies code</h3>
 
@@ -73,9 +73,9 @@ If you want to use React but don't want to deal with JSX and prefer a more HTML-
 
 If you would like to write your UI in Angular, you will need to switch out Meteor's Blaze template compiler which comes by default with the Angular one. Read about how to do this in the [Angular-Meteor tutorial](https://www.meteor.com/tutorials/angular/templates).
 
-<h2 id="css">CSS pre-processors</h2>
+<h2 id="css">CSS and CSS pre-processors</h2>
 
-It's no secret that writing raw CSS can often be a hassle - there's no way to share common CSS code between different selectors or have a consistent color scheme between different elements. CSS compilers or pre-processors solve these issues by adding extra features on top of the CSS language like variables, mixins, math, and more, and in some cases also significantly change the syntax of CSS to be easier to read and write.
+All your CSS style files will processed using Meteor's default file load order rules along with any import statements and concatenated, and in a production build also minified. However, it's no secret that writing plain CSS can often be a hassle as there's no way to share common CSS code between different selectors or have a consistent color scheme between different elements. CSS compilers, or pre-processors, solve these issues by adding extra features on top of the CSS language like variables, mixins, math, and more, and in some cases also significantly change the syntax of CSS to be easier to read and write.
 
 <h3 id="css-which-preprocessor">Sass, Less, or Stylus?</h3>
 
@@ -94,7 +94,7 @@ CSS framework compatibility should be a primary concern when picking a pre-proce
 An important feature shared by all of the available CSS pre-processors is the ability to import files. This lets you split your CSS into smaller pieces, and provides a lot of the same benefits that you get from JavaScript modules:
 
 1. You can control the load order of files by encoding dependencies through imports, since the load order of CSS matters.
-2. You can create reusable CSS "modules" that just have variables and mixins, and don't actually generate any CSS.
+2. You can create reusable CSS "modules" that just have variables and mixins and don't actually generate any CSS.
 
 In Meteor, each of your `.scss`, `.less`, or `.styl` source files will be one of two types: "source" or "import".
 
@@ -106,21 +106,39 @@ Read the documentation for each package listed below to see how to indicate whic
 
 <h3 id="css-importing">Importing styles</h3>
 
-In all three Meteor-supported CSS pre-processors you can import files from an absolute path in your app by using the special `{}` syntax:
+In all three Meteor supported CSS pre-processors you can import other style files from both relative and absolute paths in your app and from both npm and Meteor Atmosphere packages. 
 
 ```less
-@import '{}/imports/ui/stylesheets/button.less';
+@import '../stylesheets/colors.less';   // a relative path
+@import '{}/imports/ui/stylesheets/button.less';   // absolute path with `{}` syntax
 ```
 
-To import files from a Meteor Atmosphere packages using this special package name syntax:
+You can also import CSS from a JavaScript file if you have the `ecmascript` package installed:
+
+```js
+import '../stylesheets/styles.css';
+```
+
+> When importing CSS from a JavaScript file, that CSS is not bundled with the rest of the CSS processed with the Meteor Build tool, but instead is put in your app's `<head>` tag inside `<style>...</style>` after the main concatenated CSS file.
+
+Importing styles from an Atmosphere package using the `{}` package name syntax:
 
 ```less
-@import "{my-package:pretty-buttons}/buttons/styles.import.less";
+@import '{my-package:pretty-buttons}/buttons/styles.import.less';
 ```
 
-> It is currently not possible to import non-CSS assets from npm packages in `node_modules` using the Meteor build tool. There are various potential workarounds such as creating a symbolic link to the asset file in node_modules from somewhere else in your app `ln -s /path/to/node_modules/package-name/style.scss /path/to/app/imports/ui/style.scss` and importing it from there `@import '{}/imports/ui/style.scss';` or try using an alternative pre-processor tool with [npm scripts](https://github.com/tableflip/meteor-sass-bootstrap4) or try using this configuration of [PostCSS](https://github.com/juliancwirko/meteor-bootstrap-postcss-test).
+> CSS files in an Atmosphere package are declared with [`api.addFiles`](http://docs.meteor.com/#/full/pack_addFiles), and therefore will be eagerly evaluated, and automatically bundled with all the other CSS in your app.
 
-For more details using `@imports` with packages see [Using Packages](using-packages.html) in the Meteor Guide.
+Importing styles from an npm package using the `{}` syntax:
+
+```less
+@import '{}/node_modules/npm-package-name/button.less';
+```
+```js
+import 'npm-package-name/stylesheets/styles.css';
+```
+
+For more examples and details on importing styles and using `@imports` with packages see the [Using Packages](using-packages.html#npm-styles) article.
 
 <h3 id="sass">Sass</h3>
 
@@ -175,3 +193,26 @@ The current best practice for deploying web production applications is to concat
 Every Meteor app comes with production minification by default with the `standard-minifier-js` and `standard-minifier-css` packages. These minifiers go to some extra effort to do a good job - for example, Meteor automatically splits up your files if they get too big to maintain support for older versions of Internet Explorer which had a limit on the number of CSS rules per file.
 
 Minification usually happens when you `meteor deploy` or `meteor build` your app. If you have an error in production that you suspect is related to minification, you can run the minified version of your app locally with `meteor --production`.
+
+<h2 id="build-plugins">Build plugins</h2>
+
+The most powerful feature of Meteor's build system is the ability to define custom build plugins. If you find yourself writing scripts that mangle one type of file into another, merge multiple files, or something else, it's likely that these scripts would be better implemented as a build plugin. The `ecmascript`, `templating`, and `coffeescript` packages are all implemented as build plugins, so you can replace them with your own versions if you want to!
+
+[Read the documentation about build plugins.](https://docs.meteor.com/api/packagejs.html#build-plugin-api)
+
+<h3 id="types-of-build-plugins">Types of build plugins</h3>
+
+There are three types of build plugins supported by Meteor today:
+
+1. Compiler plugin - compiles source files (LESS, CoffeeScript) into built output (JS, CSS, asset files, and HTML). Only one compiler plugin can handle a single file extension.
+2. Minifier plugin - compiles lots of built CSS or JS files into one or more minified files, for example `standard-minifiers`. Only one minifier can handle each of `js` and `css`.
+3. Linter plugin - processes any number of files, and can print lint errors. Multiple linters can process the same files.
+
+<h3 id="writing-build-plugins">Writing your own build plugin</h3>
+
+Writing a build plugin is a very advanced task that only the most advanced Meteor users should get into. The best place to start is to copy a different plugin that is the most similar to what you are trying to do. For example, if you wanted to make a new CSS compiler plugin, you could fork the `less` package; if you wanted to make your own JS transpiler, you could fork `ecmascript`. A good example of a linter is the `jshint` package, and for a minifier you can look at `standard-minifiers-js` and `standard-minifiers-css`.
+
+<h3 id="caching-build-plugins">Caching</h3>
+
+The best way to make your build plugin fast is to use caching anywhere you can - the best way to save time is to do less work! Check out the [documentation about CachingCompiler](https://docs.meteor.com/api/packagejs.html#build-plugin-caching) to learn more. It's used in all of the above examples, so you can see how to use it by looking at them.
+

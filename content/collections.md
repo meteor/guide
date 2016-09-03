@@ -18,7 +18,7 @@ After reading this guide, you'll know:
 
 At its core, a web application offers its users a view into, and a way to modify, a persistent set of data. Whether managing a list of todos, or ordering a car to pick you up, you are interacting with a permanent but constantly changing data layer.
 
-In Meteor, that data layer is typically stored in MongoDB. A set of related data in MongoDB is referred to as a "collection". In Meteor you access MongoDB through [collections](http://docs.meteor.com/#/full/mongo_collection), making them the primary persistence mechanism for your app data.
+In Meteor, that data layer is typically stored in MongoDB. A set of related data in MongoDB is referred to as a "collection". In Meteor you access MongoDB through [collections](http://docs.meteor.com/api/collections.html#Mongo-Collection), making them the primary persistence mechanism for your app data.
 
 However, collections are a lot more than a way to save and retrieve data. They also provide the core of the interactive, connected user experience that users expect from the best applications. Meteor makes this user experience easy to implement.
 
@@ -84,7 +84,7 @@ A local collection is a convenient way to use the full power of the Minimongo li
 
 Although MongoDB is a schema-less database, which allows maximum flexibility in data structuring, it is generally good practice to use a schema to constrain the contents of your collection to conform to a known format. If you don't, then you tend to end up needing to write defensive code to check and confirm the structure of your data as it *comes out* of the database, instead of when it *goes into* the database. As in most things, you tend to *read data more often than you write it*, and so it's usually easier, and less buggy to use a schema when writing.
 
-In Meteor, the pre-eminent schema package is [aldeed:simple-schema](http://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents.
+In Meteor, the pre-eminent schema package is [aldeed:simple-schema](https://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents. Another alternative is [jagi:astronomy](https://atmospherejs.com/jagi/astronomy) which is a full Object Model (OM) layer offering schema definition, server/client side validators, object methods and event handlers.
 
 To write a schema using `simple-schema`, you can simply create a new instance of the `SimpleSchema` class:
 
@@ -216,7 +216,7 @@ class ListsCollection extends Mongo.Collection {
 
     // Call the original `insert` method, which will validate
     // against the schema
-    return super(list, callback);
+    return super.insert(list, callback);
   }
 }
 
@@ -234,7 +234,7 @@ class ListsCollection extends Mongo.Collection {
   // ...
   remove(selector, callback) {
     Package.todos.Todos.remove({listId: selector});
-    return super(selector, callback);
+    return super.remove(selector, callback);
   }
 }
 ```
@@ -294,7 +294,7 @@ We are then able to wire in the denormalizer into the mutations of the `Todos` c
 class TodosCollection extends Mongo.Collection {
   insert(doc, callback) {
     doc.createdAt = doc.createdAt || new Date();
-    const result = super(doc, callback);
+    const result = super.insert(doc, callback);
     incompleteCountDenormalizer.afterInsertTodo(doc);
     return result;
   }
@@ -322,7 +322,7 @@ Migrations.add({
   version: 1,
   up() {
     Lists.find({todoCount: {$exists: false}}).forEach(list => {
-      const todoCount = Todos.find({listId: list._id})).count();
+      const todoCount = Todos.find({listId: list._id}).count();
       Lists.update(list._id, {$set: {todoCount}});
     });
   },
@@ -344,7 +344,7 @@ The advantage of a bulk operation is that it only requires a single round trip t
 
 What this means is if users are accessing the site whilst the update is being prepared, it will likely go out of date! Also, a bulk update will lock the entire collection while it is being applied, which can cause a significant blip in your user experience if it takes a while. For these reason, you often need to stop your server and let your users know you are performing maintenance while the update is happening.
 
-We could write our above migration like so (note that you must be on MongoDB 2.6 or later for the bulk update operations to exist). We can access the native MongoDB API via [`Collection#rawCollection()`](http://docs.meteor.com/#/full/Mongo-Collection-rawCollection):
+We could write our above migration like so (note that you must be on MongoDB 2.6 or later for the bulk update operations to exist). We can access the native MongoDB API via [`Collection#rawCollection()`](http://docs.meteor.com/api/collections.html#Mongo-Collection-rawCollection):
 
 ```js
 Migrations.add({

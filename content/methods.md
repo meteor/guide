@@ -91,7 +91,7 @@ Here's some of the functionality an ideal Method would have:
 <h4 id="advanced-boilerplate-defining">Defining</h4>
 
 ```js
-export default updateText = {
+export const updateText = {
   name: 'todos.updateText',
 
   // Factor out validation so that it can be run independently (1)
@@ -175,6 +175,8 @@ As you can see, this approach to calling Methods results in a better development
 To alleviate some of the boilerplate that's involved in correct Method definitions, we've published a wrapper package called `mdg:validated-method` that does most of this for you. Here's the same Method as above, but defined with the package:
 
 ```js
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+
 export const updateText = new ValidatedMethod({
   name: 'todos.updateText',
   validate: new SimpleSchema({
@@ -339,9 +341,7 @@ Template.Invoices_newInvoice.helpers({
 });
 
 Template.Invoices_newInvoice.events({
-  'submit .Invoices_newInvoice'(event) {
-    const instance = Template.instance();
-
+  'submit .Invoices_newInvoice'(event, instance) {
     const data = {
       email: event.target.email.value,
       description: event.target.description.value,

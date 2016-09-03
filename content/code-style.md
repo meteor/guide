@@ -1,6 +1,6 @@
 ---
-title: Code style
-order: 2
+title: Code Style
+order: 1
 description: Suggested style guidelines for your code.
 discourseTopicId: 20189
 ---
@@ -56,11 +56,13 @@ Here at Meteor, we strongly believe that JavaScript is the best language to buil
 
 ![](images/ben-es2015-demo.gif)
 
+> An example of refactoring from JavaScript to ES2015
+
 <h3 id="ecmascript">Use the `ecmascript` package</h3>
 
 ECMAScript, the language standard on which every browser's JavaScript implementation is based, has moved to yearly standards releases. The newest complete standard is ES2015, which includes some long-awaited and very significant improvements to the JavaScript language. Meteor's `ecmascript` package compiles this standard down to regular JavaScript that all browsers can understand using the [popular Babel compiler](https://babeljs.io/). It's fully backwards compatible to "regular" JavaScript, so you don't have to use any new features if you don't want to. We've put a lot of effort into making advanced browser features like source maps work great with this package, so that you can debug your code using your favorite developer tools without having to see any of the compiled output.
 
-The `ecmascript` package is included in all new apps and packages by default, and compiles all files with the `.js` file extension automatically. See the [list of all ES2015 features supported by the ecmascript package](https://docs.meteor.com/#/full/supportedes2015features).
+The `ecmascript` package is included in all new apps and packages by default, and compiles all files with the `.js` file extension automatically. See the [list of all ES2015 features supported by the ecmascript package](https://docs.meteor.com/packages/ecmascript.html#Supported-ES2015-Features).
 
 To get the full experience, you should also use the `es5-shim` package which is included in all new apps by default. This means you can rely on runtime features like `Array#forEach` without worrying about which browsers support them.
 
@@ -84,11 +86,13 @@ Below, you can find directions for setting up automatic linting at many differen
 
 <h3 id="eslint-installing">Installing and running ESLint</h3>
 
-To setup ESLint in your application, you can install the following npm packages:
+To setup ESLint in your application, you can install the following [npm](https://docs.npmjs.com/getting-started/what-is-npm) packages:
 
 ```
-npm install --save-dev eslint eslint-plugin-react eslint-plugin-meteor eslint-config-airbnb
+meteor npm install --save-dev babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-meteor eslint-plugin-react eslint-plugin-jsx-a11y eslint-import-resolver-meteor eslint
 ```
+
+> Meteor comes with npm bundled so that you can type meteor npm without worrying about installing it yourself. If you like, you can also use a globally installed npm command.
 
 You can also add a `eslintConfig` section to your `package.json` to specify that you'd like to use the Airbnb config, and to enable [ESLint-plugin-Meteor](https://github.com/dferber90/eslint-plugin-meteor). You can also setup any extra rules you want to change, as well as adding a lint npm command:
 
@@ -100,24 +104,29 @@ You can also add a `eslintConfig` section to your `package.json` to specify that
     "pretest": "npm run lint --silent"
   },
   "eslintConfig": {
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "allowImportExportEverywhere": true
+    },
     "plugins": [
       "meteor"
     ],
     "extends": [
-      "airbnb/base",
-      "plugin:meteor/guide"
+      "airbnb",
+      "plugin:meteor/recommended"
     ],
+    "settings": {
+      "import/resolver": "meteor"
+    },
     "rules": {}
   }
 }
 ```
 
-Use `"airbnb/base"` for a normal ecmascript-based config and `"airbnb"` in a React project.
-
 To run the linter, you can now simply type:
 
 ```bash
-npm run lint
+meteor npm run lint
 ```
 
 For more details, read the [Getting Started](http://eslint.org/docs/user-guide/getting-started) directions from the ESLint website.
@@ -141,23 +150,13 @@ A side note for Emmet users: You can use *\<ctrl-e\>* to expand HTML tags in .js
 
 <h4 id="eslint-atom">Atom</h4>
 
-Install the following three Atom packages. Here's how to install them from the terminal, but you can also select them from within Atom:
+Using ESLint with Atom is simple. Just install these three packages:
 
 ```bash
 apm install language-babel
 apm install linter
 apm install linter-eslint
 ```
-
-Go to *Settings -> Packages.* Under "linter-eslint", click the *Settings* button. To allow atom to see ESLint, you need to set "Global Node Path" to your Node path. As indicated in Atom, you can find this out with the following command in the terminal:
-
-```
-npm get prefix
-```
-
-This will return something like `/usr/local`. Add this to the "Global Node Path", and check "Use Global Eslint":
-
-![Set your "Global Node Path" and check "Use Global Eslint"](images/atom-configuration.png)
 
 Then **restart** (or **reload** by pressing Ctrl+Alt+R / Cmd+Opt+R) Atom to activate linting.
 
@@ -170,6 +169,14 @@ WebStorm provides [these instructions for using ESLint](https://www.jetbrains.co
 
 Linting can be activated on WebStorm on a project-by-project basis, or you can set ESLint as a default under Editor > Inspections, choosing the Default profile, checking "ESLint", and applying.
 
+<h4 id="eslint-vscode">Visual Studio Code</h4>
+
+Using ESLint in VS Code requires installation of the 3rd party [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension.  In order to install the extension, follow these steps:
+
+1. Launch VS Code and open the quick open menu by typing `Ctrl+P`
+2. Paste `ext install vscode-eslint` in the command window and press `Enter`
+3. Restart VS Code
+
 
 <h2 id="meteor-features">Meteor code style</h2>
 
@@ -177,7 +184,7 @@ The section above talked about JavaScript code in general - you can easily apply
 
 <h3 id="collections">Collections</h3>
 
-Collections should be named as a plural noun, in PascalCase. The name of the collection in the database (the first argument to the collection constructor) should be the same as the name of the JavaScript symbol.
+Collections should be named as a plural noun, in [PascalCase](https://en.wikipedia.org/wiki/PascalCase). The name of the collection in the database (the first argument to the collection constructor) should be the same as the name of the JavaScript symbol.
 
 ```js
 // Defining a collection
@@ -240,7 +247,7 @@ Note that imports use relative paths, and include the file extension at the end 
 For [Atmosphere packages](using-packages.html), as the older pre-1.3 `api.export` syntax allowed more than one export per package, you'll tend to see non-default exports used for symbols. For instance:
 
 ```js
-// You'll need to deconstruct here, as Meteor could export more symbols
+// You'll need to destructure here, as Meteor could export more symbols
 import { Meteor } from 'meteor/meteor';
 
 // This will not work
@@ -274,6 +281,6 @@ show.js
 show.less
 ```
 
-The whole directory or path should indicate that these templates are related to the `Lists` module, so it's not necessary to reproduce that information in the file name. Read more about directory structure [above](#javascript-structure).
+The whole directory or path should indicate that these templates are related to the `Lists` module, so it's not necessary to reproduce that information in the file name. Read more about directory structure [below](structure.html#javascript-structure).
 
 If you are writing your UI in React, you don't need to use the underscore-split names because you can import and export your components using the JavaScript module system.

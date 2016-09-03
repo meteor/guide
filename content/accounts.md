@@ -70,14 +70,14 @@ Here are a couple of screenshots of `accounts-ui` so you know what to expect:
 
 <h2 id="useraccounts">Customizable UI: useraccounts</h2>
 
-Once you've gotten your initial prototype up and running with `accounts-ui`, you'll want to move to something more powerful and configurable so that you can better integrate your login flow with the rest of your app. The [`useraccounts` family of packages](http://useraccounts.meteor.com/) is the most powerful set of accounts management UI controls available for Meteor today. If you need even more customization, you can also roll your own system, but it's worth trying `useraccounts` first.
+Once you've gotten your initial prototype up and running with `accounts-ui`, you'll want to move to something more powerful and configurable so that you can better integrate your login flow with the rest of your app. The [`useraccounts` family of packages](https://github.com/meteor-useraccounts/core/blob/master/Guide.md) is the most powerful set of accounts management UI controls available for Meteor today. If you need even more customization, you can also roll your own system, but it's worth trying `useraccounts` first.
 
 <h3 id="useraccounts-flexibility">Use any router or UI framework</h3>
 
 The first thing to understand about `useraccounts` is that the core accounts management logic is independent of the HTML templates and routing packages. This means you can use [`useraccounts:core`](https://atmospherejs.com/useraccounts/core) to build your own set of login templates. Generally, you'll want to pick one login template package and one login routing package. The options for templates include:
 
 - [`useraccounts:unstyled`](https://atmospherejs.com/useraccounts/unstyled) which lets you bring your own CSS; this one is used in the Todos example app to make the login UI blend seamlessly with the rest of the app.
-- Pre-built templates for [Bootstrap, Semantic UI, Materialize, and more](http://useraccounts.meteor.com/). These templates don't come with the actual CSS framework, so you can pick your favorite Bootstrap package, for example.
+- Pre-built templates for [Bootstrap, Semantic UI, Materialize, and more](https://github.com/meteor-useraccounts/core/blob/master/Guide.md#available-versions). These templates don't come with the actual CSS framework, so you can pick your favorite Bootstrap package, for example.
 
 While it's optional and the basic functionality will work without it, it's also a good idea to pick a router integration:
 
@@ -221,7 +221,7 @@ Accounts.validateNewUser((user) => {
 
 <h3 id="multiple-emails">Multiple emails</h3>
 
-Often, users might want to associate multiple email addresses with the same account. `accounts-password` addresses this case by storing the email addresses as an array in the user collection. There are some handy API methods to deal with [adding](http://docs.meteor.com/#/full/Accounts-addEmail), [removing](http://docs.meteor.com/#/full/Accounts-removeEmail), and [verifying](http://docs.meteor.com/#/full/accounts_verifyemail) emails.
+Often, users might want to associate multiple email addresses with the same account. `accounts-password` addresses this case by storing the email addresses as an array in the user collection. There are some handy API methods to deal with [adding](http://docs.meteor.com/api/passwords.html#Accounts-addEmail), [removing](http://docs.meteor.com/api/passwords.html#Accounts-removeEmail), and [verifying](http://docs.meteor.com/api/passwords.html#Accounts-verifyEmail) emails.
 
 One useful thing to add for your app can be the concept of a "primary" email address. This way, if the user has added multiple emails, you know where to send confirmation emails and similar.
 
@@ -231,7 +231,7 @@ Before Meteor 1.2, all email addresses and usernames in the database were consid
 
 <h4 id="case-sensitivity-in-my-app">What does this mean for my app?</h4>
 
-Just follow one simple rule: don't query the database by `username` or `email` directly. Instead, use the [`Accounts.findUserByUsername`](http://docs.meteor.com/#/full/Accounts-findUserByUsername) and [`Accounts.findUserByEmail`](http://docs.meteor.com/#/full/Accounts-findUserByEmail) methods provided by Meteor. This will run a query for you that is case-insensitive, so you will always find the user you are looking for.
+Just follow one simple rule: don't query the database by `username` or `email` directly. Instead, use the [`Accounts.findUserByUsername`](http://docs.meteor.com/api/passwords.html#Accounts-findUserByUsername) and [`Accounts.findUserByEmail`](http://docs.meteor.com/api/passwords.html#Accounts-findUserByEmail) methods provided by Meteor. This will run a query for you that is case-insensitive, so you will always find the user you are looking for.
 
 <h3 id="email-flows">Email flows</h3>
 
@@ -560,6 +560,8 @@ Meteor.users.update(userId, {
   }
 });
 ```
+
+You can use any field name other than those [used by the Accounts sytem](http://docs.meteor.com/api/accounts.html#Meteor-users).
 
 <h3 id="adding-fields-on-registration">Adding fields on user registration</h3>
 
