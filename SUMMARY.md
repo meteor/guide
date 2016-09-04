@@ -1,6 +1,5 @@
 # Summary
 
-* [Read Me](README.md)
 * [Introduction](content/index.md)
 * [Code style](content/code-style.md)
 * [Application Structure](content/structure.md)
