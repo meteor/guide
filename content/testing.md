@@ -102,7 +102,7 @@ describe('my module', function () {
 })
 ```
 
-Note that arrow function use with Mocha [is discouraged](http://mochajs.org/#arrow-functions).
+Note that arrow function use with Mocha [is discouraged](http://mochajs.org/#arrow-functions). Also 'my module' must equal your test file name, otherwise your tests will not be seen. So for `todos-item.test.js` 'my module' will be `todos-item`.
 
 <h2 id="test-data">Test data</h2>
 
