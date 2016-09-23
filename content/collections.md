@@ -352,14 +352,17 @@ Migrations.add({
   up() {
     // This is how to get access to the raw MongoDB node collection that the Meteor server collection wraps
     const batch = Lists.rawCollection().initializeUnorderedBulkOp();
+
+    //Mongo throws an error if we execute a batch operation without actual operations, e.g. when Lists was empty.
+    let hasUpdates = false;
     Lists.find({todoCount: {$exists: false}}).forEach(list => {
       const todoCount = Todos.find({listId: list._id}).count();
       // We have to use pure MongoDB syntax here, thus the `{_id: X}`
       batch.find({_id: list._id}).updateOne({$set: {todoCount}});
+      hasUpdates = true;
     });
 
-    //Mongo throws an error if we execute a batch operation without actual operations, e.g. when Lists was empty.
-    if(batch.s && batch.s.currentBatch && batch.s.currentBatch.operations && batch.s.currentBatch.operations.length > 0){
+    if(hasUpdates){
       // We need to wrap the async function to get a synchronous API that migrations expects
       const execute = Meteor.wrapAsync(batch.execute, batch);
       return execute();
