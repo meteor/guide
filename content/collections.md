@@ -85,7 +85,7 @@ Although MongoDB is a schema-less database, which allows maximum flexibility in 
 
 In Meteor, the pre-eminent schema package is [aldeed:simple-schema](https://atmospherejs.com/aldeed/simple-schema). It's an expressive, MongoDB based schema that's used to insert and update documents. Another alternative is [jagi:astronomy](https://atmospherejs.com/jagi/astronomy) which is a full Object Model (OM) layer offering schema definition, server/client side validators, object methods and event handlers.
 
-To write a schema using `simple-schema`, you can simply create a new instance of the `SimpleSchema` class:
+Let's assume that we have a `Lists` collection.  To define a schema for this collection using `simple-schema`, you can simply create a new instance of the `SimpleSchema` class and attach it to the `Lists` object:
 
 ```js
 Lists.schema = new SimpleSchema({
@@ -326,7 +326,7 @@ Migrations.add({
     });
   },
   down() {
-    Lists.update({}, {$unset: {todoCount: true}});
+    Lists.update({}, {$unset: {todoCount: true}}, {multi: true});
   }
 });
 ```
@@ -351,18 +351,26 @@ Migrations.add({
   up() {
     // This is how to get access to the raw MongoDB node collection that the Meteor server collection wraps
     const batch = Lists.rawCollection().initializeUnorderedBulkOp();
+
+    //Mongo throws an error if we execute a batch operation without actual operations, e.g. when Lists was empty.
+    let hasUpdates = false;
     Lists.find({todoCount: {$exists: false}}).forEach(list => {
       const todoCount = Todos.find({listId: list._id}).count();
       // We have to use pure MongoDB syntax here, thus the `{_id: X}`
       batch.find({_id: list._id}).updateOne({$set: {todoCount}});
+      hasUpdates = true;
     });
 
-    // We need to wrap the async function to get a synchronous API that migrations expects
-    const execute = Meteor.wrapAsync(batch.execute, batch);
-    return execute();
+    if(hasUpdates){
+      // We need to wrap the async function to get a synchronous API that migrations expects
+      const execute = Meteor.wrapAsync(batch.execute, batch);
+      return execute();
+    }
+  
+    return true;
   },
   down() {
-    Lists.update({}, {$unset: {todoCount: true}});
+    Lists.update({}, {$unset: {todoCount: true}}, {multi: true});
   }
 });
 ```
