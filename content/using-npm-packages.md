@@ -5,7 +5,7 @@ discourseTopicId: 20193
 
 <h2 id="npm-searching">Searching for packages</h2>
 
-The best way to find npm packages is by searching on [npmjs.com](https://www.npmjs.com/). There are also some websites that have special search features specifically for certain kinds of packages, like the aptly named [react-components.com](http://react-components.com/).
+The best way to find npm packages is by searching on [npmjs.com](https://www.npmjs.com/). There are also some websites that have special search features specifically for certain kinds of packages, like [js.coach](https://js.coach/).
 
 <h2 id="client-npm">npm on the client</h2>
 
