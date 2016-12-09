@@ -99,25 +99,11 @@ You can also add a `eslintConfig` section to your `package.json` to specify that
 {
   ...
   "scripts": {
-    "lint": "eslint .",
+    "lint": "./node_modules/.bin/eslint .",
     "pretest": "npm run lint --silent"
   },
   "eslintConfig": {
-    "parser": "babel-eslint",
-    "parserOptions": {
-      "allowImportExportEverywhere": true
-    },
-    "plugins": [
-      "meteor"
-    ],
-    "extends": [
-      "airbnb",
-      "plugin:meteor/recommended"
-    ],
-    "settings": {
-      "import/resolver": "meteor"
-    },
-    "rules": {}
+    "extends": "eslint-config-meteor"
   }
 }
 ```
