@@ -1,7 +1,7 @@
 ---
 title: "Security"
-order: 8
 description: How to secure your Meteor app.
+discourseTopicId: 19667
 ---
 
 After reading this guide, you'll know:
@@ -115,21 +115,21 @@ The _only_ times you should be passing any user ID as an argument are the follow
 The best way to make your app secure is to understand all of the possible inputs that could come from an untrusted source, and make sure that they are all handled correctly. The easiest way to understand what inputs can come from the client is to restrict them to as small of a space as possible. This means your Methods should all be specific actions, and shouldn't take a multitude of options that change the behavior in significant ways. The end goal is that you can easily look at each Method in your app and validate or test that it is secure. Here's a secure example Method from the Todos example app:
 
 ```js
-Lists.methods.makePrivate = new ValidatedMethod({
-  name: 'Lists.methods.makePrivate',
+export const makePrivate = new ValidatedMethod({
+  name: 'lists.makePrivate',
   validate: new SimpleSchema({
     listId: { type: String }
   }).validator(),
   run({ listId }) {
     if (!this.userId) {
-      throw new Meteor.Error('Lists.methods.makePrivate.notLoggedIn',
+      throw new Meteor.Error('lists.makePrivate.notLoggedIn',
         'Must be logged in to make private lists.');
     }
 
     const list = Lists.findOne(listId);
 
     if (list.isLastPublicList()) {
-      throw new Meteor.Error('Lists.methods.makePrivate.lastPublicList',
+      throw new Meteor.Error('lists.makePrivate.lastPublicList',
         'Cannot make the last public list private.');
     }
 
@@ -174,8 +174,14 @@ Just like REST endpoints, Meteor Methods can easily be called from anywhere - a 
 In the Todos example app, we use the following code to set a basic rate limit on all Methods:
 
 ```js
-// Get list of all Method names on Lists
-const LISTS_METHODS = _.pluck(Lists.methods, 'name');
+// Get list of all method names on Lists
+const LISTS_METHODS = _.pluck([
+  insert,
+  makePublic,
+  makePrivate,
+  updateName,
+  remove,
+], 'name');
 
 // Only allow 5 list operations per connection per second
 DDPRateLimiter.addRule({
@@ -216,13 +222,13 @@ For example, you could write a publication, then later add a secret field to the
 ```js
 // #1: Bad! If we add a secret field to Lists later, the client
 // will see it
-Meteor.publish('Lists.public', function () {
+Meteor.publish('lists.public', function () {
   return Lists.find({userId: {$exists: false}});
 });
 
 // #2: Good, if we add a secret field to Lists later, the client
 // will only publish it if we add it to the list of fields
-Meteor.publish('Lists.public', function () {
+Meteor.publish('lists.public', function () {
   return Lists.find({userId: {$exists: false}}, {
     fields: {
       name: 1,
@@ -247,7 +253,7 @@ Lists.publicFields = {
 Now your code becomes a bit simpler:
 
 ```js
-Meteor.publish('Lists.public', function () {
+Meteor.publish('lists.public', function () {
   return Lists.find({userId: {$exists: false}}, {
     fields: Lists.publicFields
   });
@@ -267,7 +273,7 @@ Meteor.publish('list', function (listId) {
 
   const list = Lists.findOne(listId);
 
-  if (! list.userId === this.userId) {
+  if (list.userId !== this.userId) {
     throw new Meteor.Error('list.unauthorized',
       'This list doesn\'t belong to you.');
   }
@@ -371,7 +377,7 @@ You can pass settings to your app through a _settings file_ or an _environment v
 # Pass development settings when running your app locally
 meteor --settings development.json
 
-# Pass production settings when deploying your app
+# Pass production settings when deploying your app to Galaxy
 meteor deploy myapp.com --settings production.json
 ```
 
@@ -380,7 +386,7 @@ Here's what a settings file with some API keys might look like:
 ```js
 {
   "facebook": {
-    "clientId": "12345",
+    "appId": "12345",
     "secret": "1234567"
   }
 }
@@ -388,7 +394,7 @@ Here's what a settings file with some API keys might look like:
 
 In your app's JavaScript code, these settings can be accessed from the variable `Meteor.settings`.
 
-[Read more about managing keys and settings in the Deployment article.](#environment)
+[Read more about managing keys and settings in the Deployment article.](deployment.html#environment)
 
 <h3 id="client-settings">Settings on the client</h3>
 
@@ -411,7 +417,7 @@ ServiceConfiguration.configurations.upsert({
   service: "facebook"
 }, {
   $set: {
-    clientId: Meteor.settings.facebook.clientId,
+    appId: Meteor.settings.facebook.appId,
     loginStyle: "popup",
     secret: Meteor.settings.facebook.secret
   }
@@ -434,9 +440,8 @@ You can ensure that any unsecured connection to your app redirects to a secure c
 
 #### Setting up SSL
 
-1. On `meteor deploy` free hosting, [just add `force-ssl`](deployment.html#free-hosting) and you're good to go
-2. On [Galaxy](deployment.html#galaxy), most things are set up for you, but you need to add a certificate. [See the help article about SSL on Galaxy](https://galaxy.meteor.com/help/using-ssl).
-3. If you are running on your own [infrastructure](deployment.html#custom-deployment), there are a few options for setting up SSL, mostly through configuring a proxy web server. See the articles: [Josh Owens on SSL and Meteor](http://joshowens.me/ssl-and-meteor-js/), [SSL on Meteorpedia](http://www.meteorpedia.com/read/SSL), and [Digital Ocean tutorial with an Nginx config](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-meteor-js-application-on-ubuntu-14-04-with-nginx).
+1. On [Galaxy](deployment.html#galaxy), most things are set up for you, but you need to add a certificate. [See the help article about SSL on Galaxy](http://galaxy-guide.meteor.com/encryption.html).
+2. If you are running on your own [infrastructure](deployment.html#custom-deployment), there are a few options for setting up SSL, mostly through configuring a proxy web server. See the articles: [Josh Owens on SSL and Meteor](http://joshowens.me/ssl-and-meteor-js/), [SSL on Meteorpedia](http://www.meteorpedia.com/read/SSL), and [Digital Ocean tutorial with an Nginx config](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-meteor-js-application-on-ubuntu-14-04-with-nginx).
 
 <h2 id="checklist">Security checklist</h2>
 
