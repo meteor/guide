@@ -1,6 +1,5 @@
 ---
 title: Writing Atmosphere Packages
-order: 29
 discourseTopicId: 20194
 ---
 
@@ -257,12 +256,6 @@ From within your test entry point, you can import other files as you would in th
 
 You can read more about testing in Meteor in the [Testing article](testing.html).
 
-<h3 id="testing-with-peer-dependencies">Testing with peer npm dependencies</h3>
-
-If your package makes use of [peer npm dependencies](#peer-npm-dependencies), you cannot currently use `test-packages` to write package tests (as the dependencies will not be included in the special test app).
-
-To work around this, you can create a "scaffolding" test application, which is a simple app which simply includes the package and uses standard [tests](testing.html) to run tests against the package. You can see examples of these kind of scaffold test apps in the [React packages repository](https://github.com/meteor/react-packages/tree/devel/tests).
-
 <h2 id="publishing-atmosphere">Publishing your package</h2>
 
 To publish your package to Atmosphere, run [`meteor publish`](http://docs.meteor.com/#/full/meteorpublish) from the package directory. To publish a package the package name must follow the format of `username:my-package` and the package must contain a [SemVer version number](#version-constraints).
@@ -278,12 +271,10 @@ If you need to modify a package to do something that the published version doesn
 A Meteor app can load Atmosphere packages in one of three ways, and it looks for a matching package name in the following order:
 
 1. Package source code in the `packages/` directory inside your app.
-2. Package source code in directories indicated by setting a `PACKAGE_DIRS` environment variable before running any `meteor` command. You can add multiple directories by separating the paths with a `:` on OSX or Linux, or a `;` on Windows. For example: `PACKAGE_DIRS=../first/directory:../second/directory`, or on Windows: `set PACKAGE_DIRS=..\first\directory;..\second\directory`.
+2. Package source code in directories indicated by setting a `METEOR_PACKAGE_DIRS` environment variable before running any `meteor` command. You can add multiple directories by separating the paths with a `:` on OSX or Linux, or a `;` on Windows. For example: `METEOR_PACKAGE_DIRS=../first/directory:../second/directory`, or on Windows: `set PACKAGE_DIRS=..\first\directory;..\second\directory`.
+ > Note: Prior to Meteor 1.4.2, `METEOR_PACKAGE_DIRS` was simply `PACKAGE_DIRS`.  For compatibility reasons, developers should use `METEOR_PACKAGE_DIRS` going forward.
 3. Pre-built package from Atmosphere. The package is cached in `~/.meteor/packages` on Mac/Linux or `%LOCALAPPDATA%\.meteor\packages` on Windows, and only loaded into your app as it is built.
 
 You can use (1) or (2) to override the version from Atmosphere. You can even do this to load patched versions of Meteor core packages - just copy the code of the package from [Meteor's GitHub repository](https://github.com/meteor/meteor/tree/devel/packages), and edit away.
 
 One difference between pre-published packages and local app packages is that the published packages have any binary dependencies pre-built. This should only affect a small subset of packages. If you clone the source code into your app, you need to make sure you have any compilers required by that package.
-
-
-

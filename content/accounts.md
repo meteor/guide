@@ -1,6 +1,5 @@
 ---
 title: Users and Accounts
-order: 13
 description: How to build user login functionality into a Meteor app. Let your users log in with passwords, Facebook, Google, GitHub, and more.
 discourseTopicId: 19664
 ---
@@ -168,7 +167,9 @@ AccountsTemplates.configureRoute('resetPwd', {
 });
 ```
 
-Now, we can easily render links to our login page like so:
+Note that we have specified a password reset route. Normally, we would have to configure Meteor's accounts system to send this route in password reset emails, but the `useraccounts:flow-routing` package does it for us. [Read more about configuring email flows below.](#email-flows)
+
+Now that the routes are setup on the server, they can be accessed from the browser (e.g. `example.com/reset-password`).  To create links to these routes in a template, it's best to use a helper method provided by the router.  For Flow Router, the [`arillo:flow-router-helpers`](https://github.com/arillo/meteor-flow-router-helpers/) package provides a `pathFor` helper for just this purpose.  Once installed, the following is possible in a template:
 
 ```html
 <div class="btns-group">
@@ -176,8 +177,6 @@ Now, we can easily render links to our login page like so:
   <a href="{{pathFor 'join'}}" class="btn-secondary">Join</a>
 </div>
 ```
-
-Note that we have specified a password reset route. Normally, we would have to configure Meteor's accounts system to send this route in password reset emails, but the `useraccounts:flow-routing` package does it for us. [Read more about configuring email flows below.](#email-flows)
 
 You can find a complete list of different available routes in the [documentation the `useraccounts:flow-routing`](https://github.com/meteor-useraccounts/flow-routing#routes).
 
@@ -532,7 +531,7 @@ Note that the schema is different when users register with different login servi
 
 1. User documents in the database have secret data like access keys and hashed passwords. When [publishing user data to the client](#publish-custom-data), be extra careful not to include anything that client shouldn't be able to see.
 2. DDP, Meteor's data publication protocol, only knows how to resolve conflicts in top-level fields. This means that you can't have one publication send `services.facebook.first_name` and another send `services.facebook.locale` - one of them will win, and only one of the fields will actually be available on the client. The best way to fix this is to denormalize the data you want onto custom top-level fields, as described in the section about [custom user data](#custom-user-data).
-3. The OAuth login service packages populate `profile.name`. We don't recommend using this but, if you plan to, make sure to deny client-side writes to `profile`. See the section about the [`profile` field on users](dont-use-profile).
+3. The OAuth login service packages populate `profile.name`. We don't recommend using this but, if you plan to, make sure to deny client-side writes to `profile`. See the section about the [`profile` field on users](#dont-use-profile).
 4. When finding users by email or username, make sure to use the case-insensitive functions provided by `accounts-password`. See the [section about case-sensitivity](#case-sensitivity) for more details.
 
 <h2 id="custom-user-data">Custom data about users</h2>

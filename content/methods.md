@@ -1,6 +1,5 @@
 ---
 title: "Methods"
-order: 12
 description: How to use Methods, Meteor's remote procedure call system, to write to the database.
 discourseTopicId: 19662
 ---
@@ -175,6 +174,8 @@ As you can see, this approach to calling Methods results in a better development
 To alleviate some of the boilerplate that's involved in correct Method definitions, we've published a wrapper package called `mdg:validated-method` that does most of this for you. Here's the same Method as above, but defined with the package:
 
 ```js
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+
 export const updateText = new ValidatedMethod({
   name: 'todos.updateText',
   validate: new SimpleSchema({
@@ -196,7 +197,7 @@ export const updateText = new ValidatedMethod({
 });
 ```
 
-You call it the same way you call the advanced Method above, but the Method definition is significantly simpler. We believe this style of Method lets you clearly see the important parts - the name of the Method sent over the wire, the format of the expected arguments, and the JavaScript namespace by which the Method can be referenced.
+You call it the same way you call the advanced Method above, but the Method definition is significantly simpler. We believe this style of Method lets you clearly see the important parts - the name of the Method sent over the wire, the format of the expected arguments, and the JavaScript namespace by which the Method can be referenced. Validated methods only accept a single argument and a callback function.
 
 <h2 id="errors">Error handling</h2>
 
