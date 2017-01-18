@@ -194,7 +194,7 @@ if (Meteor.isServer) {
     // Rate limit per connection ID
     connectionId() { return true; }
   }, 5, 1000);
- }
+}
 ```
 
 This will make every Method only callable 5 times per second per connection. This is a rate limit that shouldn't be noticeable by the user at all, but will prevent a malicious script from totally flooding the server with requests. You will need to tune the limit parameters to match your app's needs.
