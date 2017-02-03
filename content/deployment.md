@@ -171,7 +171,7 @@ When selecting a hosted MongoDB service for production it is important to assess
 * Instance size & options
 * Instance configurability - Independently configure your CPU, memory, storage and disk I/O speed.
 
-You can read this [detailed guide](https://www.okgrow.com/posts/mongodb-atlas-setup) by OK GROW! for step-by-step instructions on deploying and connecting a production ready MongoDB database hosted on MongoDB Atlas to your Meteor app.
+You can read this [detailed guide](https://www.okgrow.com/posts/mongodb-atlas-setup) by OK GROW! for step-by-step instructions to deploying a production ready MongoDB database on MongoDB Atlas.
 
 <h3 id="mup">Meteor Up</h3>
 
