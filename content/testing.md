@@ -242,11 +242,11 @@ import { Factory } from 'meteor/dburles:factory';
 import { chai } from 'meteor/practicalmeteor:chai';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
-import { Todos } from '../../../api/todos/todos';
+import { Todos } from '/imports/api/todos/todos';
 
 
-import { withRenderedTemplate } from '../../test-helpers.js';
-import '../todos-item.js';
+import { withRenderedTemplate } from '/imports/ui/test-helpers.js';
+import '/imports/ui/components/todos-item.js';
 
 describe('Todos_item', function () {
   beforeEach(function () {
@@ -349,7 +349,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { sinon } from 'meteor/practicalmeteor:sinon';
 import TodoItem from './TodoItem.jsx';
-import { setCheckedStatus } from '../../api/todos/methods.js';
+import { setCheckedStatus } from '/imports/api/todos/methods.js';
 
 describe('TodoItem', () => {
   it('should update status when checked', () => {
@@ -471,11 +471,11 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { sinon } from 'meteor/practicalmeteor:sinon';
 
 
-import { withRenderedTemplate } from '../../test-helpers.js';
-import '../lists-show-page.js';
+import { withRenderedTemplate } from '/imports/ui/test-helpers.js';
+import '/imports/ui/pages/lists-show-page.js';
 
-import { Todos } from '../../../api/todos/todos.js';
-import { Lists } from '../../../api/lists/lists.js';
+import { Todos } from '/imports/api/todos/todos.js';
+import { Lists } from '/imports/api/lists/lists.js';
 
 describe('Lists_show_page', function () {
   const listId = Random.id();
@@ -550,10 +550,10 @@ import { assert } from 'meteor/practicalmeteor:chai';
 import { Promise } from 'meteor/promise';
 import { $ } from 'meteor/jquery';
 
-import { denodeify } from '../../utils/denodeify';
-import { generateData } from './../../api/generate-data.app-tests.js';
-import { Lists } from '../../api/lists/lists.js';
-import { Todos } from '../../api/todos/todos.js';
+import { denodeify } from '/imports/utils/denodeify';
+import { generateData } from '/imports/api/generate-data.app-tests.js';
+import { Lists } from '/imports/api/lists/lists.js';
+import { Todos } from '/imports/api/todos/todos.js';
 
 
 // Utility -- returns a promise which resolves when all subscriptions are done
@@ -634,7 +634,7 @@ import { resetDatabase } from 'meteor/xolvio:cleaner';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
-import { denodeify } from '../utils/denodeify';
+import { denodeify } from '/imports/utils/denodeify';
 
 const createList = (userId) => {
   const list = Factory.create('list', { userId });

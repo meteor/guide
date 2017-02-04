@@ -327,7 +327,7 @@ Let's define a simple HTML form:
 Now, let's write some JavaScript to handle this form nicely:
 
 ```js
-import { insert } from '../api/invoices/methods.js';
+import { insert } from '/imports/api/invoices/methods.js';
 
 Template.Invoices_newInvoice.onCreated(function() {
   this.errors = new ReactiveDict();
@@ -395,7 +395,7 @@ ScoreAverages = new Mongo.Collection(null);
 Now, if you fetch data using a Method, you can put into this collection:
 
 ```js
-import { calculateAverages } from '../api/games/methods.js';
+import { calculateAverages } from '/imports/api/games/methods.js';
 
 function updateAverages() {
   // Clean out result cache

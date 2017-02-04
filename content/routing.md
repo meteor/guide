@@ -301,7 +301,7 @@ Now that you have this package, you can use helpers in your templates to display
 In some cases you want to change routes based on user action outside of them clicking on a link. For instance, in the example app, when a user creates a new list, we want to route them to the list they just created. We do this by calling `FlowRouter.go()` once we know the id of the new list:
 
 ```js
-import { insert } from '../../api/lists/methods.js';
+import { insert } from '/imports/api/lists/methods.js';
 
 Template.App_body.events({
   'click .js-new-list'() {

@@ -211,9 +211,9 @@ Then we create a `ListPageContainer` container component which wraps it and prov
 
 ```js
 import { Meteor } from 'meteor/meteor';
-import { Lists } from '../../api/lists/lists.js';
+import { Lists } from '/imports/api/lists/lists.js';
 import { createContainer } from 'meteor/react-meteor-data';
-import ListPage from '../pages/ListPage.js';
+import ListPage from '/imports/ui/pages/ListPage.js';
 
 export default ListPageContainer = createContainer(({ params }) => {
   const { id } = params;
@@ -261,8 +261,8 @@ import React from 'react';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mount } from 'react-mounter';
 
-import AppContainer from '../../ui/containers/AppContainer.js';
-import ListPageContainer from '../../ui/containers/ListPageContainer.js';
+import AppContainer from '/imports/ui/containers/AppContainer.js';
+import ListPageContainer from '/imports/ui/containers/ListPageContainer.js';
 
 
 FlowRouter.route('/lists/:_id', {
@@ -305,11 +305,11 @@ import React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
 
 // route components
-import AppContainer from '../../ui/containers/AppContainer.js';
-import ListPageContainer from '../../ui/containers/ListPageContainer.js';
-import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
-import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
-import NotFoundPage from '../../ui/pages/NotFoundPage.js';
+import AppContainer from '/imports/ui/containers/AppContainer.js';
+import ListPageContainer from '/imports/ui/containers/ListPageContainer.js';
+import AuthPageSignIn from '/imports/ui/pages/AuthPageSignIn.js';
+import AuthPageJoin from '/imports/ui/pages/AuthPageJoin.js';
+import NotFoundPage from '/imports/ui/pages/NotFoundPage.js';
 
 export const renderRoutes = () => (
   <Router history={browserHistory}>
@@ -328,7 +328,7 @@ With React Router, you'll also need to explicity render the exported routes in a
 ```js
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import { renderRoutes } from '../imports/startup/client/routes.js';
+import { renderRoutes } from '/imports/startup/client/routes.js';
 
 Meteor.startup(() => {
   render(renderRoutes(), document.getElementById('app'));
