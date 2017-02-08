@@ -4,6 +4,7 @@ order: 1001
 description: A log of significant changes to the Meteor Guide.
 ---
 
+- 2017/02/08: Added an example on how to work with subdomains and custom meta tags.
 - 2017/01/19: Updated recommendations for forcing SSL to avoid the `force-ssl` package when possible.
 - 2017/01/07: Created new section "TypeScript".
 - 2017/01/04: Changed "Testing" section to reference `dburles:factory` in the same spirit as the `meteor/todos` app [PR #598](https://github.com/meteor/guide/pull/598)
