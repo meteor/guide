@@ -459,3 +459,168 @@ If you need more control, you can use the comprehensive [`nimble:restivus`](http
 The Blaze UI library does not have support for server-side rendering, so it's not possible to render your pages on the server if you use Blaze. However, the React UI library does. This means it is possible to render HTML on the server if you use React as your rendering framework.
 
 Although Flow Router can be used to render React components more or less as we've described above for Blaze, at the time of this writing Flow Router's support for SSR is [still experimental](https://kadira.io/blog/meteor/meteor-ssr-support-using-flow-router-and-react). However, it's probably the best approach right now if you want to use SSR for Meteor.
+
+<h3 id="subdomains">Subdomains, and Meta Tags</h3>
+
+Use of subdomains as a way to run a [multi-tenant](https://en.wikipedia.org/wiki/Multitenancy) application is quite common. There's a number of ways to achieve this with Meteor, made easier by using the [webapp](https://docs.meteor.com/packages/webapp.html) API. Here's a small example of how to work with subdomains, including a crude way to cache them. The same principles work for working with meta tags as you can see from the example.
+
+```js
+/**
+ * Server-side only.
+ */
+
+Subdomains = new Mongo.Collection('subdomains');
+
+var cachedSubdomains = [];
+
+Meteor.startup(function() {
+
+  /**
+   * Cache subdomains in memory. If you expect a lot of subdomains, you might
+   * want to consider a different strategy.
+   */
+  cachedSubdomains = Subdomains.find().fetch();
+
+});
+
+/**
+ * Try to resolve a subdomain first from the in-memory array, then by doing
+ * a find in the database. If the entry is found in the database, it's added
+ * into the cache.
+ * @param  {String} subdomain    Subdomain to resolve into a document
+ * @return {Subdomain}           Subdomain document, if found
+ */
+function resolveSubdomain(subdomain) {
+
+  var subdomainDoc = cachedSubdomains.find(site => {
+    return site.subdomain === subdomain;
+  });
+
+  if(!subdomainDoc) {
+    var newSubdomainDoc = Subdomains.findOne({ subdomain: subdomain });
+    if(newSubdomainDoc) {
+      cachedSubdomains.push(newSubdomainDoc);
+      subdomainDoc = newSubdomainDoc;
+    }
+  }
+
+  return subdomainDoc;
+
+}
+
+/**
+ * Write a simple 404 not found message back to the user.
+ * @param  {Object} res Connect result object
+ */
+function send404(res) {
+  res.writeHead(404);
+  res.end('<html><head><title>Not found</title></head><body>Your 404 message goes here</body></html>');
+}
+
+/**
+ * 
+ * Inject the subdomain to every page.
+ * 
+ */
+
+if (!Package.appcache) {
+
+  WebApp.connectHandlers.use((req, res, next) => {
+
+    var isValidRoute = true;
+
+    /**
+     * Only inject on pages which would serve the initial HTML.
+     */
+    if(Inject.appUrl(req.url)) {
+
+      var headers = req.headers ? req.headers : undefined;
+
+      if(headers && headers.host) {
+
+        var subdomain = headers.host.split('.')[0]; // Crude split, but it works.
+        var subdomainDoc = resolveSubdomain(subdomain);
+        var metatags = [];
+
+        if(subdomainDoc) {
+
+          /**
+           * In this example we're attaching the subdomain to an user ID, so
+           * here we're checking if it can be found.
+           */
+          
+          var user = Meteor.users.findOne({
+            _id: subdomainDoc.userId
+          });
+
+          if(user) {
+            
+            isValidRoute = true;
+
+            /**
+             * Do some other things with checking req.url here for meta tags:
+             */
+
+            if(req.url === undefined || req.url === "/") {
+
+              metatags.push(
+                '<meta property="description" content="My Awesome App">'
+              );
+
+            }
+
+            /**
+             * You can also deny a specific route with a 404, or if you like,
+             * after a document find to check if data for the route *really*
+             * exists.
+             */
+            else if(req.url === "/denied-route") { 
+              pass = false;
+            }
+
+
+          }
+          else pass = false;
+
+        }
+        else pass = false;
+
+        if(pass) {
+
+          /**
+           * Use https://atmospherejs.com/meteorhacks/inject-initial to inject
+           * the subdomain document, if you like. Any other meta tags can
+           * be injected at this stage too.
+           */
+
+          Inject.obj('subdomain', subdomainDoc);
+
+          /**
+           * Inject meta tags too.
+           */
+
+          metatags.forEach((tag, index) => {
+            Inject.rawHead("head"+index, tag);
+          });
+
+        }
+        else {
+          send404(res);
+        }
+
+      }
+      else {
+        send404(res);
+      }
+
+    }
+
+    /**
+     * If this is a valid route, carry on with connect handlers.
+     */
+    if(isValidRoute) {
+      next();
+    }
+  });
+}
+```js
