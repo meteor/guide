@@ -61,9 +61,9 @@ meteor add barbatus:typescript
 
 It is necessary to configure the TypeScript compiler with a `tsconfig.json` file.
 
-A complete guide on installation, configuration and usage of TypeScript, and how type defintions for libraries are installed, can be found [here](https://medium.com/@birkskyum/modern-meteor-development-with-typescript-introduction-836f2a89f79).
+A complete guide on installation, configuration, and usage of TypeScript, and how type definitions for libraries are installed, can be found [here](https://medium.com/@birkskyum/modern-meteor-development-with-typescript-introduction-836f2a89f79).
 
-The guide also includes sample applications created with Angular, React, Vue and Blaze all written in TypeScript. If you just want to see the source code is it to be found [here](https://github.com/birkskyum/meteor-typescript-samples).
+The guide also includes sample applications created with Angular, React, Vue, and Blaze—all written in TypeScript. See the code [here](https://github.com/birkskyum/meteor-typescript-samples).
 
 <h2 id="blaze-templates">Templates and HTML</h2>
 
