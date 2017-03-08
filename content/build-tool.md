@@ -211,7 +211,7 @@ Every Meteor app comes with production minification by default with the `standar
 
 Minification usually happens when you `meteor deploy` or `meteor build` your app. If you have an error in production that you suspect is related to minification, you can run the minified version of your app locally with `meteor --production`.
 
-> Notice that files with `.min.js` filename extension are not minified by `standard-minifier-js`.
+> Note that files with the `.min.js` filename extension are not minified by `standard-minifier-js`.
 
 <h2 id="build-plugins">Build plugins</h2>
 
