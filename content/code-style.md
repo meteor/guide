@@ -73,7 +73,7 @@ All of the code samples in this guide and future Meteor tutorials will use all o
 
 <h3 id="style-guide">Follow a JavaScript style guide</h3>
 
-We recommend choosing and sticking to a JavaScript style guide and enforcing it with tools. A popular option that we recommend is the [Airbnb style guide](https://github.com/airbnb/javascript) with the ES6 extensions (and optionally React extensions).
+We recommend choosing and sticking to a JavaScript style guide and enforcing it with tools. A popular option that we recommend is the [Airbnb style guide](https://github.com/airbnb/javascript) with the ES6 extensions (and optionally React extensions). It's the style guide used by MDG and the one you're required to use when contributing to Meteor.
 
 <h2 id="eslint">Check your code with ESLint</h2>
 
