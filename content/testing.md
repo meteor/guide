@@ -74,8 +74,6 @@ There are two main kinds of test driver packages:
 In this article, we'll use the popular [Mocha](https://mochajs.org) test runner alongside the [Chai](http://chaijs.com) assertion library to test our application. In order to write and run tests in Mocha, we need to add an appropriate test driver package.
 
 There are several options. Choose the ones that makes sense for your app. You may depend on more than one and set up different test commands for different situations.
-
-* [practicalmeteor:mocha](https://atmospherejs.com/practicalmeteor/mocha) Runs client and server package or app tests and displays all results in a browser. Use [spacejam](https://www.npmjs.com/package/spacejam) for command line / CI support.
 * [dispatch:mocha](https://atmospherejs.com/dispatch/mocha) Runs client and/or server package or app tests and reports all results in the server console. Supports various browsers for running client tests, including PhantomJS, Selenium ChromeDriver, and Electron. Can be used for running tests on a CI server. Has a watch mode.
 * [dispatch:mocha-browser](https://atmospherejs.com/dispatch/mocha-browser) Runs client and server package or app tests with Mocha reporting client results in a web browser and server results in the server console. Has a watch mode.
 
