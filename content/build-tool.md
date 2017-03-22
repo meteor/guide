@@ -68,7 +68,7 @@ A guide on installation, configuration and usage of TypeScript with Meteor is cu
 
 TypeScript does not support nested `import` statements, therefore conditionally importing modules requires you to use the `require` statement (see [Using `require`](https://guide.meteor.com/structure.html#using-require)).
 
-To maintain type safety, you can take advantage of TypeScript's import elision and reference the types using the `typeof` keyword. See the [TypeScript handbook article](https://www.typescriptlang.org/docs/handbook/modules.html#optional-module-loading-and-other-advanced-loading-scenarios) for details.
+To maintain type safety, you can take advantage of TypeScript's import elision and reference the types using the `typeof` keyword. See the [TypeScript handbook article](https://www.typescriptlang.org/docs/handbook/modules.html#optional-module-loading-and-other-advanced-loading-scenarios) for details or [this blog post](http://ideasintosoftware.com/typescript-conditional-imports/) for a concrete Meteor example.
 
 <h2 id="blaze-templates">Templates and HTML</h2>
 
