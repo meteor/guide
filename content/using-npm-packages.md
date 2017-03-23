@@ -5,7 +5,7 @@ discourseTopicId: 20193
 
 <h2 id="npm-searching">Searching for packages</h2>
 
-The best way to find npm packages is by searching on [npmjs.com](https://www.npmjs.com/). There are also some websites that have special search features specifically for certain kinds of packages, like the aptly named [react-components.com](http://react-components.com/).
+You can use the official search at [npmjs.com](https://www.npmjs.com/) or see results sorted by package quality (code quality, maintenance status, development velocity, popularity etc.) at [npms.io](https://npms.io/). There are also sites that search certain types of packages, like [js.coach](https://js.coach/)'s [React](https://js.coach/react) and [React Native](https://js.coach/react-native) sections.
 
 <h2 id="client-npm">npm on the client</h2>
 
@@ -194,7 +194,7 @@ npm install -g shrinkpack
 Then use it directly after you shrinkwrap
 
 ```bash
-meteor npm install moment
+meteor npm install --save moment
 meteor npm shrinkwrap
 shrinkpack
 ```

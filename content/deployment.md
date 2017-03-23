@@ -132,8 +132,10 @@ In order to deploy to Galaxy, you'll need to [sign up for an account](https://ww
 Once you've done that, it's easy to [deploy to Galaxy](http://galaxy-guide.meteor.com/deploy-guide.html). You just need to [add some environment variables to your settings file](http://galaxy-guide.meteor.com/environment-variables.html) to point it at your MongoDB, and you can deploy with:
 
 ```bash
-DEPLOY_HOSTNAME=us-east-1.galaxy-deploy.meteor.com meteor deploy your-app.com --settings production-settings.json
+DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy your-app.com --settings production-settings.json
 ```
+
+To deploy to the EU region, set DEPLOY_HOSTNAME to eu-west-1.galaxy.meteor.com.
 
 In order for Galaxy to work with your custom domain (`your-app.com` in this case), you need to [set up your DNS to point at Galaxy](http://galaxy-guide.meteor.com/dns.html). Once you've done this, you should be able to reach your site from a browser.
 
@@ -141,7 +143,7 @@ You can also log into the Galaxy UI at https://galaxy.meteor.com. Once there you
 
 <img src="images/galaxy-org-dashboard.png">
 
-If you are following [our advice](security.html#ssl), you'll probably want to [set up SSL](http://galaxy-guide.meteor.com/encryption.html) on your Galaxy application with the certificate and key for your domain. The key things here are to add the `force-ssl` package and to use the Galaxy UI to add your SSL certificate.
+If you are following [our advice](security.html#ssl), you'll probably want to [set up SSL](http://galaxy-guide.meteor.com/encryption.html) on your Galaxy application with the certificate and key for your domain. You should also read the [Security](security.html#ssl) section of this guide for information on how to forcibly redirect HTTP to HTTPS.
 
 Once you are setup with Galaxy, deployment is simple (just re-run the `meteor deploy` command above), and scaling is even easier---simply log into galaxy.meteor.com, and scale instantly from there.
 
@@ -149,7 +151,27 @@ Once you are setup with Galaxy, deployment is simple (just re-run the `meteor de
 
 <h4 id="galaxy-mongo">MongoDB hosting services to use with Galaxy</h4>
 
-If you are using Galaxy (or need a production quality, managed MongoDB for one of the other options listed here), it's usually a good idea to use a [MongoDB hosting provider](http://galaxy-guide.meteor.com/mongodb.html). There are a variety of options out there, but a good choice is [mLab](https://mlab.com/). The main things to look for are support for oplog tailing, and a presence in the us-east-1 or eu-west-1 AWS region.
+If you are using Galaxy (or need a production quality, managed MongoDB for one of the other options listed here), it's usually a good idea to use a [hosted MongoDB service](http://galaxy-guide.meteor.com/mongodb.html). There are a variety of services out there, we recommend that you select one of the below services depending on your requirements:
+
+* [mLab](https://www.mlab.com)
+* [compose](https://www.compose.io)
+* [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+
+When selecting a hosted MongoDB service for production it is important to assess the features that the service provides. Below is a nonexhaustive list of features to consider when selecting a service:
+
+* Supports the MongoDB version you wish to run
+* Storage Engine Support (MMAPv1 or WiredTiger) - Since Meteor 1.4 WiredTiger is the default storage engine
+* Support for Replica Sets & Oplog tailing
+* AWS Region - For performance your app and database should be in the same AWS region (For Galaxy this is us-east-1 or eu-west-1)
+* Monitoring & Automated alerting
+* Continuous backups & Automated snapshots
+* Access Control, IP whitelisting, and AWS VPC Peering
+* Encryption of data in-flight and at-rest
+* Cost and pricing granularity
+* Instance size & options
+* Instance configurability - Independently configure your CPU, memory, storage and disk I/O speed.
+
+You can read this [detailed guide](https://www.okgrow.com/posts/mongodb-atlas-setup) by OK GROW! for step-by-step instructions to deploying a production ready MongoDB database on MongoDB Atlas.
 
 <h3 id="mup">Meteor Up</h3>
 
@@ -192,7 +214,7 @@ meteor build /path/to/build --architecture os.linux.x86_64
 This will provide you with a bundled application `.tar.gz` which you can extract and run without the `meteor` tool.  The environment you choose will need the correct version of Node.js and connectivity to a MongoDB server.
 
 Depending on the version of Meteor you are using, you should install the proper version of `node` using the appropriate installation process for your platform.
-* Node 4.4.7 for *Meteor 1.4.x*
+* Node 4.6.2 for *Meteor 1.4.x*
 * Node 0.10.43 for *Meteor 1.3.x and earlier*
 
 > If you use a mis-matched version of Node when deploying your application, you will encounter errors!
@@ -334,8 +356,8 @@ In this screenshot we can see that observers are fairly steadily created and des
 
 If your application contains a lot of publicly accessible content, then you probably want it to rank well in Google and other search engines' indexes. As most webcrawlers do not support client-side rendering (or if they do, have spotty support for websockets), it's better to render the site on the server and deliver it as HTML in this special case.
 
-To do so, we can use the [Prerender.io](https://prerender.io) service, thanks to the [`dfischer:prerenderio`](https://atmospherejs.com/dfischer/prerenderio) package. It's a simple as `meteor add`-ing it, and optionally setting your prerender token if you have a premium prerender account and would like to enable more frequent cache changes.
+To do so, we can use the [Prerender.io](https://prerender.io) service, thanks to the [`dferber:prerender`](https://atmospherejs.com/dferber/prerender/) package. It's a simple as `meteor add`-ing it, and optionally setting your prerender token if you have a premium prerender account and would like to enable more frequent cache changes.  You can also just use the [`prerender-node` NPM package](https://www.npmjs.com/package/prerender-node) directly, mimicing the small amount of [client](https://github.com/dferber90/meteor-prerender/blob/master/client/prerender.html) and [server](https://github.com/dferber90/meteor-prerender/blob/master/server/prerender.js) code in the Atmosphere package; do this if you need to use a newer version of the NPM package than the one in `dferber:prerender`.
 
-If you’re using [Galaxy to host your meteor apps](https://www.meteor.com/galaxy/signup), you can also take advantage of built-in automatic [Prerender.io](https://prerender.io) integration. Simply add [`mdg:seo`](https://atmospherejs.com/mdg/seo) to your app and Galaxy will take care of the rest.
+If you’re using [Galaxy to host your meteor apps](https://www.meteor.com/galaxy/signup), you can also take advantage of built-in automatic [Prerender.io](https://prerender.io) integration. Simply add [`mdg:seo`](https://atmospherejs.com/mdg/seo) to your app and Galaxy will take care of the rest: loading the code and configuring it with Galaxy-provided credentials.
 
 Chances are you also want to set `<title>` tags and other `<head>` content to make your site appear nicer in search results. The best way to do so is to use the [`kadira:dochead`](https://atmospherejs.com/kadira/dochead) package. The sensible place to call out to `DocHead` is from the `onCreated` callbacks of your page-level components.

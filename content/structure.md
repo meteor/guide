@@ -20,7 +20,7 @@ As of version 1.3, Meteor ships with full support for [ES2015 modules](https://d
 
 In ES2015, you can make variables available outside a file using the `export` keyword. To use the variables somewhere else, you must `import` them using the path to the source. Files that export some variables are called "modules", because they represent a unit of reusable code. Explicitly importing the modules and packages you use helps you write your code in a modular way, avoiding the introduction of global symbols and "action at a distance".
 
-Since this is a new feature introduced in Meteor 1.3, you will find a lot of code online that uses the older, more centralized conventions built around packages and apps declaring global symbols. This old system still works, so to opt-in to the new module system code must be placed inside the `imports/` directory in your application. We expect a future release of Meteor will turn on modules by default for all code, because this is more aligned with how developers in the wider JavaScript community write their code.
+Since this is a new feature introduced in Meteor 1.3, you will find a lot of code online that uses the older, more centralized conventions built around packages and apps declaring global symbols. This old system still works, so to opt-in to the new module system, code must be placed inside the `imports/` directory in your application. We expect a future release of Meteor will turn on modules by default for all code, because this is more aligned with how developers in the wider JavaScript community write their code.
 
 You can read about the module system in detail in the [`modules` package README](https://docs.meteor.com/#/full/modules). This package is automatically included in every new Meteor app as part of the [`ecmascript` meta-package](https://docs.meteor.com/#/full/ecmascript), so most apps won't need to do anything to start using modules right away.
 
@@ -85,7 +85,7 @@ React = require 'react'
 When using CoffeeScript, not only the syntax to import variables is different, but also the export has to be done in a different way. Variables to be exported are put in the `exports` object:
 
 ```cs
-exports.Lists = ListsCollection 'Lists'
+exports.Lists = ListsCollection 'lists'
 ```
 
 <h2 id="javascript-structure">File structure</h2>
@@ -98,7 +98,7 @@ These `main.js` files won't do anything themselves, but they should import some 
 
 <h3 id="example-app-structure">Example directory layout</h3>
 
-To start, let's look at our [Todos example application](https://github.com/meteor/todos), which is a great example to follow when structuring your app. Here's an overview of its directory structure:
+To start, let's look at our [Todos example application](https://github.com/meteor/todos), which is a great example to follow when structuring your app. Below is an overview of its directory structure. You can generate a new app with this structure using the command `meteor create appName --full`.
 
 ```sh
 imports/

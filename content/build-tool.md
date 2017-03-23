@@ -46,6 +46,31 @@ meteor add coffeescript
 
 All code written in CoffeeScript compiles to JavaScript under the hood, and is completely compatible with any code in other packages that is written in JS or ES2015.
 
+<h3 id="typescript">TypeScript</h3>
+
+[TypeScript](https://www.typescriptlang.org/) is modern JavaScript with optional types and more.
+
+Adding types will make your code more readable and less prone to runtime errors.
+
+TypeScript can be installed with:
+
+```sh
+meteor remove ecmascript
+meteor add barbatus:typescript
+```
+
+It is necessary to configure the TypeScript compiler with a `tsconfig.json` file.
+
+A complete guide on installation, configuration, and usage of TypeScript, and how type definitions for libraries are installed, can be found [here](https://medium.com/@birkskyum/modern-meteor-development-with-typescript-introduction-836f2a89f79).
+
+The guide also includes sample applications created with Angular, React, Vue, and Blaze—all written in TypeScript. See the code [here](https://github.com/birkskyum/meteor-typescript-samples).
+
+<h4 id="typescript-conditional-imports">Conditional imports</h4>
+
+TypeScript does not support nested `import` statements, therefore conditionally importing modules requires you to use the `require` statement (see [Using `require`](https://guide.meteor.com/structure.html#using-require)).
+
+To maintain type safety, you can take advantage of TypeScript's import elision and reference the types using the `typeof` keyword. See the [TypeScript handbook article](https://www.typescriptlang.org/docs/handbook/modules.html#optional-module-loading-and-other-advanced-loading-scenarios) for details or [this blog post](http://ideasintosoftware.com/typescript-conditional-imports/) for a concrete Meteor example.
+
 <h2 id="blaze-templates">Templates and HTML</h2>
 
 Since Meteor uses client-side rendering for your app's UI, all of your HTML code, UI components, and templates need to be compiled to JavaScript. There are a few options at your disposal to write your UI code.
@@ -58,7 +83,7 @@ The aptly named `blaze-html-templates` package that comes with every new Meteor 
 
 <h3 id="blaze-jade">Blaze Jade templates</h3>
 
-If you don't like the Spacebars syntax Meteor uses by default and want something more concise, you can give Jade a try by using [`dalgard:jade`](https://atmospherejs.com/dalgard/jade). This package will compile all files in your app with the `.jade` extension into Blaze-compatible code, and can be used side-by-side with `blaze-html-templates` if you want to have some of your code in Spacebars and some in Jade.
+If you don't like the Spacebars syntax Meteor uses by default and want something more concise, you can give Jade a try by using [`pacreach:jade`](https://atmospherejs.com/pacreach/jade). This package will compile all files in your app with the `.jade` extension into Blaze-compatible code, and can be used side-by-side with `blaze-html-templates` if you want to have some of your code in Spacebars and some in Jade.
 
 <h3 id="react-jsx">JSX for React</h3>
 

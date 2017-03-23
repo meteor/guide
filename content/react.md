@@ -43,7 +43,7 @@ export default class HelloWorld extends React.Component {
 }
 ```
 
-You can render a component heirarchy to the DOM using the `react-dom` package:
+You can render a component hierarchy to the DOM using the `react-dom` package:
 
 ```jsx
 import { Meteor } from 'meteor/meteor';
@@ -215,8 +215,7 @@ import { Lists } from '../../api/lists/lists.js';
 import { createContainer } from 'meteor/react-meteor-data';
 import ListPage from '../pages/ListPage.js';
 
-export default ListPageContainer = createContainer(({ params }) => {
-  const { id } = params;
+export default ListPageContainer = createContainer(({ id }) => {
   const todosHandle = Meteor.subscribe('todos.inList', id);
   const loading = !todosHandle.ready();
   const list = Lists.findOne(id);
@@ -237,7 +236,7 @@ The container component created by `createContainer()` will reactively rerender 
 Although this `ListPageContainer` container is intended to be instantiated by the React Router (which passes in the props automatically), if we did ever want to create one manually, we would need to pass in the props to the container component (which then get passed into our data function above):
 
 ```jsx
-<ListPageContainer params={{id: '7'}}/>
+<ListPageContainer id={7}/>
 ```
 
 <h3 id="preventing-rerenders">Preventing re-renders</h3>
@@ -335,7 +334,7 @@ Meteor.startup(() => {
 });
 ```
 
-When using React Router in Meteor, you can follow roughly the [same principles](routing.html) as when using Flow Router, but you should also consider the idioms outlined in React Router's own  [documentation](https://github.com/reactjs/react-router/blob/latest/docs/Introduction.md).
+When using React Router in Meteor, you can follow roughly the [same principles](routing.html) as when using Flow Router, but you should also consider the idioms outlined in React Router's own  [documentation](https://github.com/ReactTraining/react-router).
 
 These include some notable differences like:
  - React Router encourages you to couple your URL design and layout hierarchy in the route definition. Flow Router is more flexible, although it can involve much more boilerplate as a result.

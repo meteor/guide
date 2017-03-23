@@ -28,7 +28,7 @@ In this article, we'll look closely at how collections work in various places in
 When you create a collection on the server:
 
 ```js
-Todos = new Mongo.Collection('Todos');
+Todos = new Mongo.Collection('todos');
 ```
 
 You are creating a collection within MongoDB, and an interface to that collection to be used on the server. It's a fairly straightforward layer on top of the underlying Node MongoDB driver, but with a synchronous API:
@@ -47,12 +47,12 @@ console.log(todo);
 On the client, when you write the same line:
 
 ```js
-Todos = new Mongo.Collection('Todos');
+Todos = new Mongo.Collection('todos');
 ```
 
 It does something totally different!
 
-On the client, there is no direct connection to the MongoDB database, and in fact a synchronous API to it is not possible (nor probably what you want). Instead, on the client, a collection is a client side *cache* of the database. This is achieved thanks to the [Minimongo](https://www.meteor.com/mini-databases) library---an in-memory, all JS, implementation of the MongoDB API. What this means is that on the client, when you write:
+On the client, there is no direct connection to the MongoDB database, and in fact a synchronous API to it is not possible (nor probably what you want). Instead, on the client, a collection is a client side *cache* of the database. This is achieved thanks to the [Minimongo](https://github.com/meteor/meteor/blob/master/packages/minimongo/README.md) library---an in-memory, all JS, implementation of the MongoDB API. What this means is that on the client, when you write:
 
 ```js
 // This line is changing an in-memory Minimongo data structure
@@ -219,7 +219,7 @@ class ListsCollection extends Mongo.Collection {
   }
 }
 
-Lists = new ListsCollection('Lists');
+Lists = new ListsCollection('lists');
 ```
 
 <h3 id="hooks">Hooks on insert/update/remove</h3>
@@ -366,7 +366,7 @@ Migrations.add({
       const execute = Meteor.wrapAsync(batch.execute, batch);
       return execute();
     }
-  
+
     return true;
   },
   down() {

@@ -67,7 +67,7 @@ There are two main kinds of test driver packages:
 
 <img src="images/mocha-test-results.png">
 
-- **Console reporters**: These run completely on the command-line and are primary used for automated testing like [continuous integration](#ci) (as we'll see, typically PhantomJS is used to drive such tests).
+- **Console reporters**: These run completely on the command-line and are primary used for automated testing like [continuous integration](#ci).
 
 <h3 id="mocha">Recommended: Mocha</h3>
 
@@ -76,9 +76,8 @@ In this article, we'll use the popular [Mocha](https://mochajs.org) test runner 
 There are several options. Choose the ones that makes sense for your app. You may depend on more than one and set up different test commands for different situations.
 
 * [practicalmeteor:mocha](https://atmospherejs.com/practicalmeteor/mocha) Runs client and server package or app tests and displays all results in a browser. Use [spacejam](https://www.npmjs.com/package/spacejam) for command line / CI support.
-* [dispatch:mocha-phantomjs](https://atmospherejs.com/dispatch/mocha-phantomjs) Runs client and server package or app tests using PhantomJS and reports all results in the server console. Can be used for running tests on a CI server. Has a watch mode.
+* [dispatch:mocha](https://atmospherejs.com/dispatch/mocha) Runs client and/or server package or app tests and reports all results in the server console. Supports various browsers for running client tests, including PhantomJS, Selenium ChromeDriver, and Electron. Can be used for running tests on a CI server. Has a watch mode.
 * [dispatch:mocha-browser](https://atmospherejs.com/dispatch/mocha-browser) Runs client and server package or app tests with Mocha reporting client results in a web browser and server results in the server console. Has a watch mode.
-* [dispatch:mocha](https://atmospherejs.com/dispatch/mocha) Runs server-only package or app tests with Mocha and reports all results in the server console. Can be used for running tests on a CI server. Has a watch mode.
 
 These packages don't do anything in development or production mode. They declare themselves `testOnly` so they are not even loaded outside of testing. But when our app is run in [test mode](#test-modes), the test driver package takes over, executing test code on both the client and server, and rendering results to the browser.
 
@@ -238,10 +237,11 @@ A simple example of a reusable component to test is the [`Todos_item`](https://g
 /* eslint-env mocha */
 /* eslint-disable func-names, prefer-arrow-callback */
 
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { chai } from 'meteor/practicalmeteor:chai';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
+import { Todos } from '../../../api/todos/todos';
 
 
 import { withRenderedTemplate } from '../../test-helpers.js';
@@ -259,7 +259,7 @@ describe('Todos_item', function () {
   it('renders correctly with simple data', function () {
     const todo = Factory.build('todo', { checked: false });
     const data = {
-      todo,
+      todo: Todos._transform(todo),
       onEditingChange: () => 0,
     };
 
@@ -322,7 +322,7 @@ We can use the [Factory package's](#test-data) `.build()` API to create a test d
 We can also apply the same structure to testing React components and recommend the [Enzyme](https://github.com/airbnb/enzyme) package, which simulates a React component's environment and allows you to query it using CSS selectors. A larger suite of tests is available in the [react branch of the Todos app](https://github.com/meteor/todos/tree/react), but let's look at a simple example for now:
 
 ```js
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
@@ -343,7 +343,7 @@ describe('TodoItem', () => {
 The test is slightly simpler than the Blaze version above because the React sample app is not internationalized. Otherwise, it's conceptually identical. We use Enzyme's `shallow` function to render the `TodoItem` component, and the resulting object to query the document, and also to simulate user interactions. And here's an example of simulating a user checking the todo item:
 
 ```js
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { sinon } from 'meteor/practicalmeteor:sinon';
@@ -459,7 +459,7 @@ In the [Todos](https://github.com/meteor/todos) example app, we have an integrat
 /* eslint-disable func-names, prefer-arrow-callback */
 
 import { Meteor } from 'meteor/meteor';
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { Random } from 'meteor/random';
 import { chai } from 'meteor/practicalmeteor:chai';
 import StubCollections from 'meteor/hwillson:stub-collections';
@@ -628,7 +628,7 @@ Similar to the way we cleared the database using a method in the `beforeEach` in
 // ensuring the method is always available
 
 import { Meteor } from 'meteor/meteor';
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
@@ -785,13 +785,13 @@ There are two principal ways to do it: on the developer's machine before allowin
 
 We've seen one example of running tests on the command line, using our `meteor npm run chimp-test` mode.
 
-We can also use a command-line driver for Mocha [`dispatch:mocha-phantomjs`](http://atmospherejs.com/dispatch/mocha-phantomjs) to run our standard tests on the command line.
+We can also use a command-line driver for Mocha [`dispatch:mocha`](https://atmospherejs.com/dispatch/mocha) to run our standard tests on the command line.
 
 Adding and using the package is straightforward:
 
 ```bash
-meteor add dispatch:mocha-phantomjs
-meteor test --once --driver-package dispatch:mocha-phantomjs
+meteor add dispatch:mocha
+meteor test --once --driver-package dispatch:mocha
 ```
 
 (The `--once` argument ensures the Meteor process stops once the test is done).
@@ -801,7 +801,7 @@ We can also add that command to our `package.json` as a `test` script:
 ```json
 {
   "scripts": {
-    "test": "meteor test --once --driver-package dispatch:mocha-phantomjs"
+    "test": "meteor test --once --driver-package dispatch:mocha"
   }
 }
 ```

@@ -115,7 +115,13 @@ The easiest way to get a working Android development environment is by installin
 
 Please refer to [the Android Studio installation instructions](http://developer.android.com/sdk/installing/index.html?pkg=studio) for more details on the exact steps to follow.
 
-> There is no need to use Android Studio if you prefer a stand-alone install. Just make sure you install the most recent versions of the [Android SDK Tools](http://developer.android.com/sdk/index.html#Other) and download the required [additional packages](http://developer.android.com/sdk/installing/adding-packages.html) yourself using the [Android SDK Manager](http://developer.android.com/tools/help/sdk-manager.html). Make sure to select SDK Platform API 23, because that is what the version of Cordova we bundle requires.
+> There is no need to use Android Studio if you prefer a stand-alone install. Just make sure you install the most recent versions of the [Android SDK Tools](http://developer.android.com/sdk/index.html#Other) and download the required [additional packages](http://developer.android.com/sdk/installing/adding-packages.html) yourself using the [Android SDK Manager](http://developer.android.com/tools/help/sdk-manager.html).
+
+Make sure to select the correct version of the [Android Studio SDK Tools](https://developer.android.com/studio/releases/sdk-tools.html):
+
+ * Meteor 1.4.3.1 or later: Android SDK Tools v.25.**2**.x
+   * v.25.**3**.x (or newer) **will not work** due to [extensive changes](https://developer.android.com/studio/releases/sdk-tools.html) in v.25.3.0.  See [this issue](https://github.com/meteor/meteor/issues/8464) for more information.
+ * Meteor 1.4.2.x or before: Android SDK Tools v.23
 
 <h4 id="ubuntu-make">Using Ubuntu Make</h4>
 
@@ -273,6 +279,11 @@ Hot code pushing updated JavaScript code to a device could accidentally push cod
 To avoid this, we try to detect faulty versions and revert to the last known good version when this happens. The way detection works is that we expect all `Meteor.startup()` callbacks to complete within a set period of time. If this doesn't happen we consider the version faulty and will rollback the update. Unless the version on the server has been updated in the meantime, the server will try to hot code push the faulty version again. Therefore, we blacklist faulty versions on the device so we know not to retry.
 
 By default, the startup timeout is set to 20 seconds. If your app needs more time to startup (or considerably less), you can use [`App.setPreference`](http://docs.meteor.com/api/mobile-config.html#App-setPreference) to set `WebAppStartupTimeout` to another value.
+
+```js
+// The timeout is specified in milliseconds!
+App.setPreference('WebAppStartupTimeout', 30000);
+```
 
 <h2 id="cordova-plugins">Native features with Cordova plugins</h2>
 
@@ -450,6 +461,36 @@ In addition to the domain whitelisting mechanism Cordova implements, the web vie
 What is often confusing to people is that setting `App.accessRule` is not enough to allow access to remote resources. While domain whitelisting allows the client to control which domains it can connect to, additional restrictions based on the [same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) also apply. By default, web views will not allow  cross-origin HTTP requests initiated from JavaScript for instance, so you will likely run into this when using [`XMLHttpRequest`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest).
 
 To get around these restrictions, you'll have to use what is known as [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS). In contrast to the whitelisting mechanism configured on the client, CORS relies on headers set by the server. In other words, in order to allow access to a remote resource, you may have to make configuration changes on the server, such as setting a `Access-Control-Allow-Origin` header.
+
+<h3 id="csp">System Permissions</h3>
+As of Android Marshmallow, certain system features (e.g. camera, microphone, etc.) require additional permissions in order to access them. These must be listed in the manifest and **also requested at runtime**.
+
+To request them at runtime, consider using the [`cordova.plugins.diagnostic`](https://github.com/dpa99c/cordova-diagnostic-plugin) plugin.
+
+For example, here we prepare our Android and iOS hardware permissions for a WebRTC session.
+
+```sh
+meteor add cordova:cordova.plugins.diagnostic@3.0.2
+```
+
+```js
+if (Meteor.isCordova) {
+  cordova.plugins.diagnostic.isCameraAuthorized(
+    authorized => {
+      if (!authorized) {
+        cordova.plugins.diagnostic.requestCameraAuthorization(
+          granted => {
+            console.log( "Authorization request for camera use was " +
+              (granted ? "granted" : "denied"));
+          },
+          error => { console.error(error); }
+        );
+      }
+    },
+    error => { console.error(error); }
+  );
+}
+```
 
 <h2 id="configuring-your-app">Configuring your app</h2>
 
