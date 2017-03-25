@@ -334,6 +334,56 @@ Meteor.startup(() => {
 });
 ```
 
+Since the version 4.0.0 of react-router, you don't have any longer access to the browserHistory object from the library, to do so, you first need to install history : 
+
+```bash
+npm install --save history
+```
+
+Once it's done, you can call the object and use the same syntaxe as earlier (except for the declaration of the Route who don't accept any longer to have multiples childrens in a single instance of Router) : 
+
+```js
+import React from 'react';
+import { Router, Route } from 'react-router';
+
+// Call the library history
+import createBrowserHistory from 'history/createBrowserHistory';
+
+// route components
+import AppContainer from '../../ui/containers/AppContainer.js';
+import ListPageContainer from '../../ui/containers/ListPageContainer.js';
+import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
+import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
+import NotFoundPage from '../../ui/pages/NotFoundPage.js';
+
+const browserHistory = createBrowserHistory();
+
+export const renderRoutes = () => (
+  <Router history={browserHistory}>
+    <div><!-- Needed for have multiples childrens -->
+      <Route path="/" component={AppContainer}>
+        <Route path="lists/:id" component={ListPageContainer}/>
+        <Route path="signin" component={AuthPageSignIn}/>
+        <Route path="join" component={AuthPageJoin}/>
+        <Route path="*" component={NotFoundPage}/>
+      </Route>
+    <div>
+  </Router>
+);
+```
+
+The call of this constant doesn't change : 
+
+```js
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
+import { renderRoutes } from '../imports/startup/client/routes.js';
+
+Meteor.startup(() => {
+  render(renderRoutes(), document.getElementById('app'));
+});
+```
+
 When using React Router in Meteor, you can follow roughly the [same principles](routing.html) as when using Flow Router, but you should also consider the idioms outlined in React Router's own  [documentation](https://github.com/ReactTraining/react-router).
 
 These include some notable differences like:
