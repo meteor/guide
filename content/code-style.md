@@ -99,7 +99,7 @@ You can also add a `eslintConfig` section to your `package.json` to specify that
 {
   ...
   "scripts": {
-    "lint": "./node_modules/.bin/eslint .",
+    "lint": "eslint .",
     "pretest": "npm run lint --silent"
   },
   "eslintConfig": {
