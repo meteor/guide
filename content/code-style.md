@@ -103,7 +103,7 @@ You can also add a `eslintConfig` section to your `package.json` to specify that
     "pretest": "npm run lint --silent"
   },
   "eslintConfig": {
-    "extends": "eslint-config-meteor"
+    "extends": "@meteorjs/eslint-config-meteor"
   }
 }
 ```
