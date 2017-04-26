@@ -361,7 +361,7 @@ const browserHistory = createBrowserHistory();
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <div><!-- Needed for have multiples childrens -->
-      <Route path="/" component={AppContainer}>
+      <Route exact path="/" component={AppContainer}>
         <Route path="lists/:id" component={ListPageContainer}/>
         <Route path="signin" component={AuthPageSignIn}/>
         <Route path="join" component={AuthPageJoin}/>
