@@ -222,7 +222,6 @@ export default ListPageContainer = createContainer(({ id }) => {
   const listExists = !loading && !!list;
   return {
     loading,
-    list,
     listExists,
     todos: listExists ? list.todos().fetch() : [],
   };
