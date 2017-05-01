@@ -50,6 +50,40 @@ Environment variables are used to set process specific things, which could conce
 
 A final note on storing these settings: It's not a good idea to store settings the same repository where you keep your app code. Read about good places to put your settings in the [Security article](security.html#api-keys).
 
+<h4 id="environment-variable-list">List of environment variables</h4>
+
+Here's a list of the environment variables you can provide to your application.
+
+`BIND_IP` 
+Bind the application server to a specific interface, for example: `BIND_IP=192.168.0.2`.
+
+`DISABLE_WEBSOCKETS` 
+Set this to 1 to disable WebSocket usage in your application.
+
+`HTTP_FORWARDED_COUNT` 
+Set this to however many network hops you have running before your Meteor application. For example, if have a nginx server acting as a proxy before your Meteor application, you would set `HTTP_FORWARDED_COUNT=1`. If you have a load balancer in front of that nginx server, the count is 2.
+
+`MAIL_URL` 
+If you're using an external mail service like [Postmark](https://www.postmarkapp.com), [Mandrill](https://www.mandrillapp.com), [MailGun](https://www.mailgun.com) or [SendGrid](https://www.sendgrid.net), you can provide a SMTP URL for your Meteor app to use to send e-mail. For example: `MAIL_URL="smtp://user@pass:yourservice.com:587"`.
+
+`MONGO_URL` 
+MongoDB server URL. Give a fully qualified URL (or comma-separated list of URLs) like `MONGO_URL="mongodb://user@password:myserver.com:10139"`. For more information see the [MongoDB docs](https://docs.mongodb.com/manual/reference/connection-string/).
+
+`MONGO_OPLOG_URL` 
+MongoDB server oplog URL. If you're using a replica set (which you should), construct this url like so: `MONGO_URL="mongodb://user@password:myserver.com:10139/local?replicaSet=(your replica set)&authSource=(your auth source)"`
+
+`METEOR_SETTINGS`
+[See Core API docs](http://docs.meteor.com/api/core.html#Meteor-settings)
+
+`PACKAGE_DIRS`
+Colon-delimited list of local package directories to look in, outside your normal application structure, for example: `PACKAGE_DIRS="/usr/local/my_packages/"`
+
+`PORT`
+Which port the app should listen on, for example: `PORT=3030`
+
+`ROOT_URL` 
+Used to generate URLs to your application by, among others, the accounts package. Provide a full URL to your application like this: `ROOT_URL="https://www.myapp.com"`. 
+
 <h2 id="other-considerations">Other considerations</h2>
 
 There are some other considerations that you should make before you deploy your application to a production host. Remember that you should if possible do these steps for both your production *and* staging environments.
