@@ -60,7 +60,7 @@ You can also import other files or JS entry points from a package:
 import { parse } from 'graphql/language';
 ```
 
-Some Meteor apps contains local Meteor packages (packages defined in the `packages` directory of your app tree); this was an older recommendation from before Meteor had full ECMAScript support.  If your app is laid out this way, you can also also `require` or `import` npm packages installed in your app from within your local Meteor packages.
+Some Meteor apps contain local Meteor packages (packages defined in the `packages/` directory of your app tree); this was an older recommendation from before Meteor had full ECMAScript support.  If your app is laid out this way, you can also `require` or `import` npm packages installed in your app from within your local Meteor packages.
 
 <h3 id="npm-styles">Importing styles from npm</h3>
 
