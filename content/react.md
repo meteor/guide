@@ -297,7 +297,7 @@ export default AppContainer = createContainer(props => {
 
 <h3 id="using-react-router">React Router</h3>
 
-Using React Router is also straightforward. Once you `meteor npm install --save react-router`, you can simply export a list of nested routes as you would in any other React Router driven React application:
+Using React Router is also straightforward. Once you `meteor npm install --save react-router@3.0.5`, you can simply export a list of nested routes as you would in any other React Router driven React application:
 
 ```js
 import React from 'react';
