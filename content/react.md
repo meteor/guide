@@ -297,56 +297,11 @@ export default AppContainer = createContainer(props => {
 
 <h3 id="using-react-router">React Router</h3>
 
-Using React Router is also straightforward. Once you `meteor npm install --save react-router`, you can simply export a list of nested routes as you would in any other React Router driven React application:
-
-```js
-import React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
-
-// route components
-import AppContainer from '../../ui/containers/AppContainer.js';
-import ListPageContainer from '../../ui/containers/ListPageContainer.js';
-import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
-import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
-import NotFoundPage from '../../ui/pages/NotFoundPage.js';
-
-export const renderRoutes = () => (
-  <Router history={browserHistory}>
-    <Route path="/" component={AppContainer}>
-      <Route path="lists/:id" component={ListPageContainer}/>
-      <Route path="signin" component={AuthPageSignIn}/>
-      <Route path="join" component={AuthPageJoin}/>
-      <Route path="*" component={NotFoundPage}/>
-    </Route>
-  </Router>
-);
-```
-
-With React Router, you'll also need to explicity render the exported routes in a startup function:
-
-```js
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { renderRoutes } from '../imports/startup/client/routes.js';
-
-Meteor.startup(() => {
-  render(renderRoutes(), document.getElementById('app'));
-});
-```
-
-Since the version 4.0.0 of react-router, you don't have any longer access to the browserHistory object from the library, to do so, you first need to install history : 
-
-```bash
-npm install --save history
-```
-
-Once it's done, you can call the object and use the same syntaxe as earlier (except for the declaration of the Route who don't accept any longer to have multiples childrens in a single instance of Router) : 
+Using React Router is also straightforward. Once you `meteor npm install --save react-router history`, you can simply export a list of nested routes as you would in any other React Router driven React application:
 
 ```js
 import React from 'react';
 import { Router, Route } from 'react-router';
-
-// Call the library history
 import createBrowserHistory from 'history/createBrowserHistory';
 
 // route components
@@ -361,7 +316,7 @@ const browserHistory = createBrowserHistory();
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <div>
-      <Route exact path="/" component={AppContainer}>
+      <Route exact path="/" component={AppContainer}/>
       <Route path="lists/:id" component={ListPageContainer}/>
       <Route path="signin" component={AuthPageSignIn}/>
       <Route path="join" component={AuthPageJoin}/>
@@ -371,7 +326,7 @@ export const renderRoutes = () => (
 );
 ```
 
-The call of this constant doesn't change : 
+With React Router, you'll also need to explicity render the exported routes in a startup function:
 
 ```js
 import { Meteor } from 'meteor/meteor';
