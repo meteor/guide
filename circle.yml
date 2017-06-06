@@ -1,6 +1,10 @@
 machine:
   node:
-    version: 0.12
+    version: 4
+
+checkout:
+  post:
+    - git submodule update --init
 
 dependencies:
   cache_directories:
@@ -17,7 +21,7 @@ test:
 
 deployment:
   s3:
-    branch: /^(master|version-.*)/
+    branch: /^(master|version-.*|translation-.*)/
     commands:
-      - node deploy:
+      - npm run deploy:
           pwd: site
