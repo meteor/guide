@@ -171,7 +171,7 @@ If you do want to run on an emulator however, you will have to create an Android
 During development, the Meteor [build tool](build-tool.html) integrates with Cordova to run your app on a physical device or the iOS Simulator/Android emulator. In addition to starting a development server and MongoDB instance as usual, `meteor run` accepts arguments to run the app on one or more mobile targets:
 
 - `ios`: Runs the app on the iOS Simulator
-> Thus will run your app on a default simulated iOS device. You can open Xcode to install and select another simulated device.
+> This will run your app on a default simulated iOS device. You can open Xcode to install and select another simulated device.
 - `ios-device`: Opens Xcode, where you can run the app on a connected iOS device or simulator
 - `android`: Runs the app on the Android emulator
 > The current Android emulator tends to be rather slow and can be unstable. Our recommendation is to run on a physical device or to use an alternative emulator like [Genymotion](https://www.genymotion.com).
