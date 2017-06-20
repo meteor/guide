@@ -253,7 +253,7 @@ To set and change the language that a user is seeing, you should call `TAPi18n.s
 export const CurrentLanguage = new ReactiveVar('en');
 
 
-import CurrentLanguage from '../stores/current-language.js';
+import CurrentLanguage from '/imports/stores/current-language.js';
 TAPi18n.setLanguage(() => {
   CurrentLanguage.get();
 });
@@ -322,7 +322,7 @@ To throttle writes, a typical approach is to use underscore's [`.throttle()`](ht
 ```js
 import {
   updateText,
-} from '../../api/todos/methods.js';
+} from '/imports/api/todos/methods.js';
 
 
 Template.Todos_item.events({
@@ -579,7 +579,7 @@ So when should you wait for the server and when not? It basically comes down to 
 For instance, in the Todos example app, when creating a new list, the list creation will basically always succeed, so we write:
 
 ```js
-import { insert } from '../../api/lists/methods.js';
+import { insert } from '/imports/api/lists/methods.js';
 
 Template.App_body.events({
   'click .js-new-list'() {

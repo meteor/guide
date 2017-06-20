@@ -155,13 +155,13 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
 
 // Import to load these templates
-import '../../ui/layouts/app-body.js';
-import '../../ui/pages/root-redirector.js';
-import '../../ui/pages/lists-show-page.js';
-import '../../ui/pages/app-not-found.js';
+import '/imports/ui/layouts/app-body.js';
+import '/imports/ui/pages/root-redirector.js';
+import '/imports/ui/pages/lists-show-page.js';
+import '/imports/ui/pages/app-not-found.js';
 
 // Import to override accounts templates
-import '../../ui/accounts/accounts-templates.js';
+import '/imports/ui/accounts/accounts-templates.js';
 
 // Below here are the route definitions
 ```
@@ -183,17 +183,17 @@ On the server, we use the same technique of importing all the startup code in `i
 
 ```js
 // This defines a starting set of data to be loaded if the app is loaded with an empty db.
-import '../imports/startup/server/fixtures.js';
+import '/imports/startup/server/fixtures.js';
 
 // This file configures the Accounts package to define the UI of the reset password email.
-import '../imports/startup/server/reset-password-email.js';
+import '/imports/startup/server/reset-password-email.js';
 
 // Set up some rate limiting and other important security settings.
-import '../imports/startup/server/security.js';
+import '/imports/startup/server/security.js';
 
 // This defines all the collections, publications and methods that the application provides
 // as an API to the client.
-import '../imports/api/api.js';
+import '/imports/api/api.js';
 ```
 
 Our main server entry point `server/main.js` then imports this startup module. You can see that here we don't actually import any variables from these files - we just import them so that they execute in this order.
