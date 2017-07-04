@@ -302,7 +302,7 @@ METEOR_CORDOVA_COMPAT_VERSION_EXCLUDE='cordova-plugin-camera,cordova-plugin-gyro
 
 your compatibility version would not change.
 
-The `METEOR_CORDOVA_COMPAT_VERSION*` env vars need to be present __while building__ your app through either `run`, `build` or `deploy`.
+The `METEOR_CORDOVA_COMPAT_VERSION_*` env vars must be present __while building__ your app through `run`, `build` or `deploy`.
 
 <h3 id="configuring-server-for-hot-code-push">Configuring your server</h3>
 
