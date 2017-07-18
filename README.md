@@ -1,3 +1,3 @@
 # Meteor Guide
 
-[Read the guide!](http://guide.meteor.com/)
+The Gitbook version of the Meteor Guide [http://guide.meteor.com/](http://guide.meteor.com/)
