@@ -71,7 +71,7 @@ There are two main kinds of test driver packages:
 
 <h3 id="mocha">Recommended: Mocha</h3>
 
-In this article, we'll use the popular [Mocha](https://mochajs.org) test runner alongside the [Chai](http://chaijs.com) assertion library to test our application. In order to write and run tests in Mocha, we need to add an appropriate test driver package.
+In this article, we'll use the popular [Mocha](https://mochajs.org) test runner alongside the [Chai](http://chaijs.com) assertion library and [Sinon](http://sinonjs.org/) mocking libary to test our application. to test our application. In order to write and run tests in Mocha, we need to add an appropriate test driver package.
 
 There are several options. Choose the ones that makes sense for your app. You may depend on more than one and set up different test commands for different situations.
 
@@ -85,6 +85,7 @@ Here's how we can add the [`practicalmeteor:mocha`](https://atmospherejs.com/pra
 
 ```bash
 meteor add practicalmeteor:mocha
+meteor npm i --save chai sinon
 ```
 
 <h2 id="test-files">Test Files</h2>
@@ -238,7 +239,7 @@ A simple example of a reusable component to test is the [`Todos_item`](https://g
 /* eslint-disable func-names, prefer-arrow-callback */
 
 import { Factory } from 'meteor/dburles:factory';
-import { chai } from 'meteor/practicalmeteor:chai';
+import { assert } from 'chai';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 import { Todos } from '../../../api/todos/todos';
@@ -264,9 +265,9 @@ describe('Todos_item', function () {
     };
 
     withRenderedTemplate('Todos_item', data, el => {
-      chai.assert.equal($(el).find('input[type=text]').val(), todo.text);
-      chai.assert.equal($(el).find('.list-item.checked').length, 0);
-      chai.assert.equal($(el).find('.list-item.editing').length, 0);
+      assert.equal($(el).find('input[type=text]').val(), todo.text);
+      assert.equal($(el).find('.list-item.checked').length, 0);
+      assert.equal($(el).find('.list-item.editing').length, 0);
     });
   });
 });
@@ -461,14 +462,13 @@ In the [Todos](https://github.com/meteor/todos) example app, we have an integrat
 import { Meteor } from 'meteor/meteor';
 import { Factory } from 'meteor/dburles:factory';
 import { Random } from 'meteor/random';
-import { chai } from 'meteor/practicalmeteor:chai';
+import { assert } from 'chai';
+import sinon from 'sinon';
 import StubCollections from 'meteor/hwillson:stub-collections';
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { sinon } from 'meteor/practicalmeteor:sinon';
-
 
 import { withRenderedTemplate } from '../../test-helpers.js';
 import '../lists-show-page.js';
@@ -509,7 +509,7 @@ describe('Lists_show_page', function () {
       const renderedText = $(el).find('.list-items input[type=text]')
         .map((i, e) => $(e).val())
         .toArray();
-      chai.assert.deepEqual(renderedText, todosText);
+      assert.deepEqual(renderedText, todosText);
     });
   });
 });
@@ -545,7 +545,7 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { DDP } from 'meteor/ddp-client';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { assert } from 'meteor/practicalmeteor:chai';
+import { assert } from 'chai';
 import { Promise } from 'meteor/promise';
 import { $ } from 'meteor/jquery';
 
