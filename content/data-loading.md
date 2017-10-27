@@ -77,9 +77,7 @@ Here's an example of a publication which takes a named argument. Note that it's 
 ```js
 Meteor.publish('todos.inList', function(listId) {
   // We need to check the `listId` is the type we expect
-  new SimpleSchema({
-    listId: {type: String}
-  }).validate({ listId });
+  check(listId, String);
 
   // ...
 });
@@ -236,10 +234,8 @@ In an infinite scroll publication, we simply need to add a new argument to our p
 const MAX_TODOS = 1000;
 
 Meteor.publish('todos.inList', function(listId, limit) {
-  new SimpleSchema({
-    listId: { type: String },
-    limit: { type: Number }
-  }).validate({ listId, limit });
+  check(listId, String);
+  check(limit, Number);
 
   const options = {
     sort: {createdAt: -1},
@@ -271,10 +267,8 @@ One piece of information that's very useful to know when paginating data is the 
 
 ```js
 Meteor.publish('Lists.todoCount', function({ listId }) {
-  new SimpleSchema({
-    listId: {type: String}
-  }).validate({ listId });
-
+  check(listId, String);
+  
   Counts.publish(this, `Lists.todoCount.${listId}`, Todos.find({listId}));
 });
 ```
@@ -360,9 +354,7 @@ One way you might do this is to return more than one cursor from your publicatio
 
 ```js
 Meteor.publish('todos.inList', function(listId) {
-  new SimpleSchema({
-    listId: {type: String}
-  }).validate({ listId });
+  check(listId, String);
 
   const list = Lists.findOne(listId);
 
@@ -391,9 +383,7 @@ The way this package works is to first establish a cursor on one collection, and
 
 ```js
 Meteor.publishComposite('todos.inList', function(listId) {
-  new SimpleSchema({
-    listId: {type: String}
-  }).validate({ listId });
+  check(listId, String);
 
   const userId = this.userId;
 
@@ -432,9 +422,7 @@ We might want to write:
 
 ```js
 Meteor.publish('Todos.admin.inList', function({ listId }) {
-  new SimpleSchema({
-    listId: {type: String}
-  }).validate({ listId });
+  check(listId, String);
 
   const user = Meteor.users.findOne(this.userId);
 
@@ -454,9 +442,7 @@ However, due to the same reasons discussed above, the publication *will not re-r
 
 ```js
 Meteor.publishComposite('Todos.admin.inList', function(listId) {
-  new SimpleSchema({
-    listId: {type: String}
-  }).validate({ listId });
+  check(listId, String);
 
   const userId = this.userId;
   return {
