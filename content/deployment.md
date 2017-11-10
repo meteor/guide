@@ -46,7 +46,7 @@ There are two main ways to configure your application outside of the code of the
 
 Settings should be used to set environment (i.e. staging vs production) specific things, like the access token and secret used to connect to Google. These settings will not change between any given process running your application in the given environment.
 
-Environment variables are used to set process specific things, which could conceivably change for different instances of your application's processes. A list of environment variables can be found [here](https://docs.meteor.com/environment-variables.html).
+Environment variables are used to set process-specific things, which could conceivably change for different instances of your application's processes. A list of environment variables can be found [here](https://docs.meteor.com/environment-variables.html).
 
 A final note on storing these settings: It's not a good idea to store settings the same repository where you keep your app code. Read about good places to put your settings in the [Security article](security.html#api-keys).
 
