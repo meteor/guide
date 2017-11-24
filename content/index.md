@@ -20,7 +20,7 @@ Meteor is a full-stack JavaScript platform for developing modern web and mobile 
 
 Meteor supports [OS X, Windows, and Linux](https://www.meteor.com/install).
 
-On Windows?  First install [Chocolatey](https://chocolatey.org/), then run this command using and Administrator command prompt:
+On Windows?  First install [Chocolatey](https://chocolatey.org/), then run this command using an Administrator command prompt:
 
 ```bash
 choco install meteor
