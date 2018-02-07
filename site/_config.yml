@@ -4,11 +4,18 @@
 
 # Site
 title: Meteor Guide
-subtitle:
+subtitle: The Official Guide
 description:
 author:
 language:
 timezone:
+github_repo: meteor/guide
+apis:
+  gtm: GTM-MBQ369M
+  segment: zQx6cQifkTU79E3L0XAnmrOXP2A5bC6r
+  docsearch:
+    apiKey: bdf6b09d12024f6bae3631a0dfdd4a7f
+    indexName: meteor_api_guide
 versions:
   - '1.6'
   - '1.5'
@@ -17,6 +24,51 @@ versions:
   - '1.2'
 versioned-netlify-redirects:
     netlify_site_id: meteor-guide
+
+# This setting also defines the page order used to generate the Previous/Next links at the bottom of each page
+sidebar_categories:
+  null:
+    - index
+    - collections
+    - data-loading
+    - methods
+    - routing
+    - accounts
+    - ui-ux
+    - blaze
+    - security
+    - deployment
+    - build-tool
+
+# themeing
+favicon: '../images/favicon.png'
+
+logo:
+  nav_mobile: '../images/logo-coralspace-left.svg'
+  url: 'http://www.meteor.com/developers'
+  title: 'Meteor Developers'
+  subtitle: 'Developers'
+
+nav_links:
+  'Tutorials':
+    url: http://www.meteor.com/tutorials
+    partial: illustration-guide
+    target: _new
+  'Guide':
+    url: http://guide.meteor.com
+    partial: illustration-compass
+    active: true
+  'API Docs':
+    url: http://docs.meteor.com
+    partial: illustration-logs
+  'Forums':
+    url: https://forums.meteor.com/
+    partial: illustration-support
+    target: _new
+
+social_links:
+  github: 'https://github.com/meteor'
+  twitter: '@meteor'
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -36,7 +88,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :title.md # File name of new posts
+new_post_name: :title.html # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
