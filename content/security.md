@@ -338,16 +338,23 @@ Secret business logic in your app should be located in code that is only loaded 
 If you have a Meteor Method in your app that has secret business logic, you might want to split the Method into two functions - the optimistic UI part that will run on the client, and the secret part that runs on the server. Most of the time, putting the entire Method on the server doesn't result in the best user experience. Let's look at an example, where you have a secret algorithm for calculating someone's MMR (ranking) in a game:
 
 ```js
-// In a server-only file
+// In a server-only file, for example /imports/server/mmr.js
 MMR = {
   updateWithSecretAlgorithm(userId) {
     // your secret code here
   }
 }
+
+export default MMR;
 ```
 
 ```js
 // In a file loaded on client and server
+let MMR;
+if (Meteor.isServer) {
+  MMR = require('/imports/server/mmr.js');
+}
+
 const Meteor.users.methods.updateMMR = new ValidatedMethod({
   name: 'Meteor.users.methods.updateMMR',
   validate: null,
