@@ -339,22 +339,15 @@ If you have a Meteor Method in your app that has secret business logic, you migh
 
 ```js
 // In a server-only file, for example /imports/server/mmr.js
-MMR = {
+export const MMR = {
   updateWithSecretAlgorithm(userId) {
     // your secret code here
   }
 }
-
-export default MMR;
 ```
 
 ```js
 // In a file loaded on client and server
-let MMR;
-if (Meteor.isServer) {
-  MMR = require('/imports/server/mmr.js');
-}
-
 const Meteor.users.methods.updateMMR = new ValidatedMethod({
   name: 'Meteor.users.methods.updateMMR',
   validate: null,
@@ -362,6 +355,7 @@ const Meteor.users.methods.updateMMR = new ValidatedMethod({
     if (this.isSimulation) {
       // Simulation code for the client (optional)
     } else {
+      const { MMR } = require('/imports/server/mmr.js');
       MMR.updateWithSecretAlgorithm(this.userId);
     }
   }
