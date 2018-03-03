@@ -147,7 +147,7 @@ You can see that this Method does a _very specific thing_ - it just makes a sing
 However, this doesn't mean you can't have any flexibility in your Methods. Let's look at an example:
 
 ```js
-const Meteor.users.methods.setUserData = new ValidatedMethod({
+Meteor.users.methods.setUserData = new ValidatedMethod({
   name: 'Meteor.users.methods.setUserData',
   validate: new SimpleSchema({
     fullName: { type: String, optional: true },
@@ -348,7 +348,7 @@ export const MMR = {
 
 ```js
 // In a file loaded on client and server
-const Meteor.users.methods.updateMMR = new ValidatedMethod({
+Meteor.users.methods.updateMMR = new ValidatedMethod({
   name: 'Meteor.users.methods.updateMMR',
   validate: null,
   run() {
