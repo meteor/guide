@@ -672,7 +672,7 @@ The caveats:
 
 The benefits:
 1. A scalable solution with proven results
-2. Backwards compatible (no changes required to your code)
+2. Backwards compatible (no changes required to your publication/subscription code)
 2. [Better control](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/finetuning.md) over which updates should trigger reactivity
 3. You can work with a MongoDB database that does not have oplog enabled
 4. Full control over reactivity using [Vent](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/vent.md)
@@ -695,4 +695,4 @@ In your `settings.json` file:
 meteor run --settings settings.json
 ```
 
-Read more here: https://github.com/cult-of-coders/redis-oplog
+Read more about `redis-oplog` here: https://github.com/cult-of-coders/redis-oplog
