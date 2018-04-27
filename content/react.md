@@ -305,52 +305,69 @@ export default AppContainer = withTracker(props => {
 
 <h3 id="using-react-router">React Router</h3>
 
-Using React Router is also straightforward. Once you `meteor npm install --save react-router history`, you can simply export a list of nested routes as you would in any other React Router driven React application:
+Using [React Router](https://reacttraining.com/react-router/web/guides/philosophy) is also straightforward. After you `meteor npm install --save react-router-dom`, you can start using [`<Route />`](https://reacttraining.com/react-router/web/api/Route) components to render UI elements, when a browser location matches a route's path.
 
 ```js
-import React from 'react';
-import { Router, Route, Switch } from 'react-router';
-import createBrowserHistory from 'history/createBrowserHistory';
-
-// route components
-import AppContainer from '../../ui/containers/AppContainer.js';
-import ListPageContainer from '../../ui/containers/ListPageContainer.js';
-import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
-import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
-import NotFoundPage from '../../ui/pages/NotFoundPage.js';
-
-const browserHistory = createBrowserHistory();
-
-export const renderRoutes = () => (
-  <Router history={browserHistory}>
-    <Switch>
-      <Route exact path="/" component={AppContainer}/>
-      <Route exact path="/lists/:id" component={ListPageContainer}/>
-      <Route exact path="/signin" component={AuthPageSignIn}/>
-      <Route exact path="/join" component={AuthPageJoin}/>
-      <Route component={NotFoundPage}/>
-    </Switch>
-  </Router>
-);
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+...
+export default class App extends Component {
+  ...
+  renderContent(location) {
+    ...
+    return (
+      <div id="container" className={menuOpen ? 'menu-open' : ''}>
+        <section id="menu">
+          <LanguageToggle />
+          <UserMenu user={user} logout={this.logout} />
+          <ListList lists={lists} />
+        </section>
+        {showConnectionIssue && !connected
+          ? <ConnectionNotification />
+          : null}
+        <div className="content-overlay" onClick={this.closeMenu} />
+        <div id="content-container">
+          {loading ? (
+            <Loading key="loading" />
+          ) : (
+            <TransitionGroup>
+              <CSSTransition
+                key={location.key}
+                classNames="fade"
+                timeout={200}
+              >
+                <Switch location={location}>
+                  <Route
+                    path="/lists/:id"
+                    render={({ match }) => (
+                      <ListPageContainer match={match} {...commonChildProps} />
+                    )}
+                  />
+                  <Route
+                    path="/signin"
+                    render={() => <AuthPageSignIn {...commonChildProps} />}
+                  />
+                  <Route
+                    path="/join"
+                    render={() => <AuthPageJoin {...commonChildProps} />}
+                  />
+                  <Route
+                    path="/*"
+                    render={() => <NotFoundPage {...commonChildProps} />}
+                  />
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
+          )}
+        </div>
+      </div>
+    );
+  }
+  ...
+}
 ```
 
-With React Router, you'll also need to explicity render the exported routes in a startup function:
-
-```js
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { renderRoutes } from '../imports/startup/client/routes.js';
-
-Meteor.startup(() => {
-  render(renderRoutes(), document.getElementById('app'));
-});
-```
-
-When using React Router in Meteor, you can follow roughly the [same principles](routing.html) as when using Flow Router, but you should also consider the idioms outlined in React Router's own  [documentation](https://github.com/ReactTraining/react-router).
-
-These include some notable differences like:
- - React Router encourages you to couple your URL design and layout hierarchy in the route definition. Flow Router is more flexible, although it can involve much more boilerplate as a result.
- - React Router embraces React-specific functionality like the use of [context](https://facebook.github.io/react/docs/context.html), although you can also explicitly pass your FlowRouter instance around in context if you'd like (in fact this is probably the best thing to do).
+When using React Router in Meteor, you can follow many of the [same principles](routing.html) as Flow Router, but you should consider the idioms outlined in React Router's own [documentation](https://reacttraining.com/react-router/web/guides/philosophy). The most important difference to understand is that React Router prefers a more [dynamic routing approach](https://reacttraining.com/react-router/core/guides/philosophy/dynamic-routing), where routes are full-fledged components integrated alongside the rest of your application's React components.
 
 <h2 id="meteor-and-react">Meteor and React</h2>
 
