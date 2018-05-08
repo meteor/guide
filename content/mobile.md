@@ -117,6 +117,8 @@ In order to build and run Android apps, you will need to:
 
 <h4>Installing the Java Development Kit (JDK)</h4>
 
+>Note: Currently, the Android SDK does not support JDK 9 or higher, please ensure you download JDK 8 for to ensure compatibility.
+
 > On Linux, you may want to use your distribution's package manager to install a JDK; on Ubuntu, you can even use [Ubuntu Make](#ubuntu-make) to install Android Studio and all dependencies at the same time.
 
 1. Open the [Oracle Java website](http://www.oracle.com/technetwork/java/javase/downloads/index.html), and select the Java Platform (JDK)
