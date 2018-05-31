@@ -236,7 +236,7 @@ A simple example of a reusable component to test is the [`Todos_item`](https://g
 /* eslint-disable func-names, prefer-arrow-callback */
 
 import { Factory } from 'meteor/dburles:factory';
-import { chai } from 'meteor/practicalmeteor:chai';
+import chai from 'chai';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 import { Todos } from '../../../api/todos/todos';
@@ -323,7 +323,7 @@ We can also apply the same structure to testing React components and recommend t
 import { Factory } from 'meteor/dburles:factory';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { chai } from 'meteor/practicalmeteor:chai';
+import chai from 'chai';
 import TodoItem from './TodoItem.jsx';
 
 describe('TodoItem', () => {
@@ -344,7 +344,7 @@ The test is slightly simpler than the Blaze version above because the React samp
 import { Factory } from 'meteor/dburles:factory';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { sinon } from 'meteor/practicalmeteor:sinon';
+import sinon from 'sinon';
 import TodoItem from './TodoItem.jsx';
 import { setCheckedStatus } from '../../api/todos/methods.js';
 
@@ -459,13 +459,13 @@ In the [Todos](https://github.com/meteor/todos) example app, we have an integrat
 import { Meteor } from 'meteor/meteor';
 import { Factory } from 'meteor/dburles:factory';
 import { Random } from 'meteor/random';
-import { chai } from 'meteor/practicalmeteor:chai';
+import chai from 'chai';
 import StubCollections from 'meteor/hwillson:stub-collections';
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { sinon } from 'meteor/practicalmeteor:sinon';
+import sinon from 'sinon';
 
 
 import { withRenderedTemplate } from '../../test-helpers.js';
@@ -543,7 +543,7 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { DDP } from 'meteor/ddp-client';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { assert } from 'meteor/practicalmeteor:chai';
+import { assert } from 'chai';
 import { Promise } from 'meteor/promise';
 import { $ } from 'meteor/jquery';
 
