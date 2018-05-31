@@ -375,14 +375,12 @@ In this case, the `TodoItem` component calls a [Meteor Method](/methods.html) `s
 To run the tests that our app defines, we run our app in [test mode](#test-modes):
 
 ```txt
-meteor test --driver-package meteortesting:mocha
+TEST_WATCH=1 meteor test --driver-package meteortesting:mocha
 ```
 
 As we've defined a test file (`imports/todos/todos.tests.js`), what this means is that the file above will be eagerly loaded, adding the `'builds correctly from factory'` test to the Mocha registry.
 
-To run the tests, visit http://localhost:3000 in your browser. This kicks off `meteortesting:mocha`, which runs your tests both in the browser and on the server. It displays the test results in the browser in a Mocha test reporter:
-
-<img src="images/mocha-test-results.png">
+To run the tests, visit http://localhost:3000 in your browser. This kicks off `meteortesting:mocha`, which runs your tests both in the browser and on the server. It will display the test results in a div with ID mocha.
 
 Usually, while developing an application, it makes sense to run `meteor test` on a second port (say `3100`), while also running your main application in a separate process:
 
