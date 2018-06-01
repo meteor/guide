@@ -478,8 +478,8 @@ describe('Lists_show_page', function () {
   beforeEach(function () {
     StubCollections.stub([Todos, Lists]);
     Template.registerHelper('_', key => key);
-    sinon.stub(FlowRouter, 'getParam', () => listId);
-    sinon.stub(Meteor, 'subscribe', () => ({
+    sinon.stub(FlowRouter, 'getParam').returns(listId);
+    sinon.stub(Meteor, 'subscribe').returns.({
       subscriptionId: 0,
       ready: () => true,
     }));
