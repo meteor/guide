@@ -659,23 +659,23 @@ $ curl localhost:3000/publications/lists.private -H "Authorization: Bearer 6PN4E
 }
 ```
 
-<h3 id="scaling-reactivity">Scaling Reactivity</h3>
+<h2 id="scaling-updates">Scaling updates</h2>
 
-As previously mentioned, Meteor uses MongoDB's Oplog to identify which changes to apply to which publication. The reason MongoDB's Oplog isn't fit for scaling is because all changes that happen inside the database are sent out to every Meteor instance connected to it, therefore, as your database becomes chattier, your instances will be hit with data thus consuming additional CPU resources and more bandwidth. At the same time, your database will also slow down because it has to send all the changes to everyone listening to the oplog.
+As previously mentioned, Meteor uses MongoDB's Oplog to identify which changes to apply to which publication. Each change to the database is processed by every Meteor server, so frequent changes can result in high CPU usage across the board. At the same time, your database will come under higher load as all your servers keep fetching data from the oplog.
 
-To solve this issue you can use [`cultofcoders:redis-oplog`](https://github.com/cult-of-coders/redis-oplog) package, which opts-out completely from using MongoDB's Oplog and shifts the communication through Redis' Pub/Sub system.
+To solve this issue, you can use the [`cultofcoders:redis-oplog`](https://github.com/cult-of-coders/redis-oplog) package, which opts out completely from using MongoDB's Oplog and shifts the communication to Redis' Pub/Sub system.
 
 The caveats:
-1. You may not need it, if your application is small and doesn't have a lot of traffic
-2. You'll have to maintain another database (Redis)[https://redis.io/]
-3. Changes that happen outside Meteor instance, must be [manually notified to Redis](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/outside_mutations.md)
+1. You may not need it, if your application is smaller or your data doesn't change a lot.
+2. You'll have to maintain another database (Redis)[https://redis.io/].
+3. Changes that happen outside Meteor instance, must be [manually submitted to Redis](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/outside_mutations.md).
 
 The benefits:
-1. A scalable solution with proven results
-2. Backwards compatible (no changes required to your publication/subscription code)
-2. [Better control](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/finetuning.md) over which updates should trigger reactivity
-3. You can work with a MongoDB database that does not have oplog enabled
-4. Full control over reactivity using [Vent](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/vent.md)
+1. Lower load on server CPU and MongoDB.
+2. Backwards compatible (no changes required to your publication/subscription code).
+3. [Better control](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/finetuning.md) over which updates should trigger reactivity.
+4. You can work with a MongoDB database that does not have oplog enabled.
+5. Full control over reactivity using [Vent](https://github.com/cult-of-coders/redis-oplog/blob/master/docs/vent.md).
 
 ```
 meteor add cultofcoders:redis-oplog
