@@ -177,7 +177,21 @@ To find that out, `Meteor.subscribe()` and (`this.subscribe()` in Blaze componen
 const handle = Meteor.subscribe('lists.public');
 Tracker.autorun(() => {
   const isReady = handle.ready();
-  console.log(`Handle is ${isReady ? 'ready' : 'not ready'}`);  
+  console.log(`Handle is ${isReady ? 'ready' : 'not ready'}`);
+});
+```
+
+If you're subscribing to multiple publications, no need to assign each handle to a variable. A proper way to do this would be to call `Meteor.subscribe` in an array and use [`every`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every) on their handle to determine if they're ready:
+
+```js
+const handles = [
+  Meteor.subscribe('lists.public'),
+  Meteor.subscribe('todos.inList'),
+];
+
+Tracker.autorun(() => {
+  const areReady = handles.every(handle => handle.ready());
+  console.log(`Handles are ${areReady ? 'ready' : 'not ready'}`);
 });
 ```
 

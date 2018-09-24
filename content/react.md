@@ -237,6 +237,21 @@ export default ListPageContainer = withTracker(({ id }) => {
 })(ListPage);
 ```
 
+If you're subscribing to multiple publications, no need to assign each handle to a variable. A proper way to do this would be to call `Meteor.subscribe` in an array and use [`some`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some) on their handle to determine if they're loading:
+
+```js
+export default withTracker(({ id }) => {
+  const handles = [
+    Meteor.subscribe('todos.inList', id),
+    Meteor.subscribe('otherSub'),
+  ];
+  const loading = handles.some(handle => !handle.ready());
+  return {
+    loading,
+  };
+})(ListPage);
+```
+
 It's a good habit to name your container exactly like the component that it wraps, with the word “Container” tacked onto the end. This way, when you're attempting to track down issues in your code, it makes it much easier to locate the appropriate files/classes.
 
 The container component created by `withTracker` will reactively re-render the wrapped component in response to any changes to [reactive data sources](https://atmospherejs.com/meteor/tracker) accessed from inside the function provided to it.
