@@ -223,7 +223,7 @@ import { Lists } from '../../api/lists/lists.js';
 import { withTracker } from 'meteor/react-meteor-data';
 import ListPage from '../pages/ListPage.js';
 
-export default withTracker(({ id }) => {
+const ListPageContainer = withTracker(({ id }) => {
   const todosHandle = Meteor.subscribe('todos.inList', id);
   const loading = !todosHandle.ready();
   const list = Lists.findOne(id);
@@ -235,17 +235,11 @@ export default withTracker(({ id }) => {
     todos: listExists ? list.todos().fetch() : [],
   };
 })(ListPage);
-```
-
-It's a good habit to name your container exactly like the component that it wraps (ex: `ListPageContainer`), with the word “Container” tacked onto the end. This way, when you're attempting to track down issues in your code, it makes it much easier to locate the appropriate files/classes. To do this, you would have to assign the “Container” to a `const`, then `export default` the const:
-
-```js
-const ListPageContainer = withTracker(({ id }) => {
-  // ...
-})(ListPage);
 
 export default ListPageContainer;
 ```
+
+It's a good habit to name your container exactly like the component that it wraps, with the word “Container” tacked onto the end (eg `ListPageContainer`). This way, when you're attempting to track down issues in your code, it makes it much easier to locate the appropriate files/classes.
 
 The container component created by `withTracker` will reactively re-render the wrapped component in response to any changes to [reactive data sources](https://atmospherejs.com/meteor/tracker) accessed from inside the function provided to it.
 
@@ -302,14 +296,15 @@ const App = (props) => (
   </div>
 );
 
-// Will be known as AppContainer
-export default withTracker(props => {
+const AppContainer = withTracker(props => {
   // props here will have `main`, passed from the router
   // anything we return from this function will be *added* to it
   return {
     user: Meteor.user(),
   };
 })(App);
+
+export default AppContainer
 ```
 
 <h3 id="using-react-router">React Router</h3>
