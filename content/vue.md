@@ -7,9 +7,9 @@ After reading this guide, you'll know:
 
 1. What Vue is, and why you would consider using it with Meteor.
 2. How to install Vue in your Meteor application, and how to use it correctly.
-3. How to structure your Vue application according to both Meteor's and Vue's style guides
-4. How to use Vue's SSR (Serverside Rendering) with Meteor. 
-5. How to integrate Vue with Meteor's realtime data layer.
+3. [TODO] How to structure your Vue application according to both Meteor's and Vue's style guides
+4. [TODO] How to use Vue's SSR (Serverside Rendering) with Meteor. 
+5. [TODO] How to integrate Vue with Meteor's realtime data layer.
 
 <h2 id="introduction">Introduction</h2>
 [Vue](https://vuejs.org/v2/guide/) (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. 
