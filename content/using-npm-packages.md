@@ -91,7 +91,7 @@ import 'npm-package-name/stylesheets/styles.css';
 
 Meteor does not recompile packages installed in your `node_modules` by default. However, compilation of specific npm packages (for example, to support older browsers that the package author neglected) can now be enabled in one of two ways:
 
-1. Clone the package repository into your application's `/imports` directory, make any modifications necessary, then use `npm install` to link the-package into your `node_modules`:
+1. Clone the package repository into your application's `/imports` directory, make any modifications necessary, then use `npm install` to link the package into your `node_modules`:
 ```
 meteor npm install imports/the-package
 ```
