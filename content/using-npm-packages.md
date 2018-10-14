@@ -88,7 +88,7 @@ import 'npm-package-name/stylesheets/styles.css';
 
 <h3 id="npm-assets">Building with other assets from npm</h3>
 
-Meteor also supports building other assets into your app, such as fonts, that are located in your `node_modules` directory by symbolic linking to those assets from either the `/public` or `/private` directories. For example, `Font-awesome` is a very popular font library that provides lots of font-based icons. New icons appear frequently as the library is developed and it would be difficult to manage all the updates if you were to copy the entire `Font-awesome` code base to your own app and git repository. Instead use the following to include these fonts:
+Meteor also supports building other assets into your app, such as fonts, that are located in your `node_modules` directory by symbolic linking to those assets from either the `/public` or `/private` directories. For example, `font-awesome` is a very popular font library that provides lots of font-based icons. New icons appear frequently as the library is developed and it would be difficult to manage all the updates if you were to copy the entire `font-awesome` code base to your own app and git repository. Instead use the following to include these fonts:
 
 ```
 cd /public
