@@ -107,7 +107,7 @@ You can then access these files from the client from a URL `/packages/username_m
 
 <h2 id="exporting">Exporting</h2>
 
-While some packages exist just to provide side effects to the app, most packages provide a reusable bit of code that can be used by the consumer with `import`. To export a symbol from your package, simply use the ES2015 `export` syntax in your `mainModule`:
+While some packages exist just to provide side effects to the app, most packages provide a reusable bit of code that can be used by the consumer with `import`. To export a symbol from your package, use the ES2015 `export` syntax in your `mainModule`:
 
 ```js
 // in my-package.js:
@@ -231,7 +231,7 @@ Read more about using Cordova in the [mobile guide](mobile.html).
 Meteor has a test mode for packages called `meteor test-packages`. If you are in a package's directory, you can run
 
 ```bash
-meteor test-packages ./ --driver-package practicalmeteor:mocha
+meteor test-packages ./ --driver-package meteortesting:mocha
 ```
 
 This will run a special app containing only a "test" version of your package and start a Mocha [test driver package](testing.html#driver-packages).
@@ -245,7 +245,7 @@ Package.onTest(function(api) {
   api.use('my-package');
 
   // You should also include any packages you need to use in the test code
-  api.use(['ecmascript', 'random', 'practicalmeteor:mocha']);
+  api.use(['ecmascript', 'random', 'meteortesting:mocha']);
 
   // Finally add an entry point for tests
   api.mainModule('my-package-tests.js');
@@ -259,6 +259,8 @@ You can read more about testing in Meteor in the [Testing article](testing.html)
 <h2 id="publishing-atmosphere">Publishing your package</h2>
 
 To publish your package to Atmosphere, run [`meteor publish`](http://docs.meteor.com/#/full/meteorpublish) from the package directory. To publish a package the package name must follow the format of `username:my-package` and the package must contain a [SemVer version number](#version-constraints).
+
+> Note that if you have a local `node_modules` directory in your package, remove it before running `meteor publish`. While local `node_modules` directories are allowed in Meteor packages, their paths can collide with the paths of `Npm.depends` dependencies when published.
 
 <h3 id="local-vs-published">Cache format</h3>
 
@@ -276,7 +278,7 @@ A Meteor app can load Atmosphere packages in one of three ways, and it looks for
 
 1. Package source code in the `packages/` directory inside your app.
 2. Package source code in directories indicated by setting a `METEOR_PACKAGE_DIRS` environment variable before running any `meteor` command. You can add multiple directories by separating the paths with a `:` on OSX or Linux, or a `;` on Windows. For example: `METEOR_PACKAGE_DIRS=../first/directory:../second/directory`, or on Windows: `set PACKAGE_DIRS=..\first\directory;..\second\directory`.
- > Note: Prior to Meteor 1.4.2, `METEOR_PACKAGE_DIRS` was simply `PACKAGE_DIRS`.  For compatibility reasons, developers should use `METEOR_PACKAGE_DIRS` going forward.
+ > Note: Prior to Meteor 1.4.2, `METEOR_PACKAGE_DIRS` was `PACKAGE_DIRS`.  For compatibility reasons, developers should use `METEOR_PACKAGE_DIRS` going forward.
 3. Pre-built package from Atmosphere. The package is cached in `~/.meteor/packages` on Mac/Linux or `%LOCALAPPDATA%\.meteor\packages` on Windows, and only loaded into your app as it is built.
 
 You can use (1) or (2) to override the version from Atmosphere. You can even do this to load patched versions of Meteor core packages - just copy the code of the package from [Meteor's GitHub repository](https://github.com/meteor/meteor/tree/devel/packages), and edit away.

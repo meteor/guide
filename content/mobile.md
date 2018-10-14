@@ -18,7 +18,7 @@ After reading this guide, you'll know:
 
 <h2 id="introduction">Meteor Cordova integration</h2>
 
-Meteor integrates with [Cordova](https://cordova.apache.org), a well-known Apache open source project, to build mobile apps from the same codebase you use to create regular web apps. With the Cordova integration in Meteor, you can take your existing app and run it on an iOS or Android device with a few simple commands.
+Meteor integrates with [Cordova](https://cordova.apache.org), a well-known Apache open source project, to build mobile apps from the same codebase you use to create regular web apps. With the Cordova integration in Meteor, you can take your existing app and run it on an iOS or Android device with a few commands.
 
 A Cordova app is a web app written using HTML, CSS, and JavaScript as usual, but it runs in a [web view](#what-environment) embedded in a native app instead of in a stand-alone mobile browser. An important benefit of packaging up your web app as a Cordova app is that all your assets are bundled with the app. This ensures your app will load faster than a web app running on a remote server could, which can make a huge difference for users on slow mobile connections. Another feature of the Cordova integration in Meteor is support for [hot code push](#hot-code-push), which allows you to update your app on users' devices without going through the usual app store review process.
 
@@ -94,8 +94,13 @@ After the download and installation completes, you will need to accept the licen
 
 A shortcut is to run `sudo xcodebuild -license accept` from the command line. (You will still be expected to have read and understood the [Xcode and Apple SDKs Agreement](https://www.apple.com/legal/sla/docs/xcode.pdf)).
 
-> As of [Cordova iOS 4.3.0](https://cordova.apache.org/announcements/2016/10/24/ios-release.html) you may also need to `sudo gem install cocoapods` to resolve a dependency with [PhoneGap Push Plugin](http://phonegap.com/blog/2016/11/03/phonegap-plugin-push-1.9.0/dependency). 
+> As of [Cordova iOS 4.3.0](https://cordova.apache.org/announcements/2016/10/24/ios-release.html) you may also need to `sudo gem install cocoapods` to resolve a dependency with [PhoneGap Push Plugin](https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/INSTALLATION.md). 
 
+<h4>Enabling Xcode command line tools</h4>
+
+After installing Xcode from the Mac App Store, it is still necesssary to enable those tools in the terminal environment.  This can be accompilshed by running the following from the command prompt:
+
+    sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
 <h3 id="installing-prerequisites-android">Android</h3>
 
@@ -105,6 +110,15 @@ In order to build and run Android apps, you will need to:
 - Install the Android SDK and download the required tools, platforms, and other components (which is done most easily by installing Android Studio)
 - Set `ANDROID_HOME` and add the tools directories to your `PATH`
 - Optionally: Create an Android Virtual Device to run apps on an emulator
+- If Gradle cannot be found: try using a package manager such as [Homebrew](https://brew.sh/), `apt-get`, or `yum` to install a system-wide, standalone version of `gradle`:
+  ```sh
+  # On Mac OSX:
+  brew install gradle
+  
+  # On Debian/Ubuntu:
+  sudo apt-get install gradle
+  ```
+  More information about installing Gradle can be found [here](https://gradle.org/install/#install).
 
 <h4>Installing the Java Development Kit (JDK)</h4>
 
@@ -137,7 +151,7 @@ To install an older version of SDK tools:
 
 <h4 id="ubuntu-make">Using Ubuntu Make</h4>
 
-If you're running Ubuntu, the easiest way to install both a Java Development Kit and Android Studio is by using [Ubuntu Make](https://wiki.ubuntu.com/ubuntu-make), a command line tool that sets up development environments and dependencies for you.
+If you're running Ubuntu, one way to install both a Java Development Kit and Android Studio is by using [Ubuntu Make](https://wiki.ubuntu.com/ubuntu-make), a command line tool that sets up development environments and dependencies for you.
 
 If you're on Ubuntu 14.04 LTS, you'll have to add the Ubuntu Make ppa first:
 * `sudo add-apt-repository ppa:ubuntu-desktop/ubuntu-make`
@@ -253,6 +267,8 @@ See [this article](https://developers.google.com/web/tools/chrome-devtools/debug
 
 - Because you can only connect to your app after it has started up, you sometimes miss startup warnings and errors. You can invoke `location.reload()` in the DevTools console to reload a running app, this time with the remote debugger connected.
 
+- An .apk built by `meteor build` cannot be remotely debugged unless you make a debug build via `meteor build --debug`.
+
 <h2 id="hot-code-push">Hot code push on mobile</h2>
 
 During development, the Meteor [build tool](build-tool.html) detects any relevant file changes, recompiles the necessary files, and notifies all connected clients a new version is available. Clients can then automatically reload the app, switching over to the new version of the code. This is referred to as *hot code push*.
@@ -280,7 +296,7 @@ Something else to keep in mind is that your server-side code should be prepared 
 
 The compatibility version can be found in the `cordovaCompatibilityVersions` attribute of the JSON file served at `ROOT_URL/__cordova/manifest.json` during `meteor run [ios/android]`.
 
-![cordovaCompatibilityVersions](http://i.imgur.com/Wx7iOWu.png)
+![cordovaCompatibilityVersions](https://i.imgur.com/Wx7iOWu.png)
 
 You may want to override the compatibility version if you want hot code push to reach older apps that don't have the latest version of your native code from the app store. Let's say you're developing an iOS app, you have the plugin `cordova-plugin-camera@2.4.0`, and your app has the compatibility version pictured above, `3ed5b9318b2916b595f7721759ead4d708dfbd46`. If you were to update to version `2.4.1` of `cordova-plugin-camera`, your server would generate a new compatibility version and your users' apps would stop receiving hot code pushes. However, you can tell your server to use the old compatilibity version: 
 
@@ -508,8 +524,8 @@ What is often confusing to people is that setting `App.accessRule` is not enough
 
 To get around these restrictions, you'll have to use what is known as [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS). In contrast to the whitelisting mechanism configured on the client, CORS relies on headers set by the server. In other words, in order to allow access to a remote resource, you may have to make configuration changes on the server, such as setting a `Access-Control-Allow-Origin` header.
 
-<h3 id="csp">System Permissions</h3>
-As of Android Marshmallow, certain system features (e.g. camera, microphone, etc.) require additional permissions in order to access them. These must be listed in the manifest and **also requested at runtime**.
+<h3 id="system-permissions">System Permissions</h3>
+Since the release of iOS 8.0 and Android 6.0 (Android Marshmallow), certain system features (e.g. camera, microphone, location, photos, etc.) typically require additional permissions in order to access them, and for iOS 10+ you must also provide a customized privacy usage notification prompt. These values for Android are specified in your app's `AndroidManifest.xml` file and are **also requested at runtime**. For iOS they are specified in your apps `Info.plist` file.
 
 To request them at runtime, consider using the [`cordova.plugins.diagnostic`](https://github.com/dpa99c/cordova-diagnostic-plugin) plugin.
 
@@ -538,9 +554,20 @@ if (Meteor.isCordova) {
 }
 ```
 
+Alternatively for iOS you can specify the required privacy usage notification prompts in your `mobile-config.js` by using [`App.appendToConfig`](https://docs.meteor.com/api/mobile-config.html#App-appendToConfig) along with the correct [Cocoa Keys](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html). 
+
+Here is an example to access iOS geolocation data:
+```
+App.appendToConfig(`
+  <edit-config target="NSLocationWhenInUseUsageDescription" file="*-Info.plist" mode="merge">
+    <string>My app needs access to your location for navigation purposes</string>
+  </edit-config>
+`);
+```
+
 <h2 id="configuring-your-app">Configuring your app</h2>
 
-Meteor reads a [`mobile-config.js`](http://docs.meteor.com/api/mobile-config.html) file in the root of your app directory during build, and uses the settings specified there to generate Cordova's [`config.xml`](https://cordova.apache.org/docs/en/dev/config_ref/index.html).
+Meteor reads a [`mobile-config.js`](http://docs.meteor.com/api/mobile-config.html) file in the root of your app directory during build and uses the settings specified there to generate Cordova's [`config.xml`](https://cordova.apache.org/docs/en/dev/config_ref/index.html) file.
 
 <h3 id="configuring-metadata">Metadata</h3>
 
@@ -560,15 +587,26 @@ App.setPreference('Orientation', 'default');
 App.setPreference('Orientation', 'all', 'ios');
 ```
 
-Refer to the [preferences section](https://cordova.apache.org/docs/en/dev/config_ref/index.html#preference) of the Cordova documentation for more information about supported options.
+Refer to [Meteor's Mobile Configuration](http://docs.meteor.com/api/mobile-config.html) documentation and the [preferences section](https://cordova.apache.org/docs/en/dev/config_ref/index.html#preference) of the Cordova documentation for more information on Meteor's Cordova configuration API and the supported options.
 
 <h3 id="configuring-app-icons-and-launch-screens">App icons and launch screens</h3>
 
-Although Meteor includes a standard set of app icons and launch screens, you'll most likely want to configure your own images.
+Although Meteor includes a standard set of app icons and launch screens, you will want to configure your own images to match your app's branding in your `mobile-config.js` file.
 
-You configure these images with [`App.icons`](http://docs.meteor.com/api/mobile-config.html#App-icons) and [`App.launchScreens`](http://docs.meteor.com/api/mobile-config.html#App-launchScreens), which both use names to refer to the various supported image sizes (see API documentation).
+You can configure the icon and splash screen image sizes using the specific supported settings in [`App.icons`](http://docs.meteor.com/api/mobile-config.html#App-icons) and [`App.launchScreens`](http://docs.meteor.com/api/mobile-config.html#App-launchScreens).
 
-For iOS, you can also refer to the [Icon and image sizes](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/IconMatrix.html) in the iOS Human Interface Guidelines for more information about the way these different sizes are used.
+In addition, Cordova on iOS supports using [launch story board images](https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-splashscreen/#launch-storyboard-images), which is now Apple's recommended approach for providing launch screens. This has the benefit of not requiring you to provide an image for every possible device screen size. Remove all the iOS `App.launchScreens` directives from your `mobile-config.js` and use [`App.appendToConfig`](http://docs.meteor.com/api/mobile-config.html#App-appendToConfig) to add the paths to your universal images.
+
+```
+App.appendToConfig(`
+  <splash src="../../../app/path/to/Default@2x~universal~anyany.png" />
+  <splash src="../../../app/path/to/Default@3x~universal~anyany.png" />
+`);
+```
+
+See the [iOS Human Interface Guidelines for icon and image sizes](https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/image-size-and-resolution/) for more information.
+
+> On [iPhone X](https://developer.apple.com/ios/human-interface-guidelines/overview/iphone-x/) it is likely required that you use launch story board images if you want the launch image to cover the entire screen. There are also other app layout issues that need to be adresssed such as "safe areas" and "rounded corners", see [Apple's iOS app updates for iPhone X](https://developer.apple.com/ios/update-apps-for-iphone-x/).
 
 <h3 id="advanced-build">Advanced build customization</h3>
 
@@ -590,6 +628,8 @@ The `<host>` and `<port>` should be the address of the server you want your app 
 
 This will generate a directory at `<build-output-directory>`, which includes a server bundle tarball and the project source for each targeted mobile platform in the `/ios` and `/android` directories.
 
+If you pass `--debug`, the bundles will be compiled in Cordova's debug mode instead of release mode.  On Android, this produces a `<build-output-directory>/android/debug.apk` file that can be installed without signing.
+
 You can pass `--server-only` to only build the server bundle. This allows you to build your app without installing the mobile SDKs on the build machine. This is useful if you use an automated deployment setup for instance. (If you remove the mobile platforms before building instead, hot code push will be disabled because the assets for Cordova included in the server bundle will not be generated.)
 
 <h3 id="submitting-ios">iOS App Store</h3>
@@ -608,7 +648,7 @@ From this point on, the process for building the app archive and submitting it t
 
 In order to build your app for Android, you will need to [configure your app](#configuring-your-app) with at least a version number, and the required set of app icons and launch screens.
 
-After running `meteor build` the generated APK will be copied from the `<build-output-directory>/android/project/build/outputs/apk` directory to `<build-output-directory>/android/release-unsigned.apk`.
+After running `meteor build` the generated APK will be copied from the `<build-output-directory>/android/project/build/outputs/apk/release` directory to `<build-output-directory>/android/release-unsigned.apk`.
 > If you have installed the [Crosswalk plugin](https://crosswalk-project.org/) you will need to manually copy the APK file `cp ~/build-output-directory/android/project/build/outputs/apk/android-armv7-release-unsigned.apk ~/build-output-directory/android/release-unsigned.apk`
 
 Before submitting the APK(s) to the Play Store, you will need to sign the APK and run [`zipalign`](http://developer.android.com/tools/help/zipalign.html) on it to optimize the archive.

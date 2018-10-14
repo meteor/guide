@@ -3,27 +3,24 @@
   "version": "1.0.0",
   "private": true,
   "hexo": {
-    "version": "3.2.0"
-  },
-  "dependencies": {
-    "hexo": "^3.2.2",
-    "hexo-autoprefixer": "^0.1.0",
-    "hexo-generator-archive": "^0.1.2",
-    "hexo-generator-category": "^0.1.2",
-    "hexo-generator-index": "^0.2.0",
-    "hexo-generator-tag": "^0.2.0",
-    "hexo-renderer-ejs": "^0.2.0",
-    "hexo-renderer-jade": "^0.3.0",
-    "hexo-renderer-less": "^0.2.0",
-    "hexo-renderer-marked": "^0.2.4",
-    "hexo-renderer-stylus": "^0.3.0",
-    "hexo-server": "^0.2.0"
-  },
-  "scripts": {
-    "deploy": "hexo-s3-deploy",
-    "start": "hexo server"
+    "version": "3.7.1"
   },
   "devDependencies": {
-    "hexo-s3-deploy": "^1.2.2"
+    "chexo": "1.0.5",
+    "hexo": "3.7.1",
+    "hexo-prism-plus": "1.0.0",
+    "hexo-renderer-ejs": "0.3.1",
+    "hexo-renderer-less": "0.2.0",
+    "hexo-renderer-marked": "0.3.2",
+    "hexo-server": "0.3.3",
+    "hexo-versioned-netlify-redirects": "1.0.7",
+    "meteor-hexo-config": "1.0.9",
+    "meteor-theme-hexo": "1.0.16"
+  },
+  "scripts": {
+    "build": "chexo meteor-hexo-config -- generate",
+    "clean": "hexo clean",
+    "test": "npm run clean; npm run build",
+    "start": "npm run build && chexo meteor-hexo-config -- server"
   }
 }
