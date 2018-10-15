@@ -113,13 +113,12 @@ To get around this problem Meteor supports the use of a pseudo tag `<meteor-bund
 
 It's no secret that writing plain CSS can often be a hassle as there's no way to share common CSS code between different selectors or have a consistent color scheme between different elements. CSS compilers, or pre-processors, solve these issues by adding extra features on top of the CSS language like variables, mixins, math, and more, and in some cases also significantly change the syntax of CSS to be easier to read and write.
 
-Here are three example CSS pre-processors supported by Meteor:
+Here are two example CSS pre-processors supported by Meteor:
 
 1. [Sass](http://sass-lang.com/)
 2. [Less.js](http://lesscss.org/)
-3. [Stylus](https://learnboost.github.io/stylus/)
 
-They all have their pros and cons, and different people have different preferences, just like with JavaScript transpiled languages. Sass with the SCSS syntax is quite popular as CSS frameworks like Bootstrap 4 have switched to Sass, and the C++ LibSass implementation appears to be faster than some of the other compilers available.
+They both have their pros and cons, and different people have different preferences, just like with JavaScript transpiled languages. Sass with the SCSS syntax is quite popular as CSS frameworks like Bootstrap 4 have switched to Sass, and the C++ LibSass implementation appears to be faster than some of the other compilers available.
 
 CSS framework compatibility should be a primary concern when picking a pre-processor, because a framework written with Less won't be compatible with one written in Sass.
 
@@ -130,7 +129,7 @@ An important feature shared by all of the available CSS pre-processors is the ab
 1. You can control the load order of files by encoding dependencies through imports, since the load order of CSS matters.
 2. You can create reusable CSS "modules" that only have variables and mixins and don't actually generate any CSS.
 
-In Meteor, each of your `.scss`, `.less`, or `.styl` source files will be one of two types: "source" or "import".
+In Meteor, each of your `.scss` or `.less` source files will be one of two types: "source" or "import".
 
 A "source" file is evaluated eagerly and adds its compiled form to the CSS of the app immediately.
 
@@ -140,7 +139,7 @@ Read the documentation for each package listed below to see how to indicate whic
 
 <h3 id="css-importing">Importing styles</h3>
 
-In all three Meteor supported CSS pre-processors you can import other style files from both relative and absolute paths in your app and from both npm and Meteor Atmosphere packages.
+In all Meteor supported CSS pre-processors you can import other style files from both relative and absolute paths in your app and from both npm and Meteor Atmosphere packages.
 
 ```less
 @import '../stylesheets/colors.less';   // a relative path
@@ -182,13 +181,9 @@ The best Sass build plugin for Meteor is [`fourseven:scss`](https://atmospherejs
 
 Less is maintained as a [Meteor core package called `less`](https://atmospherejs.com/meteor/less).
 
-<h3 id="stylus">Stylus</h3>
-
-The best Stylus build plugin for Meteor is [coagmano:stylus](https://atmospherejs.com/coagmano/stylus)
-
 <h2 id="postcss">PostCSS and Autoprefixer</h2>
 
-In addition to CSS pre-processors like Sass, Less, and Stylus, there is now an ecosystem of CSS post-processors. Regardless of which CSS pre-processor you use, a post-processor can give you additional benefits like cross-browser compatibility.
+In addition to CSS pre-processors like Sass or Less, there is now an ecosystem of CSS post-processors. Regardless of which CSS pre-processor you use, a post-processor can give you additional benefits like cross-browser compatibility.
 
 The most popular CSS post-processor right now is [PostCSS](https://github.com/postcss/postcss), which supports a variety of plugins. [Autoprefixer](https://github.com/postcss/autoprefixer) is perhaps the most useful plugin, since it enables you to stop worrying about browser prefixes and compatibility and write standards-compliant CSS. No more copying 5 different statements every time you want a CSS gradient - you can write a standard gradient without any prefixes and Autoprefixer handles it for you.
 
