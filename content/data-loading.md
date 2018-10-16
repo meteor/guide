@@ -181,7 +181,7 @@ Tracker.autorun(() => {
 });
 ```
 
-If you're subscribing to multiple publications, no need to assign each handle to a variable. A proper way to do this would be to call `Meteor.subscribe` in an array and use [`every`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every) on their handle to determine if they're ready:
+If you're subscribing to multiple publications, you can create an array of handles and use [`every`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every) to determine if all are ready:
 
 ```js
 const handles = [
