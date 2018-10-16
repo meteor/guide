@@ -42,8 +42,6 @@ To install Vue in Meteor 1.8, you should add it as an npm dependency:
 meteor npm install --save vue
 ```
 
-At time of writing this guide, Vue is not yet a first class citizen of Meteor and therefore it requires you to install one extra Meteor package to support Vue.
-
 To support [Vue's Single File Components](https://vuejs.org/v2/guide/single-file-components.html) with the .vue file extensions, install the following Meteor package created by Vue Core developer [Akryum (Guillaume Chau)](https://github.com/meteor-vue/vue-meteor/tree/master/packages/vue-component).
 
 ```sh
