@@ -11,6 +11,11 @@ After reading this guide, you'll know:
 4. [TODO] How to use Vue's SSR (Serverside Rendering) with Meteor. 
 5. [TODO] How to integrate Vue with Meteor's realtime data layer.
 
+Vue already has an excellent guide with many advanced topics already covered. Some of them are [SSR (Serverside Rendering)](https://ssr.vuejs.org/), 
+[Routing](https://router.vuejs.org/), [Code Structure and Style Guide](https://vuejs.org/v2/style-guide/) and [State Management with Vuex](https://vuex.vuejs.org/).
+
+This documentation is purely focused on integrating it with Meteor.
+
 <h2 id="introduction">Introduction</h2>
 [Vue](https://vuejs.org/v2/guide/) (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. 
 Unlike other monolithic frameworks, Vue is designed from the ground up to be incrementally adoptable. 
@@ -22,6 +27,7 @@ Single-Page Applications when used in combination with
 Vue has an excellent [guide and documentation](https://vuejs.org/v2/guide/). This guide is about integrating it with Meteor.
 
 <h3 id="why-use-vue-with-meteor">Why use Vue with Meteor</h3>
+
 Vue is - like React, Blaze and Angular - a frontend library. Some really nice frameworks are built around Vue. [Nuxt.js](https://nuxtjs.org) for example, aims to create a framework flexible enough that you can use it as a main project base or in addition to your current project based on Node.js.
 
 Though Nuxt.js is full-stack and very pluggable. It lacks the an API to communicate data from and to the server. Also unlike Meteor, Nuxt still relies on a configuration file. 
@@ -100,4 +106,45 @@ You will end up with at least 3 files:
 - App.vue (The root component of your app)
 - main.js (Initializing the Vue app in Meteor startup)
 - main.html (containing the body with the #app div)
+
+<h2 id="ssr-code-splitting">SSR and Code Splitting</h2>
+Vue has [an excellent guide on how to render your Vue application on the server](https://vuejs.org/v2/guide/ssr.html). It includes code splitting, async data fetching and many other practices that are used in most apps that require this. 
+
+<h3 id="basic-example">Basic example</h3>
+Making Vue SSR to work with Meteor is not more complex then for example with [Express](https://expressjs.com/). 
+However instead of defining a wildcard route, Meteor uses its own [server-render](https://docs.meteor.com/packages/server-render.html) package that exposes an `onPageLoad` function. Every time a call is made to 
+the serverside, this function is triggered. This is where we should put our code like how its described on the [VueJS SSR Guide](https://ssr.vuejs.org/guide/#integrating-with-a-server).
+
+Below is Meteor's equivalent:
+
+```javascript
+import Vue from 'vue';
+import { onPageLoad } from 'meteor/server-render';
+import { createRenderer } from 'vue-server-renderer';
+
+const renderer = createRenderer();
+
+onPageLoad(sink => {
+  const url = sink.request.url.path;
+  
+  const app = new Vue({
+    data: {
+      url: req.url
+    },
+    template: `<div>The visited URL is: {{ url }}</div>`
+  });
+
+  renderer.renderToString(app, (err, html) => {
+    if (err) {
+      res.status(500).end('Internal Server Error');
+      return
+    }
+    
+    sink.renderIntoElementById('app', html);
+  })
+})
+```
+
+
+
 
