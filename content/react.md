@@ -237,7 +237,7 @@ export default ListPageContainer = withTracker(({ id }) => {
 })(ListPage);
 ```
 
-If you're subscribing to multiple publications, no need to assign each handle to a variable. A proper way to do this would be to call `Meteor.subscribe` in an array and use [`some`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some) on their handle to determine if they're loading:
+If you're subscribing to multiple publications, you can create an array of handles and use [`some`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some) to determine if any is loading:
 
 ```js
 export default withTracker(({ id }) => {
