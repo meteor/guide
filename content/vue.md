@@ -8,7 +8,7 @@ After reading this guide, you'll know:
 1. What Vue is, and why you would consider using it with Meteor.
 2. How to install Vue in your Meteor application, and how to use it correctly.
 3. [TODO] How to structure your Vue application according to both Meteor's and Vue's style guides
-4. [TODO] How to use Vue's SSR (Serverside Rendering) with Meteor. 
+4. How to use Vue's SSR (Serverside Rendering) with Meteor. 
 5. [TODO] How to integrate Vue with Meteor's realtime data layer.
 
 Vue already has an excellent guide with many advanced topics already covered. Some of them are [SSR (Serverside Rendering)](https://ssr.vuejs.org/), 
@@ -28,11 +28,11 @@ Vue has an excellent [guide and documentation](https://vuejs.org/v2/guide/). Thi
 
 <h3 id="why-use-vue-with-meteor">Why use Vue with Meteor</h3>
 
-Vue is - like React, Blaze and Angular - a frontend library. Some really nice frameworks are built around Vue. [Nuxt.js](https://nuxtjs.org) for example, aims to create a framework flexible enough that you can use it as a main project base or in addition to your current project based on Node.js.
+Vue is—like React, Blaze and Angular—a frontend library. Some really nice frameworks are built around Vue. [Nuxt.js](https://nuxtjs.org) for example, aims to create a framework flexible enough that you can use it as a main project base or in addition to your current project based on Node.js.
 
 Though Nuxt.js is full-stack and very pluggable. It lacks the an API to communicate data from and to the server. Also unlike Meteor, Nuxt still relies on a configuration file. 
-Meteor's build tool and Pub/Sub API (or alternatively when used with Apollo) provides Vue with this API that you would normally have to integrate yourself greatly reducing the amount
-of boilerplate code you would have to write.
+Meteor's build tool and Pub/Sub API (or Apollo) provides Vue with this API that you would normally have to integrate yourself, greatly reducing the amount
+of boilerplate code you have to write.
 
 <h3 id="integrating-vue-with-meteor">Integrating Vue With Meteor</h3>
 
@@ -101,9 +101,9 @@ Of course you will need a base HTML document with a div that has the `app` id:
 
 You will end up with at least 3 files: 
 
-- App.vue (The root component of your app)
-- main.js (Initializing the Vue app in Meteor startup)
-- main.html (containing the body with the #app div)
+- `App.vue` (The root component of your app)
+- `main.js` (Initializing the Vue app in Meteor startup)
+- `main.html` (containing the body with the #app div)
 
 <h2 id="ssr-code-splitting">SSR and Code Splitting</h2>
 Vue has [an excellent guide on how to render your Vue application on the server](https://vuejs.org/v2/guide/ssr.html). It includes code splitting, async data fetching and many other practices that are used in most apps that require this. 
