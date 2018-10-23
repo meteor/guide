@@ -108,7 +108,7 @@ You will end up with at least 3 files:
 <h2 id="ssr-code-splitting">SSR and Code Splitting</h2>
 Vue has [an excellent guide on how to render your Vue application on the server](https://vuejs.org/v2/guide/ssr.html). It includes code splitting, async data fetching and many other practices that are used in most apps that require this. 
 
-<h3 id="basic-example">Basic example</h3>
+<h3 id="basic-example">Basic Example</h3>
 Making Vue SSR to work with Meteor is not more complex then for example with [Express](https://expressjs.com/). 
 However instead of defining a wildcard route, Meteor uses its own [server-render](https://docs.meteor.com/packages/server-render.html) package that exposes an `onPageLoad` function. Every time a call is made to 
 the serverside, this function is triggered. This is where we should put our code like how its described on the [VueJS SSR Guide](https://ssr.vuejs.org/guide/#integrating-with-a-server).
@@ -143,6 +143,175 @@ onPageLoad(sink => {
 })
 ```
 
+<h3 id="preferred-setup">Preferred Setup</h3>
 
+The basic example illustrates how easy it is to setup up serverside rendering and that its 
+not that different from rendering it with any other framework. However, as we know, Meteor comes with 
+a very powerfull API and to have SSR play nicely with it, we need to do some extra boilerplating. 
 
+Luckily [Akryum](https://github.com/akryum) has us covered and provided us with a Meteor package for this: 
+[akryum:vue-ssr](https://github.com/meteor-vue/vue-meteor/tree/master/packages/vue-ssr) allows us to write our serverside code like below:
 
+```javascript
+import { VueSSR } from 'meteor/akryum:vue-ssr';
+import createApp from './app';
+
+VueSSR.createApp = function () {
+  // Initialize the Vue app instance and return the app instance
+  const { app } = createApp(); 
+  return { app };
+}
+```
+
+<h4 id="serverside-routes">Serverside Routing</h4>
+
+Sweet, but most apps have some sort of routing functionality. We can use the VueSSR context parameter 
+for this. It simply passes the Meteor server-render request url which we need to push into our router instance:
+
+```javascript
+import { VueSSR } from 'meteor/akryum:vue-ssr';
+import createApp from './app';
+
+VueSSR.createApp = function (context) {
+  // Initialize the Vue app instance and return the app + router instance
+  const { app, router } = createApp(); 
+  
+  // Set router's location from the context
+  router.push(context.url);
+  
+  return { app };
+}
+```
+
+<h3>Async data</h3>
+
+[Nuxt](https://nuxtjs.org/) has a lovely feature called [asyncData](https://nuxtjs.org/guide/async-data). 
+This allows developers to fetch data from an external source on the serverside. Below follows a description of how to implement 
+a similar method into your Meteor application which grants you the same benefits, but with Meteor's 'methods' API.
+
+> Important reminder here is the fact that Server Rendering on its own is already worth a guide - 
+[which is exactly what the guys from Vue did](https://ssr.vuejs.org/). Most of the code is needed 
+in any platform except Nuxt (Vue based) and Next (React based). We simply describe the best way to do this for Meteor. To really understand what is happening 
+read that SSR guide from Vue.
+
+SSR follows a couple of steps that are almost always the same for any frontend library (React, Vue or Angular).
+
+1. Resolve the url with the router
+2. Fetch any matching components from the router
+3. Filter out components that have no asyncData
+4. Map the components into a list of promises by return the asyncData method's result
+5. Resolve all promises
+6. Store the resulting data in the HTML for later hydration of the client bundle
+7. Hydrate the clientside 
+
+Its better documented in code:
+
+```javascript
+VueSSR.createApp = function (context) {
+
+  // Wait with sending the app to the client until the promise resolves (thanks Akryum)
+  return new Promise((resolve, reject) => {
+    const { app, router, store } = createApp({
+      ssr: true,
+    });
+
+    // 1. Resolve the URL with the router
+    router.push(context.url);
+    
+    router.onReady(async () => {
+      // 2, Fetch any matching components from the router
+      const matchedComponents = router.getMatchedComponents();
+      
+      const route = router.currentRoute;
+    
+      // No matched routes
+      if (!matchedComponents.length) {
+        reject(new Error('not-found'));
+      }
+      
+      // 3. Filter out components that have no asyncData
+      const componentsWithAsyncData = matchedComponents.filter(component => component.asyncData);
+
+      // 4. Map the components into a list of promises 
+      // by returning the asyncData method's result
+      const asyncDataPromises = componentsWithAsyncData.map(component => (
+        component.asyncData({ store, route })
+      ));
+      
+      // You can have the asyncData methods resolve promises with data. 
+      // However to avoid complexity its recommended to leverage Vuex
+      // In our case we're simply calling Vuex actions in our methods 
+      // that do the fetching and storing of the data. This makes the below 
+      // step really simple
+      
+      // 5. Resolve all promises. (that's it)
+      await Promise.all(asyncDataPromises);
+      
+      // From this point on we can assume that all the needed data is stored 
+      // in the Vuex store. Now we simply need to grap it and push it into 
+      // the HTML as a "javascript string"
+      
+      // 6. Store the data in the HTML for later hydration of the client bundle
+      const js = `window.__INITIAL_STATE__=${JSON.stringify(store.state)};`;
+      
+      // Resolve the promise with the same object as the simple version
+      // Push our javascript string into the resolver. 
+      // The VueSSR package takes care of the rest
+      resolve({
+        app,
+        js, 
+      });      
+    });
+  }); 
+};
+```
+Awesome. When we load our app in the browser you should see a weird effect. The app seems to load correctly. 
+That's the serverside rendering doing its job well. However, after a split second the app suddenly is empty again..
+
+That's because when the clientside bundle takes over, it doesnt have its data yet. It will override the HTML with an empty app! 
+We need to hydrate the bundle with the JSON data on the HTML source.
+
+If you inspect the HTML via the source code view, you will see the HTML source of your 
+app accompanied by the `__INITIAL_STATE=""` filled with the JSON string. We need 
+to use this to hydrate the clientside. Luckily this is fairly easy, because we have only 1 
+place that needs hydration. The Vuex store!
+
+```javascript
+import { Meteor } from 'meteor/meteor';
+import createApp from './app';
+
+Meteor.startup(() => {
+  const { store, router } = createApp({ // Same function as the server
+    ssr: false,
+  });
+
+  // Hydrate the Vuex store with the JSON string
+  if (window.__INITIAL_STATE__) {
+    store.replaceState(window.__INITIAL_STATE__);
+  }
+});
+```
+
+Now when we load our bundle, the components should have data from the store. All fine. 
+However there is one more thing to do. If we would navigate, our newly rendered clientside 
+components will again not have any data. This is because the asyncData method is not yet being called 
+on the clientside. We can fix this using a mixin like below as documented on the [Vue SSR Guide](https://ssr.vuejs.org/guide/data.html#client-data-fetching).
+
+```javascript
+Vue.mixin({
+  beforeMount () {
+    const { asyncData } = this.$options
+    if (asyncData) {
+      // assign the fetch operation to a promise
+      // so that in components we can do `this.dataPromise.then(...)` to
+      // perform other tasks after data is ready
+      this.dataPromise = asyncData({
+        store: this.$store,
+        route: this.$route
+      })
+    }
+  }
+})
+```
+
+Finish. We now have a fully functioning and server rendered Vue app in Meteor! 
