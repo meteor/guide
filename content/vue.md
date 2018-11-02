@@ -164,6 +164,63 @@ Meteor.startup(() => {
   console.log('startup');
 });
 ```
-Please note this isn't a complete example.
 
 
+<h2 id="vue-and-meteor-realtime-data-layer">How to integrate Vue with Meteor’s realtime data layer</h2>
+
+One of the biggest advantages of Meteor is definitely it's realtime data layer. Based on publication/subscription layer allows developers to built real time applications. 
+
+To integrate Meteor's realtime data layer with Vue, you should first install the `vue-meteor-tracker` package from NPM.
+
+```
+meteor npm install --save vue-meteor-tracker
+```
+
+Next, the package needs to be plug-in into the Vue object - just before Vue initialization (client/client.js):
+
+```javascript
+import VueMeteorTracker from 'vue-meteor-tracker';
+
+Vue.use(VueMeteorTracker);
+```
+
+<h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Using subscriptions in Vue components</h3>
+
+In Vue component, add `meteor` object. It may contain subscriptions definitions or sources like cursors to your data sources.
+
+```javascript
+export default {
+  data() {
+    return {
+      selectedThreadId: null
+    }
+  },
+  meteor: {
+    // Subscriptions
+    $subscribe: {
+      // We subscribe to the 'threads' publication
+      'threads': []
+    },
+    // Threads list
+    // 
+    // You can access tthe result with the 'threads' property on the Vue instance
+    threads () {
+      // Here you can use Meteor reactive sources
+      // like cursors or reactive vars
+      // as you would in a Blaze template helper
+      return Threads.find({}, {
+        sort: {date: -1}
+      })
+    },
+    // Selected thread
+    selectedThread () {
+      // You can also use Vue reactive data inside
+      return Threads.findOne(this.selectedThreadId)
+    }
+  }
+}
+```
+
+In example above, `selectedThreadId` variable is reactive. Every time it changes, the subscription rerun.
+
+More about package is located in official [Readme file](https://github.com/meteor-vue/vue-meteor-tracker)
