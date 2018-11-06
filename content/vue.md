@@ -168,15 +168,13 @@ Meteor.startup(() => {
 
 <h2 id="vue-and-meteor-realtime-data-layer">How to integrate Vue with Meteor’s realtime data layer</h2>
 
-One of the biggest advantages of Meteor is definitely it's realtime data layer. Based on publication/subscription layer allows developers to built real time applications. 
-
-To integrate Meteor's realtime data layer with Vue, you should first install the `vue-meteor-tracker` package from NPM.
+One of the biggest advantages of Meteor is definitely it's realtime data layer. To integrate it with Vue, first install the `vue-meteor-tracker` package from NPM:
 
 ```
 meteor npm install --save vue-meteor-tracker
 ```
 
-Next, the package needs to be plug-in into the Vue object - just before Vue initialization (client/client.js):
+Next, the package needs to be plugged into the Vue object—just before Vue initialization in `/client/client.js`:
 
 ```javascript
 import VueMeteorTracker from 'vue-meteor-tracker';
@@ -186,7 +184,7 @@ Vue.use(VueMeteorTracker);
 
 <h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Using subscriptions in Vue components</h3>
 
-In Vue component, add `meteor` object. It may contain subscriptions definitions or sources like cursors to your data sources.
+In your Vue component, add a `meteor` object. It may contain subscriptions or reactive data sources like cursors and `ReactiveVar`s.
 
 ```javascript
 export default {
@@ -221,6 +219,6 @@ export default {
 }
 ```
 
-In example above, `selectedThreadId` variable is reactive. Every time it changes, the subscription rerun.
+In example above, `selectedThreadId` variable is reactive. Every time it changes, the subscription will re-run.
 
-More about package is located in official [Readme file](https://github.com/meteor-vue/vue-meteor-tracker)
+For more information, see the [`vue-meteor-tracker` readme](https://github.com/meteor-vue/vue-meteor-tracker).
