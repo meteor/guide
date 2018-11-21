@@ -5,11 +5,11 @@ description: How to use the Vue frontend rendering library, with Meteor.
 
 After reading this guide, you'll know:
 
-1. What Vue is, and why you would consider using it with Meteor.
-2. How to install Vue in your Meteor application, and how to use it correctly.
-3. Meteor’s and Vue’s Style Guides and Structure
-4. How to use Vue's SSR (Server-side Rendering) with Meteor. 
-5. [TODO] How to integrate Vue with Meteor's realtime data layer.
+1. [What Vue is, and why you would consider using it with Meteor](#introduction)
+2. [How to install Vue in your Meteor application, and how to use it correctly](#integrating-vue-with-meteor)
+3. [Meteor’s and Vue’s Style Guides and Structure](#style-guide)
+4. [How to use Vue's SSR (Server-side Rendering) with Meteor](#ssr-code-splitting)
+5. [How to integrate Vue with Meteor's realtime data layer](#vue-and-meteor-realtime-data-layer)
 
 Vue already has an excellent guide with many advanced topics already covered. Some of them are [SSR (Server-side Rendering)](https://ssr.vuejs.org/), 
 [Routing](https://router.vuejs.org/), [Code Structure and Style Guide](https://vuejs.org/v2/style-guide/) and [State Management with Vuex](https://vuex.vuejs.org/).
