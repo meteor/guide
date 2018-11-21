@@ -56,9 +56,9 @@ meteor add akryum:vue-component
 
 You will end up with at least 3 files: 
 
-- `/client/App.vue` (The root component of your app)
-- `/client/main.js` (Initializing the Vue app in Meteor startup)
-- `/client/main.html` (containing the body with the #app div)
+1. `/client/App.vue` (The root component of your app)
+2. `/client/main.js` (Initializing the Vue app in Meteor startup)
+3. `/client/main.html` (containing the body with the #app div)
 
 We need a base HTML document that has the `app` id.  If you created a new project from `meteor create .`, put this in your `/client/main.html`.
 
@@ -112,62 +112,200 @@ Meteor.startup(() => {
 
 Run your new Vue+Meteor app with this command: `NO_HMR=1 meteor`
 
-<h2 id="vue-and-meteor-realtime-data-layer">How to integrate Vue with Meteor’s realtime data layer</h2>
 
-One of the biggest advantages of Meteor is definitely it's realtime data layer. To integrate it with Vue, first install the `vue-meteor-tracker` package from NPM:
+<h2 id="vue-and-meteor-realtime-data-layer">Using Vue with Meteor’s realtime data layer</h2>
+
+One of the biggest advantages of Meteor is definitely it's realtime data layer: reactivity, methods, publications, and subscriptions.
+
+To integrate it with Vue, first install the `vue-meteor-tracker` package from NPM:
 
 ```
 meteor npm install --save vue-meteor-tracker
 ```
 
-Next, the package needs to be plugged into the Vue object—just before Vue initialization in `/client/client.js`:
+Next, the package needs to be plugged into the Vue object—just before Vue initialization in `/client/main.js`:
 
 ```javascript
-import VueMeteorTracker from 'vue-meteor-tracker';
+import Vue from 'vue';
+import VueMeteorTracker from 'vue-meteor-tracker';   // here!
+Vue.use(VueMeteorTracker);                           // here!
 
-Vue.use(VueMeteorTracker);
+import App from './App.vue';
+import './main.html';
+
+Meteor.startup(() => {
+  new Vue({
+    el: '#app',
+    ...App,
+  });
+});
 ```
 
-<h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Using subscriptions in Vue components</h3>
+<h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Methods, Publications, and Subscriptions in Vue components</h3>
 
-In your Vue component, add a `meteor` object. It may contain subscriptions or reactive data sources like cursors and `ReactiveVar`s.
+Currently our Vue application shows the time it was loaded.
+
+Let's add a button to update the time in the app.  To flex Meteor's plumbing, we'll create:
+
+1.  A [Meteor Collection](https://docs.meteor.com/api/collections.html) called `Time` with a `currentTime` doc.
+2.  A [Meteor Publication](https://guide.meteor.com/data-loading.html#publications-and-subscriptions) called `Time` that sends all documents
+3.  A [Meteor Method](https://guide.meteor.com/methods.html#what-is-a-method) called `UpdateTime` to update the `currentTime` doc.
+4.  A [Meteor Subscription](https://docs.meteor.com/api/pubsub.html) to `Time`
+5.  [Vue/Meteor Reactivity](https://github.com/meteor-vue/vue-meteor-tracker) to update the Vue component
+
+The first 3 steps are basic Meteor:
+
+1.  In `/imports/collections/Time.js`
+
+``` javascript
+Time = new Mongo.Collection("time");
+```
+
+2.  In `/imports/publications/Time.js`
+
+``` javascript
+Meteor.publish('Time', function () {
+  return Time.find({});
+});
+```
+
+3.  In `/imports/methods/UpdateTime.js`
+
+``` javascript
+Meteor.methods({
+  UpdateTime() {
+    Time.upsert('currentTime', { $set: { time: new Date() } });
+  },
+});
+```
+
+Now, let's add these to our server.  First [remove autopublish](https://guide.meteor.com/security.html#checklist) so our publications matter:
+
+``` bash
+meteor remove autopublish
+```
+
+For fun, let's make a [`settings.json` file](https://galaxy-guide.meteor.com/environment-variables.html#settings-example):
+
+``` json
+{ "public": { "hello": "world" } }
+```
+
+Now, let's update our `/server/main.js` to use our new stuff:
+
+``` javascript
+import { Meteor } from 'meteor/meteor';
+
+import '/imports/collections/Time';
+import '/imports/publications/Time';
+import '/imports/methods/UpdateTime';
+
+Meteor.startup(() => {
+  // Update the current time
+  Meteor.call('UpdateTime');
+  // Add a new doc on each start.
+  Time.insert({ time: new Date() });
+  // Print the current time from the database
+  console.log(`The time is now ${Time.findOne().time}`);
+});
+```
+
+Start your Meteor app, your should see a message pulling data from Mongo.  We haven't made any changes to the client, so you should just see some startup messages.
+
+``` bash
+NO_HMR=1 meteor
+```
+4. and 5.  Great, let's integrate this with Vue using [Vue Meteor Tracker](https://github.com/meteor-vue/vue-meteor-tracker].
 
 ```javascript
+<template>
+  <div>
+    <div v-if="!$subReady.Time">Loading...</div>
+    <div v-else>
+      <p>Hello {{hello}},
+        <br>The time is now: {{currentTime}}
+      </p>
+      <button @click="updateTime">Update Time</button>
+      <p>Startup times:</p>
+      <ul>
+        <li v-for="t in TimeCursor">
+          {{t.time}}  -  {{t._id}}
+        </li>
+      </ul>
+      <p>Meteor settings</p>
+      <pre><code>
+        {{settings}}
+      </code></pre>
+    </div>
+  </div>
+</template>
+
+<script>
+import '/imports/collections/Time';
+
 export default {
   data() {
+    console.log('Sending non-Meteor data to Vue component');
     return {
-      selectedThreadId: null
+      hello: 'World',
+      settings: Meteor.settings.public,   // not Meteor reactive
     }
   },
+  // Vue Methods
+  methods: {  
+    updateTime() {
+      console.log('Calling Meteor Method UpdateTime');
+      Meteor.call('UpdateTime');          // not Meteor reactive
+    }
+  },
+  // Meteor reactivity
   meteor: {
-    // Subscriptions
+    // Subscriptions - Errors not reported spelling and capitalization.
     $subscribe: {
-      // We subscribe to the 'threads' publication
-      'threads': []
+      'Time': []
     },
-    // Threads list
-    // 
-    // You can access tthe result with the 'threads' property on the Vue instance
-    threads () {
-      // Here you can use Meteor reactive sources
-      // like cursors or reactive vars
+    // A helper function to get the current time
+    currentTime () {
+      console.log('Calculating currentTime');
+      var t = Time.findOne('currentTime') || {};
+      return t.time;
+    },
+    // A Minimongo cursor on the Time collection is added to the Vue instance
+    TimeCursor () {
+      // Here you can use Meteor reactive sources like cursors or reactive vars
       // as you would in a Blaze template helper
-      return Threads.find({}, {
-        sort: {date: -1}
+      return Time.find({}, {
+        sort: {time: -1}
       })
     },
-    // Selected thread
-    selectedThread () {
-      // You can also use Vue reactive data inside
-      return Threads.findOne(this.selectedThreadId)
-    }
   }
 }
+</script>
+
+<style scoped>
+  p {
+    font-size: 2em;
+  }
+</style>
 ```
 
-In example above, `selectedThreadId` variable is reactive. Every time it changes, the subscription will re-run.
+Restart your server to use the `settings.json` file.
 
-For more information, see the [`vue-meteor-tracker` readme](https://github.com/meteor-vue/vue-meteor-tracker).
+``` bash
+NO_HMR=1 meteor --settings=settings.json 
+```
+
+Then refresh your browser to reload the client.
+
+You should see:
+
+  - the current time
+  - a button to Update the current time
+  - startup times for the server (added to the Time collection on startup)
+  - The Meteor settings from your settings file
+
+There may be better or alternative ways to do these things.  Please PR if you have improvements.
+
 
 <h2 id="style-guide">Meteor’s and Vue’s Style Guides and Structure
 
@@ -175,20 +313,21 @@ Like code linting and style guides are tools for making code easier and more fun
 
 These are practical means to practical ends.
 
-  - Leverage existing tools
-  - Leverage existing configurations
+1. Leverage existing tools
+2. Leverage existing configurations
   
 [Meteor's style guide](https://guide.meteor.com/code-style.html) and [Vue's style guide](https://vuejs.org/v2/style-guide/) can be overlapped like this:
 
 1. [Configure your Editor](https://guide.meteor.com/code-style.html#eslint-editor)
-1. [Configure eslint for Meteor](https://guide.meteor.com/code-style.html#eslint-installing)
-1. [Review the Vue Style Guide](https://vuejs.org/v2/style-guide/#Rule-Categories)
-1. Open up the [ESLint rules](https://eslint.org/docs/rules/) as needed.
+2. [Configure eslint for Meteor](https://guide.meteor.com/code-style.html#eslint-installing)
+3. [Review the Vue Style Guide](https://vuejs.org/v2/style-guide/#Rule-Categories)
+4. Open up the [ESLint rules](https://eslint.org/docs/rules/) as needed.
   
 Application Structure is documented here:
 
 1. [Meteor's Application Structure](https://guide.meteor.com/structure.html#example-app-structure) is the default start.
-1. [Vuex's Application Structure](https://vuex.vuejs.org/guide/structure.html) may be interesting.
+2. [Vuex's Application Structure](https://vuex.vuejs.org/guide/structure.html) may be interesting.
+
 
 <h2 id="ssr-code-splitting">SSR and Code Splitting</h2>
 Vue has [an excellent guide on how to render your Vue application on the server](https://vuejs.org/v2/guide/ssr.html). It includes code splitting, async data fetching and many other practices that are used in most apps that require this. 
