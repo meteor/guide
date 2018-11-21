@@ -7,7 +7,7 @@ After reading this guide, you'll know:
 
 1. What Vue is, and why you would consider using it with Meteor.
 2. How to install Vue in your Meteor application, and how to use it correctly.
-3. [TODO] How to structure your Vue application according to both Meteor's and Vue's style guides
+3. Meteor’s and Vue’s Style Guides and Structure
 4. How to use Vue's SSR (Server-side Rendering) with Meteor. 
 5. [TODO] How to integrate Vue with Meteor's realtime data layer.
 
@@ -111,6 +111,27 @@ Meteor.startup(() => {
 ```
 
 Run your new Vue+Meteor app with this command: `NO_HMR=1 meteor`
+
+<h2 id="style-guide">Meteor’s and Vue’s Style Guides and Structure
+
+Like code linting and style guides are tools for making code easier and more fun to work with.
+
+These are practical concerns to accomplish practical means.
+
+  - Leverage existing tools
+  - Leverage existing configurations
+  
+[Meteor's style guide](https://guide.meteor.com/code-style.html) and [Vue's style guide](https://vuejs.org/v2/style-guide/) can be overlapped like this:
+
+1. [Configure your Editor](https://guide.meteor.com/code-style.html#eslint-editor)
+1. [Configure eslint for Meteor](https://guide.meteor.com/code-style.html#eslint-installing)
+1. [Review the Vue Style Guide](https://vuejs.org/v2/style-guide/#Rule-Categories)
+1. Open up the [ESLint rules](https://eslint.org/docs/rules/) as needed.
+  
+Application Structure is documented here:
+
+1. [Meteor's Application Structure](https://guide.meteor.com/structure.html#example-app-structure) is the default start.
+1. [Vuex's Application Structure](https://vuex.vuejs.org/guide/structure.html) may be interesting.
 
 <h2 id="ssr-code-splitting">SSR and Code Splitting</h2>
 Vue has [an excellent guide on how to render your Vue application on the server](https://vuejs.org/v2/guide/ssr.html). It includes code splitting, async data fetching and many other practices that are used in most apps that require this. 
