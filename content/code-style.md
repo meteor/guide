@@ -104,6 +104,18 @@ You can also add a `eslintConfig` section to your `package.json` to specify that
   },
   "eslintConfig": {
     "extends": "@meteorjs/eslint-config-meteor"
+    "env": {
+      "meteor": true,
+      "node": true,
+      "browser": true
+    },
+    "rules": {
+      "no-console": "off",
+    },
+    "globals": {
+      "BrowserPolicy": false,
+      "Roles": false
+    }
   }
 }
 ```
