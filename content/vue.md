@@ -8,8 +8,8 @@ After reading this guide, you'll know:
 1. [What Vue is, and why you would consider using it with Meteor](#introduction)
 2. [How to install Vue in your Meteor application, and how to use it correctly](#integrating-vue-with-meteor)
 3. [Meteor’s and Vue’s Style Guides and Structure](#style-guide)
-4. [How to use Vue's SSR (Server-side Rendering) with Meteor](#ssr-code-splitting)
-5. [How to integrate Vue with Meteor's realtime data layer](#vue-and-meteor-realtime-data-layer)
+4. [How to integrate Vue with Meteor's realtime data layer](#vue-and-meteor-realtime-data-layer)
+5. [How to use Vue's SSR (Server-side Rendering) with Meteor](#ssr-code-splitting)
 
 Vue already has an excellent guide with many advanced topics already covered. Some of them are [SSR (Server-side Rendering)](https://ssr.vuejs.org/), 
 [Routing](https://router.vuejs.org/), [Code Structure and Style Guide](https://vuejs.org/v2/style-guide/) and [State Management with Vuex](https://vuex.vuejs.org/).
@@ -116,7 +116,7 @@ Run your new Vue+Meteor app with this command: `NO_HMR=1 meteor`
 
 Like code linting and style guides are tools for making code easier and more fun to work with.
 
-These are practical concerns to accomplish practical means.
+These are practical means to practical ends.
 
   - Leverage existing tools
   - Leverage existing configurations
@@ -132,6 +132,63 @@ Application Structure is documented here:
 
 1. [Meteor's Application Structure](https://guide.meteor.com/structure.html#example-app-structure) is the default start.
 1. [Vuex's Application Structure](https://vuex.vuejs.org/guide/structure.html) may be interesting.
+
+<h2 id="vue-and-meteor-realtime-data-layer">How to integrate Vue with Meteor’s realtime data layer</h2>
+
+One of the biggest advantages of Meteor is definitely it's realtime data layer. To integrate it with Vue, first install the `vue-meteor-tracker` package from NPM:
+
+```
+meteor npm install --save vue-meteor-tracker
+```
+
+Next, the package needs to be plugged into the Vue object—just before Vue initialization in `/client/client.js`:
+
+```javascript
+import VueMeteorTracker from 'vue-meteor-tracker';
+
+Vue.use(VueMeteorTracker);
+```
+
+<h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Using subscriptions in Vue components</h3>
+
+In your Vue component, add a `meteor` object. It may contain subscriptions or reactive data sources like cursors and `ReactiveVar`s.
+
+```javascript
+export default {
+  data() {
+    return {
+      selectedThreadId: null
+    }
+  },
+  meteor: {
+    // Subscriptions
+    $subscribe: {
+      // We subscribe to the 'threads' publication
+      'threads': []
+    },
+    // Threads list
+    // 
+    // You can access tthe result with the 'threads' property on the Vue instance
+    threads () {
+      // Here you can use Meteor reactive sources
+      // like cursors or reactive vars
+      // as you would in a Blaze template helper
+      return Threads.find({}, {
+        sort: {date: -1}
+      })
+    },
+    // Selected thread
+    selectedThread () {
+      // You can also use Vue reactive data inside
+      return Threads.findOne(this.selectedThreadId)
+    }
+  }
+}
+```
+
+In example above, `selectedThreadId` variable is reactive. Every time it changes, the subscription will re-run.
+
+For more information, see the [`vue-meteor-tracker` readme](https://github.com/meteor-vue/vue-meteor-tracker).
 
 <h2 id="ssr-code-splitting">SSR and Code Splitting</h2>
 Vue has [an excellent guide on how to render your Vue application on the server](https://vuejs.org/v2/guide/ssr.html). It includes code splitting, async data fetching and many other practices that are used in most apps that require this. 
@@ -215,16 +272,15 @@ VueSSR.createApp = function (context) {
 }
 ```
 
-<h3>Async data</h3>
+<h3>Async data - An Interesting Nuxt Feature</h3>
 
 [Nuxt](https://nuxtjs.org/) has a lovely feature called [asyncData](https://nuxtjs.org/guide/async-data). 
-This allows developers to fetch data from an external source on the server side. Below follows a description of how to implement 
-a similar method into your Meteor application which grants you the same benefits, but with Meteor's 'methods' API.
 
-> Important reminder here is the fact that Server Rendering on its own is already worth a guide - 
-[which is exactly what the guys from Vue did](https://ssr.vuejs.org/). Most of the code is needed 
-in any platform except Nuxt (Vue based) and Next (React based). We simply describe the best way to do this for Meteor. To really understand what is happening 
-read that SSR guide from Vue.
+Note: As an alternative to Meteor's pub/sub, it may not be more useful (given you probably picked Meteor for that feature).  This documentation is left here as an alternative.
+
+AsyncData allows developers to fetch data from an external source on the server side. Below follows a description of how to implement a similar method into your Meteor application which grants you the same benefits, but with Meteor's 'methods' API.
+
+> Important reminder here is the fact that Server Rendering on its own is already worth a guide - [which is exactly what the guys from Vue did](https://ssr.vuejs.org/). Most of the code is needed in any platform except Nuxt (Vue based) and Next (React based). We simply describe the best way to do this for Meteor. To really understand what is happening read that SSR guide from Vue.
 
 SSR follows a couple of steps that are almost always the same for any frontend library (React, Vue or Angular).
 
@@ -304,10 +360,7 @@ That's the server-side rendering doing its job well. However, after a split seco
 That's because when the client-side bundle takes over, it doesn't have its data yet. It will override the HTML with an empty app! 
 We need to hydrate the bundle with the JSON data in the HTML.
 
-If you inspect the HTML via the source code view, you will see the HTML source of your 
-app accompanied by the `__INITIAL_STATE=""` filled with the JSON string. We need 
-to use this to hydrate the clientside. Luckily this is fairly easy, because we have only one 
-place that needs hydration: the Vuex store!
+If you inspect the HTML via the source code view, you will see the HTML source of your app accompanied by the `__INITIAL_STATE=""` filled with the JSON string. We need to use this to hydrate the clientside. Luckily this is fairly easy, because we have only one place that needs hydration: the Vuex store!
 
 ```javascript
 import { Meteor } from 'meteor/meteor';
@@ -325,10 +378,7 @@ Meteor.startup(() => {
 });
 ```
 
-Now when we load our bundle, the components should have data from the store. All fine. 
-However there is one more thing to do. If we navigate, our newly rendered clientside 
-components will again not have any data. This is because the `asyncData` method is not yet being called 
-on the client side. We can fix this using a mixin like below as documented in the [Vue SSR Guide](https://ssr.vuejs.org/guide/data.html#client-data-fetching).
+Now when we load our bundle, the components should have data from the store. All fine. However there is one more thing to do. If we navigate, our newly rendered clientside components will again not have any data. This is because the `asyncData` method is not yet being called on the client side. We can fix this using a mixin like below as documented in the [Vue SSR Guide](https://ssr.vuejs.org/guide/data.html#client-data-fetching).
 
 ```javascript
 Vue.mixin({
@@ -348,60 +398,3 @@ Vue.mixin({
 ```
 
 We now have a fully functioning and server-rendered Vue app in Meteor! 
-
-<h2 id="vue-and-meteor-realtime-data-layer">How to integrate Vue with Meteor’s realtime data layer</h2>
-
-One of the biggest advantages of Meteor is definitely it's realtime data layer. To integrate it with Vue, first install the `vue-meteor-tracker` package from NPM:
-
-```
-meteor npm install --save vue-meteor-tracker
-```
-
-Next, the package needs to be plugged into the Vue object—just before Vue initialization in `/client/client.js`:
-
-```javascript
-import VueMeteorTracker from 'vue-meteor-tracker';
-
-Vue.use(VueMeteorTracker);
-```
-
-<h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Using subscriptions in Vue components</h3>
-
-In your Vue component, add a `meteor` object. It may contain subscriptions or reactive data sources like cursors and `ReactiveVar`s.
-
-```javascript
-export default {
-  data() {
-    return {
-      selectedThreadId: null
-    }
-  },
-  meteor: {
-    // Subscriptions
-    $subscribe: {
-      // We subscribe to the 'threads' publication
-      'threads': []
-    },
-    // Threads list
-    // 
-    // You can access tthe result with the 'threads' property on the Vue instance
-    threads () {
-      // Here you can use Meteor reactive sources
-      // like cursors or reactive vars
-      // as you would in a Blaze template helper
-      return Threads.find({}, {
-        sort: {date: -1}
-      })
-    },
-    // Selected thread
-    selectedThread () {
-      // You can also use Vue reactive data inside
-      return Threads.findOne(this.selectedThreadId)
-    }
-  }
-}
-```
-
-In example above, `selectedThreadId` variable is reactive. Every time it changes, the subscription will re-run.
-
-For more information, see the [`vue-meteor-tracker` readme](https://github.com/meteor-vue/vue-meteor-tracker).
