@@ -60,6 +60,9 @@ Render multiple items in your template with `{% raw %}{{#each}}{% endraw %}`
 The site is built using hexo, a static site generator.  To run it locally, perform the following steps:
 
 ```shell
+# fork the project on github
+git clone git@github.com:YOURGITACCOUNT/guide.git
+cd guide
 git submodule update --init --recursive
 cd site
 npm install
