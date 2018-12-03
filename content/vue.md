@@ -140,13 +140,11 @@ Meteor.startup(() => {
 });
 ```
 
-To run your [Vue+Meteor app in Meteor 1.8](https://github.com/meteor-vue/vue-meteor/pull/335), we need to turn off HMR: 
+Start and browse to your Vue + Meteor app, and you should see a message with the time.  Success!
 
 ``` bash
-NO_HMR=1 meteor
+meteor
 ```
-
-Open the app and you should see a message with the time.  Success!
 
 
 <h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Using Meteor in Vue components</h3>
@@ -227,7 +225,7 @@ meteor remove autopublish
 Restart your Vue Meteor app to use the `settings.json` and refresh your browser.  You should see the same web page, with new console messages on both the browser and server - sometimes the from the same code!
 
 ``` bash
-NO_HMR=1 meteor --settings=settings.json 
+meteor --settings=settings.json 
 ```
 
 4) and 5) Great, let's integrate this with Vue using [Vue Meteor Tracker](https://github.com/meteor-vue/vue-meteor-tracker).
