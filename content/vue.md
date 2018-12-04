@@ -5,20 +5,25 @@ description: How to use the Vue frontend rendering library, with Meteor.
 
 After reading this guide, you'll know:
 
-1. [What Vue is, and why you would consider using it with Meteor](#introduction)
+1. [What Vue is, and why you should consider using it with Meteor](#introduction)
 2. [How to install Vue in your Meteor application, and how to use it correctly](#integrating-vue-with-meteor)
-3. [How to integrate Vue with Meteor's realtime data layer](#vue-and-meteor-realtime-data-layer)
-4. [Meteor’s and Vue’s Style Guides and Structure](#style-guide)
-5. [How to use Vue's SSR (Server-side Rendering) with Meteor](#ssr-code-splitting)
+3. [How to integrate Vue with Meteor's realtime data layer](#using-meteors-data-system)
+4. [How to structure Meteor with Vue](#style-guide)
+5. [How to Server-side Render (SSR) Vue with Meteor](#ssr-code-splitting)
 
 Vue already has an excellent guide with many advanced topics already covered. Some of them are [SSR (Server-side Rendering)](https://ssr.vuejs.org/), [Routing](https://router.vuejs.org/), [Code Structure and Style Guide](https://vuejs.org/v2/style-guide/) and [State Management with Vuex](https://vuex.vuejs.org/).
 
 This documentation is purely focused on integrating it with Meteor.
 
 <h2 id="introduction">Introduction</h2>
-[Vue](https://vuejs.org/v2/guide/) (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. 
-Unlike other monolithic frameworks, Vue is designed from the ground up to be incrementally adoptable. 
-The core library is focused on the view layer only, and is easy to pick up and integrate with other libraries or existing projects. On the other hand, Vue is also perfectly capable of powering sophisticated Single-Page Applications when used in combination with [modern tooling](https://vuejs.org/v2/guide/single-file-components.html) and [supporting libraries](https://github.com/vuejs/awesome-vue#components--libraries).
+
+[Vue](https://vuejs.org/v2/guide/) (pronounced /vjuː/, like view) is a progressive framework 
+for building user interfaces. Unlike other monolithic frameworks, Vue is designed from the ground 
+up to be incrementally adoptable. The core library is focused on the view layer only, and is easy to 
+pick up and integrate with other libraries or existing projects. On the other hand, Vue is also 
+perfectly capable of powering sophisticated Single-Page Applications when used in combination 
+with [modern tooling](https://vuejs.org/v2/guide/single-file-components.html) and 
+[supporting libraries](https://github.com/vuejs/awesome-vue#components--libraries).
 
 Vue has an excellent [guide and documentation](https://vuejs.org/v2/guide/). This guide is about integrating it with Meteor.
 
@@ -32,6 +37,7 @@ Meteor's build tool and Pub/Sub API (or Apollo) provides Vue with this API that 
 
 <h3 id="integrating-vue-with-meteor">Integrating Vue With Meteor</h3>
 
+
 To start a new project:  
 
 ```sh
@@ -44,17 +50,19 @@ To install Vue in Meteor 1.7, you should add it as an npm dependency:
 meteor npm install --save vue
 ```
 
-To support [Vue's Single File Components](https://vuejs.org/v2/guide/single-file-components.html) with the .vue file extensions, install the following Meteor package created by Vue Core developer [Akryum (Guillaume Chau)](https://github.com/meteor-vue/vue-meteor/tree/master/packages/vue-component).
+To support [Vue's Single File Components](https://vuejs.org/v2/guide/single-file-components.html) 
+with the .vue file extensions, install the following Meteor package created by Vue Core developer [Akryum (Guillaume Chau)](https://github.com/meteor-vue/vue-meteor/tree/master/packages/vue-component).
 
 ```sh
 meteor add akryum:vue-component
 ```
 
-You will end up with at least 3 files: 
+You will end up with at least 3 files.
 
 1. `/client/App.vue` (The root component of your app)
 2. `/client/main.js` (Initializing the Vue app in Meteor startup)
 3. `/client/main.html` (containing the body with the #app div)
+
 
 We need a base HTML document that has the `app` id.  If you created a new project from `meteor create .`, put this in your `/client/main.html`.
 
@@ -106,28 +114,32 @@ Meteor.startup(() => {
 });
 ```
 
-Run your new Vue+Meteor app with this command: `NO_HMR=1 meteor`
+
+<h2 id="using-meteors-data-system">Using Meteor's data system</h2>
+
+One of the biggest advantages of Meteor is definitely it's realtime data layer. It allows 
+for so called full-stack reactivity and [optimistic UI](https://blog.meteor.com/optimistic-ui-with-meteor-67b5a78c3fcf) functionality. 
+To accomplish full-stack reactivity, Meteor uses [Tracker](https://docs.meteor.com/api/tracker.html). In this section we will explain how to integrate Meteor Tracker 
+with Vue to leverage the best of both tools.
 
 
-<h2 id="vue-and-meteor-realtime-data-layer">Using Vue with Meteor’s realtime data layer</h2>
+1. Install the [vue-meteor-tracker](https://github.com/meteor-vue/vue-meteor-tracker) package from NPM:
 
-One of the biggest advantages of Meteor is definitely it's realtime data layer: reactivity, methods, publications, and subscriptions.
-
-To integrate it with Vue, first install the `vue-meteor-tracker` package from NPM:
-
-```
+```sh
 meteor npm install --save vue-meteor-tracker
 ```
 
-Next, the package needs to be plugged into the Vue object—just before Vue initialization in `/client/main.js`:
+Next, the package needs to be plugged into Vue as a plugin. 
+Add the following to your `/client/main.js`:
 
 ```javascript
 import Vue from 'vue';
-import VueMeteorTracker from 'vue-meteor-tracker';   // here!
-Vue.use(VueMeteorTracker);                           // here!
+
+import VueMeteorTracker from 'vue-meteor-tracker'; // import the integration package!
 
 import App from './App.vue';
-import './main.html';
+
+Vue.use(VueMeteorTracker); // Add the plugin to Vue!
 
 Meteor.startup(() => {
   new Vue({
@@ -137,11 +149,19 @@ Meteor.startup(() => {
 });
 ```
 
-<h3 id="vue-and-meteor-realtime-data-layer-subscriptions">Methods, Publications, and Subscriptions in Vue components</h3>
+<h3 id="calling-meteor-methods">Meteor methods</h3>
 
-Currently our Vue application shows the time it was loaded.
+-- TODO -- A gentle introduction into using Meteor methods with Vue
 
-Let's add a button to update the time in the app.  To flex Meteor's plumbing, we'll create:
+<h3 id="pub-sub-integration">Realtime data</h3>
+
+-- TODO -- An introduction to subscriptions and Minimongo usage in Vue
+
+<h3 id="pub-sub-integration">Example app</h3>
+
+If you've followed the [integration guide](#integrating-vue-with-meteor), then your Vue application shows the time it was loaded.
+
+Let's add some functionality that makes this part dynamic. To flex Meteor's plumbing, we'll create:
 
 1.  A [Meteor Collection](https://docs.meteor.com/api/collections.html) called `Time` with a `currentTime` doc.
 2.  A [Meteor Publication](https://guide.meteor.com/data-loading.html#publications-and-subscriptions) called `Time` that sends all documents
@@ -209,7 +229,7 @@ Meteor.startup(() => {
 Start your Meteor app, your should see a message pulling data from Mongo.  We haven't made any changes to the client, so you should just see some startup messages.
 
 ``` bash
-NO_HMR=1 meteor
+meteor
 ```
 4. and 5.  Great, let's integrate this with Vue using [Vue Meteor Tracker](https://github.com/meteor-vue/vue-meteor-tracker].
 
@@ -288,7 +308,7 @@ export default {
 Restart your server to use the `settings.json` file.
 
 ``` bash
-NO_HMR=1 meteor --settings=settings.json 
+meteor --settings=settings.json 
 ```
 
 Then refresh your browser to reload the client.
@@ -303,7 +323,7 @@ You should see:
 There may be better or alternative ways to do these things.  Please PR if you have improvements.
 
 
-<h2 id="style-guide">Meteor’s and Vue’s Style Guides and Structure
+<h2 id="style-guide">Style Guide and File Structure</h2>
 
 Like code linting and style guides are tools for making code easier and more fun to work with.
 
@@ -407,14 +427,16 @@ VueSSR.createApp = function (context) {
 }
 ```
 
-<h3>Async data - An Interesting Nuxt Feature</h3>
+<h3 id="async-data-and-hydration">Async data and Hydration</h3>
 
-[Nuxt](https://nuxtjs.org/) has a lovely feature called [asyncData](https://nuxtjs.org/guide/async-data). 
+Hydration is the the word for loading state into components on the serverside and then reusing that data on the clientside. 
+This allows components to fully render their markup on the server and prevents a 're-render' on the clientside when the bundle is loaded.
 
-Note: As an alternative to Meteor's pub/sub, it may not be more useful (given you probably picked Meteor for that feature).  This documentation is left here as an alternative.
+[Nuxt](https://nuxtjs.org/) solves this gracefully with a feature called [asyncData](https://nuxtjs.org/guide/async-data). 
 
-AsyncData allows developers to fetch data from an external source on the server side. Below follows a description of how to implement a similar method into your Meteor application which grants you the same benefits, but with Meteor's 'methods' API.
-
+Meteor's pub/sub system is at this moment not suitable for SSR which means that if we want the same functionality, we will have to implement it ourselves. 
+How that can be done is exactly what we are going to explain here!
+ 
 > Important reminder here is the fact that Server Rendering on its own is already worth a guide - [which is exactly what the guys from Vue did](https://ssr.vuejs.org/). Most of the code is needed in any platform except Nuxt (Vue based) and Next (React based). We simply describe the best way to do this for Meteor. To really understand what is happening read that SSR guide from Vue.
 
 SSR follows a couple of steps that are almost always the same for any frontend library (React, Vue or Angular).
