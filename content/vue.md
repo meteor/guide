@@ -300,7 +300,7 @@ You should see:
   - startup times for the server (added to the Time collection on startup)
   - The Meteor settings from your settings file
 
-Excellent!  That's a sky-tour of some of Meteor's features, and how to integrate with Vue.  Have a better approach?  Yes!  Please PR if you have improvements.
+Excellent!  That's a tour of some of Meteor's features, and how to integrate with Vue.  Have a better approach?  Please send a PR.
 
 
 <h2 id="style-guide">Meteor’s and Vue’s Style Guides and Structure</h2>
