@@ -190,6 +190,14 @@ Npm.depends({
 });
 ```
 
+If you want to use a local npm package ,e.g. during development, you can set a link to the file in `Npm.depends`.
+
+```js
+Npm.depends({
+  my-package: 'file:///home/user/npms/my-package'
+});
+```
+
 You can import the dependency from within you package code in the same way that you would inside an [application](using-npm-packages.html#using-npm):
 
 ```js
