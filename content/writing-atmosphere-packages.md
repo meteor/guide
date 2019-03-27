@@ -190,7 +190,7 @@ Npm.depends({
 });
 ```
 
-If you want to use a local npm package ,e.g. during development, you can set a link to the file in `Npm.depends`.
+If you want to use a local npm package, for example during development, you can give a directory instead of a version number:
 
 ```js
 Npm.depends({
