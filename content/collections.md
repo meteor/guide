@@ -313,12 +313,16 @@ As we discussed above, trying to predict all future requirements of your data sc
 
 <h3 id="writing-migrations">Writing migrations</h3>
 
-A useful package for writing migrations is [`percolate:migrations`](https://atmospherejs.com/percolate/migrations), which provides a nice framework for switching between different versions of your schema.
+A useful package for writing migrations is the npm package [`mgdb-migrator`](https://www.npmjs.com/package/mgdb-migrator), which provides a nice framework for switching between different versions of your schema. Install it by running `meteor npm install --save mgdb-migrator`.
 
 Suppose, as an example, that we wanted to add a `list.todoCount` field, and ensure that it was set for all existing lists. Then we might write the following in server-only code (e.g. `/server/migrations.js`):
 
 ```js
-Migrations.add({
+import {migrator} from 'mgdb-migrator';
+
+migrator.config({db: process.env.MONGO_URL});
+
+migrator.add({
   version: 1,
   up() {
     Lists.find({todoCount: {$exists: false}}).forEach(list => {
@@ -334,7 +338,7 @@ Migrations.add({
 
 This migration, which is sequenced to be the first migration to run over the database, will, when called, bring each list up to date with the current todo count.
 
-To find out more about the API of the Migrations package, refer to [its documentation](https://atmospherejs.com/percolate/migrations).
+To find out more about the API of the `mgdb-migrator` package, refer to [its documentation](https://www.npmjs.com/package/mgdb-migrator).
 
 <h3 id="bulk-data-changes">Bulk changes</h3>
 
@@ -347,7 +351,7 @@ What this means is if users are accessing the site whilst the update is being pr
 We could write our above migration like so (note that you must be on MongoDB 2.6 or later for the bulk update operations to exist). We can access the native MongoDB API via [`Collection#rawCollection()`](http://docs.meteor.com/api/collections.html#Mongo-Collection-rawCollection):
 
 ```js
-Migrations.add({
+migrator.add({
   version: 1,
   up() {
     // This is how to get access to the raw MongoDB node collection that the Meteor server collection wraps
@@ -384,7 +388,9 @@ To run a migration against your development database, it's easiest to use the Me
 
 ```js
 // After running `meteor shell` on the command line:
-Migrations.migrateTo('latest');
+import {migrator} from 'mgdb-migrator';
+migrator.config({db: process.env.MONGO_URL});
+migrator.migrateTo('latest');
 ```
 
 If the migration logs anything to the console, you'll see it in the terminal window that is running the Meteor server.
@@ -394,6 +400,20 @@ To run a migration against your production database, run your app locally in pro
 A good way to do the above is to spin up a virtual machine close to your database that has Meteor installed and SSH access (a special EC2 instance that you start and stop for the purpose is a reasonable option), and running the command after shelling into it. That way any latencies between your machine and the database will be eliminated, but you still can be very careful about how the migration is run.
 
 **Note that you should always take a database backup before running any migration!**
+
+Another option tu run migrations in both production and development mode is to run the `migrateTo` command in the server side `Meteor.startup` function (see [documentation on application strucure for reference](https://guide.meteor.com/structure.html#startup-files))
+
+```js
+// file /imports/startup/server/index.js
+import {migrator} from 'mgdb-migrator';
+migrator.config({db: process.env.MONGO_URL});
+
+Meteor.startup(function () {
+    // add databases migrations
+    migrator.migrateTo("latest");
+});
+
+```
 
 <h3 id="breaking-changes">Breaking schema changes</h3>
 
@@ -407,12 +427,12 @@ A better approach is a multi-stage deployment. The basic idea is that:
 2. Run the migration. At this point you should be confident that all lists have a `todoCount`.
 3. Deploy the new code that relies on the new schema and no longer knows how to deal with the old schema. Now we are safe to rely on `list.todoCount` in our UI.
 
-Another thing to be aware of, especially with such multi-stage deploys, is that being prepared to rollback is important! For this reason, the migrations package allows you to specify a `down()` function and call `Migrations.migrateTo(x)` to migrate _back_ to version `x`.
+Another thing to be aware of, especially with such multi-stage deploys, is that being prepared to rollback is important! For this reason, the migrations package allows you to specify a `down()` function and call `migrator.migrateTo(x)` to migrate _back_ to version `x`.
 
 So if we wanted to reverse our migration above, we'd run
 ```js
 // The "0" migration is the unmigrated (before the first migration) state
-Migrations.migrateTo(0);
+migrator.migrateTo(0);
 ```
 
 If you find you need to roll your code version back, you'll need to be careful about the data, and step carefully through your deployment steps in reverse.
