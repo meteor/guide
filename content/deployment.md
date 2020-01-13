@@ -316,6 +316,12 @@ Galaxy's UI provides a detailed logging system, which can be invaluable to deter
 
 <img src="images/galaxy-logs.png">
 
+<h3 id="sematext-monitoring">Monitoring with Sematext Cloud</h3>
+
+[Sematext Cloud](https://sematext.com) is an all-in-one Monitoring and Logging solution. It brings together infrastructure and application performance monitoring, together with log management. By enabling businesses to easily collect logs, metrics, and events, Sematext provides full-stack visibility through a single pane of glass and helps businesses extract value from logs and metrics.
+
+Here are [5 Steps to Meteor Monitoring](https://sematext.com/blog/meteorjs-monitoring-5-steps/). 
+
 <h2 id="seo">Enabling SEO</h2>
 
 If your application contains a lot of publicly accessible content, then you probably want it to rank well in Google and other search engines' indexes. As most webcrawlers do not support client-side rendering (or if they do, have spotty support for websockets), it's better to render the site on the server and deliver it as HTML in this special case.
