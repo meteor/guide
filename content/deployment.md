@@ -320,12 +320,11 @@ Galaxy's UI provides a detailed logging system, which can be invaluable to deter
 
 [Sematext Cloud](https://sematext.com) is an all-in-one Monitoring and Logging solution. It brings together infrastructure and application performance monitoring, together with log management. By enabling businesses to easily collect logs, metrics, and events, Sematext provides full-stack visibility through a single pane of glass and helps businesses extract value from logs and metrics.
 
-Here are [5 Steps to Meteor Monitoring](https://sematext.com/blog/meteorjs-monitoring-5-steps/). 
+Here are [5 Steps to Meteor Monitoring](https://sematext.com/blog/meteorjs-monitoring-5-steps/). Sematext UI provides a detailed monitoring dashboard, anomaly detection, and alerts. 
 
-<img src="https://sematext.com/wp-content/uploads/2020/01/Screen-Shot-2020-01-13-at-21.09.17-1.png">
+<img src="images/sematext-monitoring.png">
 
-Sematext UI provides a detailed monitoring dashboard, anomaly detection, and alerts. 
-
+ 
 
 <h2 id="seo">Enabling SEO</h2>
 
