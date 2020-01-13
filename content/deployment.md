@@ -322,6 +322,11 @@ Galaxy's UI provides a detailed logging system, which can be invaluable to deter
 
 Here are [5 Steps to Meteor Monitoring](https://sematext.com/blog/meteorjs-monitoring-5-steps/). 
 
+<img src="https://sematext.com/wp-content/uploads/2020/01/Screen-Shot-2020-01-13-at-21.09.17-1.png">
+
+Sematext UI provides a detailed monitoring dashboard, anomaly detection, and alerts. 
+
+
 <h2 id="seo">Enabling SEO</h2>
 
 If your application contains a lot of publicly accessible content, then you probably want it to rank well in Google and other search engines' indexes. As most webcrawlers do not support client-side rendering (or if they do, have spotty support for websockets), it's better to render the site on the server and deliver it as HTML in this special case.
