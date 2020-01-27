@@ -84,7 +84,7 @@ A local collection is a convenient way to use the full power of the Minimongo li
 
 Although MongoDB is a schema-less database, which allows maximum flexibility in data structuring, it is generally good practice to use a schema to constrain the contents of your collection to conform to a known format. If you don't, then you tend to end up needing to write defensive code to check and confirm the structure of your data as it *comes out* of the database, instead of when it *goes into* the database. As in most things, you tend to *read data more often than you write it*, and so it's usually easier, and less buggy to use a schema when writing.
 
-In Meteor, the pre-eminent schema package is [simple-schema-js](https://github.com/aldeed/simple-schema-js). It's an expressive, MongoDB based schema that's used to insert and update documents. Another alternative is [jagi:astronomy](https://atmospherejs.com/jagi/astronomy) which is a full Object Model (OM) layer offering schema definition, server/client side validators, object methods and event handlers.
+In Meteor, the pre-eminent schema package is [simple-schema-js](https://www.npmjs.com/package/simpl-schema). It's an expressive, MongoDB based schema that's used to insert and update documents. Another alternative is [jagi:astronomy](https://atmospherejs.com/jagi/astronomy) which is a full Object Model (OM) layer offering schema definition, server/client side validators, object methods and event handlers.
 
 Let's assume that we have a `Lists` collection.  To define a schema for this collection using `simple-schema`, you can create a new instance of the `SimpleSchema` class and attach it to the `Lists` object:
 
