@@ -104,7 +104,7 @@ This example from the Todos app defines a schema with a few simple rules:
 
 We attach the schema to the namespace of `Lists` directly, which allows us to check objects against this schema directly whenever we want, such as in a form or [Method](methods.html). In the [next section](#schemas-on-write) we'll see how to use this schema automatically when writing to the collection.
 
-You can see that with relatively little code we've managed to restrict the format of a list significantly. You can read more about more complex things that can be done with schemas in the [Simple Schema docs](http://atmospherejs.com/aldeed/simple-schema).
+You can see that with relatively little code we've managed to restrict the format of a list significantly. You can read more about more complex things that can be done with schemas in the [Simple Schema docs](https://github.com/aldeed/simple-schema-js).
 
 <h3 id="validating-schemas">Validating against a schema</h3>
 
