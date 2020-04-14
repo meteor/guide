@@ -125,13 +125,13 @@ For example:
 }
 ```
 
-The keys of the meteor.nodeModules.recompile configuration object are npm package names, and the values specify for which bundles those packages should be recompiled using the Meteor compiler plugins system, as if the packages were part of the Meteor application.
+The keys of the `meteor.nodeModules.recompile` configuration object are npm package names, and the values specify for which bundles those packages should be recompiled using the Meteor compiler plugins system, as if the packages were part of the Meteor application.
 
-For example, if an npm package uses const/let syntax or arrow functions, that's fine for modern and server code, but you would probably want to recompile the package when building the legacy bundle. To accomplish this, specify ”legacy" or ["legacy"] as the value of the package's property, similar to somewhat-modern-package above. These strings and arrays of strings have the same meaning as the second argument to api.addFiles(files, where) in a package.js file.
+For example, if an npm package uses const/let syntax or arrow functions, that's fine for modern and server code, but you would probably want to recompile the package when building the legacy bundle. To accomplish this, specify `"legacy"` or `["legacy"]` as the value of the package's property, similar to `somewhat-modern-package` above. These strings and arrays of strings have the same meaning as the second argument to `api.addFiles(files, where)` in a `package.js` file.
 
-This configuration serves pretty much the same purpose as symlinking an application directory into node_modules, but without any symlinking: https://forums.meteor.com/t/litelement-import-litelement-html/45042/8?u=benjamn
+This configuration serves pretty much the same purpose as symlinking an application directory into `node_modules/`, but without any symlinking: https://forums.meteor.com/t/litelement-import-litelement-html/45042/8?u=benjamn
 
-The meteor.nodeModules.recompile configuration currently applies to the application node_modules directory only (not to Npm.depends dependencies in Meteor packages). Recompiled packages must be direct dependencies of the application.
+The `meteor.nodeModules.recompile` configuration currently applies to the application `node_modules/` directory only (not to `Npm.depends` dependencies in Meteor packages). Recompiled packages must be direct dependencies of the application.
 
 Meteor will compile the exposed code as if it was part of your application, using whatever compiler plugins you have installed. You can influence this compilation using `.babelrc` files or any other techniques you would normally use to configure compilation of application code.
 
