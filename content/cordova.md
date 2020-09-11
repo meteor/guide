@@ -315,8 +315,8 @@ Now your users' apps will continue receiving hot code pushes. However, they won'
 Another option is using the `METEOR_CORDOVA_COMPAT_VERSION_EXCLUDE` environment variable. If you were to do this:
 
 ```sh
-meteor add cordova-plugin-camera
-meteor add cordova-plugin-gyroscope
+meteor add cordova:cordova-plugin-camera@4.1.0
+meteor add cordova:cordova-plugin-gyroscope@0.1.4
 METEOR_CORDOVA_COMPAT_VERSION_EXCLUDE='cordova-plugin-camera,cordova-plugin-gyroscope' meteor run ios-device
 ```
 
