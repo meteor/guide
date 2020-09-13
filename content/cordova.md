@@ -56,7 +56,7 @@ Meteor uses WKWebView by default, on both iOS 8 and iOS 9. WKWebView is part of 
 
 <h4 id="what-environment-android">Android</h4>
 
-Android 5.0 also comes with a web view based on Chromium known as the [Android System Web View](https://play.google.com/store/apps/details?id=com.google.android.webview&hl=en), but a big improvement is that it can be automatically updated through the Play Store. This means updates to the web view happen more regularly and are independent of OS updates.
+Android 5.0 and above come with a web view based on Chromium known as the [Android System Web View](https://play.google.com/store/apps/details?id=com.google.android.webview&hl=en), which can be automatically updated through the Play Store. This means updates to the web view can happen regularly and are independent of OS updates.
 
 <h3 id="adding-platforms">Adding Cordova platforms</h3>
 
