@@ -56,16 +56,7 @@ Meteor uses WKWebView by default, on both iOS 8 and iOS 9. WKWebView is part of 
 
 <h4 id="what-environment-android">Android</h4>
 
-The web view situation on Android is a little more complicated. On older Android versions, the included web view is known to be rather slow and buggy. That improved somewhat with Android 4.4, which includes a web view based on Chromium, the open source project behind the Chrome browser.
-
 Android 5.0 also comes with a web view based on Chromium known as the [Android System Web View](https://play.google.com/store/apps/details?id=com.google.android.webview&hl=en), but a big improvement is that it can be automatically updated through the Play Store. This means updates to the web view happen more regularly and are independent of OS updates.
-
-This threatens to leave many older Android devices behind however, because they would be stuck on the web view included with the OS and are often unable to update to newer OS versions. Fortunately, the [Crosswalk plugin](https://crosswalk-project.org/documentation/cordova.html) allows you to embed Chromium in your app and use it instead of the web view that comes with the OS on any of the Android versions supported by Cordova (currently Android 4.0 or higher). Embedding Chromium means the size of your APK will grow by about 20MB, but the benefit is that you can rely on a consistent web view with considerably better performance and enhanced standards support.
-
-You can add the Crosswalk plugin to your app with `meteor add crosswalk`.
-> If you receive an error message trying to run the app on your device after adding or removing the Crosswalk plugin, you may have to remove the existing app from your device first.
-
-Important: The Crosswalk project is not maintained anymore. The last Crosswalk release was Crosswalk 23. Read more in this [announcement](https://crosswalk-project.org/blog/crosswalk-final-release.html)
 
 <h3 id="adding-platforms">Adding Cordova platforms</h3>
 
