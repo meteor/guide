@@ -18,13 +18,7 @@ Meteor is a full-stack JavaScript platform for developing modern web and mobile 
 
 <h2 id="quickstart">Quick start</h2>
 
-Meteor supports [OS X, Windows, and Linux](https://www.meteor.com/install).
-
-On Windows?  First install [Chocolatey](https://chocolatey.org/), then run this command using an Administrator command prompt:
-
-```bash
-choco install meteor
-```
+Meteor supports [OS X, Windows, and Linux](https://www.meteor.com/developers/install).
 
 On OS X or Linux?  Install the latest official Meteor release from your terminal:
 
@@ -32,9 +26,11 @@ On OS X or Linux?  Install the latest official Meteor release from your terminal
 curl https://install.meteor.com/ | sh
 ```
 
-The Windows installer supports Windows 7, Windows 8.1, Windows Server
-2008, and Windows Server 2012.  The command line installer supports Mac OS X
-10.7 (Lion) and above, and Linux on x86 and x86_64 architectures.
+On Windows? Install the latest official Meteor release from your terminal:
+
+```bash
+npm install -g meteor
+```
 
 Once you've installed Meteor, create a project:
 
@@ -55,7 +51,7 @@ meteor
 
 <h2 id="learning-more">Meteor resources</h2>
 
-1. The place to get started with Meteor is the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+1. The place to get started with Meteor is the [tutorials page](https://www.meteor.com/developers/tutorials).
 
 2. [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) is the best place to ask (and answer!) technical questions. Be sure to add the meteor tag to your question.
 
@@ -77,11 +73,11 @@ The APIs of the Meteor platform are available at the [docs site](https://docs.me
 
 <h3 id="audience">Target audience</h3>
 
-The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [official tutorial](https://www.meteor.com/tutorials/blaze/creating-an-app).
+The guide is targeted towards intermediate developers that have some familiarity with JavaScript, the Meteor platform, and web development in general. If you are just getting started with Meteor, we recommend starting with the [tutorials](https://www.meteor.com/developers/tutorials).
 
-<h3 id="example-app">Example app</h3>
+<h3 id="example-app">Example apps</h3>
 
-Many articles reference the Todos example application. This code is being actively developed alongside the guide. You can see the latest source code for the app, and file issues or make suggestions via pull request at its [GitHub repository](https://github.com/meteor/todos).
+If you want to see some examples, we have a repository dedicated with several examples provided by the community showing many concepts that can be used when implementing your application with Meteor. To know more you can [here](https://github.com/meteor/examples).
 
 <h2 id="guide-concepts">Guide development</h2>
 

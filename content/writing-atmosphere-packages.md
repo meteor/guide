@@ -130,8 +130,8 @@ To depend on another Atmosphere package, use [`api.use`](http://docs.meteor.com/
 
 ```js
 Package.onUse(function(api) {
-  // This package depends on 1.3.3 or above of simple-schema
-  api.use('aldeed:simple-schema@1.3.3');
+  // This package depends on 1.2.0 or above of validated-method
+  api.use('mdg:validated-method@1.2.0');
 });
 ```
 
@@ -151,7 +151,7 @@ api.use([
   'check',
 
   // Still need to specify versions of non-core packages
-  'aldeed:simple-schema@1.3.3',
+  'mdg:validated-method@1.2.0',
   'mdg:validation-error@0.1.0'
 ]);
 ```
@@ -162,10 +162,28 @@ The above code snippet is equivalent to the code below, which specifies all of t
 api.use([
   'ecmascript@0.1.6',
   'check@1.1.0',
-  'aldeed:simple-schema@1.3.3',
+  'mdg:validated-method@1.2.0',
   'mdg:validation-error@0.1.0'
 ]);
 ```
+
+Additionally, you can call `api.versionsFrom(<release>)` multiple times, or with
+an array (eg `api.versionsFrom([<release1>, <release2>])`. Meteor will interpret
+this to mean that the package will work with packages from all the listed releases.
+
+```js
+api.versionsFrom('1.2.1');
+api.versionsFrom('1.4');
+api.versionsFrom('1.8');
+
+// or
+
+api.versionsFrom(['1.2.1', '1.4', '1.8']);
+```
+
+This usually isn't necessary, but can help in cases where you support more than 
+one major version of a core package.
+
 
 <h4 id="version-constraints">Semantic versioning and version constraints</h4>
 
@@ -180,6 +198,16 @@ The constraint solver is necessary because Meteor's package system is **single-l
 
 Note that the version solver also has a concept of "gravity" - when many solutions are possible for a certain set of dependencies, it always selects the oldest possible version. This is helpful if you are trying to develop a package to ship to lots of users, since it ensures your package will be compatible with the lowest common denominator of a dependency. If your package needs a newer version than is currently being selected for a certain dependency, you need to update your `package.js` to have a newer version constraint.
 
+If your package supports multiple major versions of a dependency, you can supply
+both versions to `api.use` like so:
+
+```js
+api.use('blaze@1.0.0 || 2.0.0');
+```
+
+Meteor will use whichever major version is compatible with your other packages, 
+or the most recent of the options given.
+
 <h3 id="npm-dependencies">npm dependencies</h3>
 
 Meteor packages can include [npm packages](https://www.npmjs.com/) to use JavaScript code from outside the Meteor package ecosystem or to include JavaScript code with native dependencies. Use [Npm.depends](http://docs.meteor.com/#/full/Npm-depends) at the top level of your `package.js` file. For example, here's how you would include the `github` npm package:
@@ -187,6 +215,14 @@ Meteor packages can include [npm packages](https://www.npmjs.com/) to use JavaSc
 ```js
 Npm.depends({
   github: '0.2.4'
+});
+```
+
+If you want to use a local npm package, for example during development, you can give a directory instead of a version number:
+
+```js
+Npm.depends({
+  my-package: 'file:///home/user/npms/my-package'
 });
 ```
 
