@@ -1,18 +1,18 @@
 ---
-title: "Testing"
-description: How to test your Meteor application
-discourseTopicId: 20191
+Title: "Testing"
+Description: How to test your Meteor application
+DiscourseTopicId: 20191
 ---
 
 <h2 id="introduction">Introduction</h2>
 
-Testing allows you to ensure your application works the way you think it does, especially as your codebase changes over time. If you have good tests, you can refactor and rewrite code with confidence. Tests are also the most concrete form of documentation of expected behavior, since other developers can figure out how to use your code by reading the tests.
+Testing allows you to ensure your application works the way you think it does, especially as your codebase changes over time. If you have good tests, you can refactor and rewrite code with confidence. Tests are also the most concrete form of documentation of expected behavior, since other developers can figure out how to use your code by reading the tests. Even a simple application can be subject to a large number and variety of tests. A test management plan helps to prioritize which types of testing provide the most value – given available time and resources. Testing effectiveness is optimized by running the fewest number of tests to find the largest number of defects.
 
 Automated testing is critical because it allows you to run a far greater set of tests much more often than you could manually, allowing you to catch regression errors immediately.
 
 <h3 id="testing-types">Types of tests</h3>
 
-Entire books have been written on the subject of testing, so we will touch on some basics of testing here. The important thing to consider when writing a test is what part of the application you are trying to test, and how you are verifying the behavior works.
+Entire books have been written on the subject of testing, so we'll touch on some basics of testing here. The important thing to consider when writing a test is what part of the application you are trying to test, and how you are verifying the behavior works.
 
 - **Unit test**: If you are testing one small module of your application, you are writing a unit test. You'll need to *stub* and *mock* other modules that your module usually leverages in order to *isolate* each test. You'll typically also need to *spy* on actions that the module takes to verify that they occur.
 
